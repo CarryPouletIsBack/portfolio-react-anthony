@@ -1,0 +1,76 @@
+/* Shiny Text Animation - 3 étapes */
+.shiny-text {
+  display: flex;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  line-height: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* État caché */
+.shiny-text.hidden {
+  opacity: 0;
+}
+
+/* Animation d'entrée */
+.shiny-text.entering {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Animation de brillance */
+.shiny-text.shining {
+  opacity: 1;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.2),
+    transparent,
+    transparent
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 2s ease-in-out 1;
+}
+
+/* État visible (pause après shiny) */
+.shiny-text.visible {
+  opacity: 1;
+  background: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Animation de sortie */
+.shiny-text.exiting {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+@keyframes shine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Fallback pour les navigateurs qui ne supportent pas background-clip */
+@supports not (background-clip: text) {
+  .shiny-text.shining {
+    background: none;
+    -webkit-text-fill-color: initial;
+    color: rgba(255, 255, 255, 0.7);
+  }
+}

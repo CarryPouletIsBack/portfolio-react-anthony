@@ -1,0 +1,14 @@
+/* Blur Text Animation - React Bits Style */
+.blur-text {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  transition: filter 0.2s ease;
+  position: relative;
+}
+
+.blur-text.blurring {
+  filter: blur(1px);
+  animation: none;
+}
+
+/* Effet de brillance supprimé pour un rendu plus simple */

@@ -1,0 +1,295 @@
+/* Header */
+.header {
+  padding: 24px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  position: relative;
+  pointer-events: auto;
+}
+
+.header-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  background: #5398D4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.4);
+  border: 4px solid rgba(255, 255, 255, 0.2);
+}
+
+.logo-text h1 {
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.logo-text p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  font-family: 'DM Mono', monospace;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.btn {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(216, 216, 216, 0.3);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
+
+.btn-primary {
+  background: rgba(241, 88, 42, 0.1);
+  border: 1.5px solid #f1582a;
+  color: #f1582a;
+  padding: 12px 12px;
+  border-radius: 9999px;
+}
+
+.btn-primary:hover {
+  background: rgba(241, 88, 42, 0.2);
+}
+
+.search-bar {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 400px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.search-bar input {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  flex: 1;
+}
+
+.search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.search-bar:focus-within {
+  background: rgba(241, 88, 42, 0.1);
+  border: 1.5px solid #f1582a;
+}
+
+.search-bar:focus-within input {
+  color: #f1582a;
+}
+
+.search-bar svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* Conteneur pour l'input */
+.search-input-container {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  flex: 1;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.search-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-placeholder.visible {
+  opacity: 1;
+}
+
+.search-placeholder.hidden {
+  opacity: 0;
+}
+
+/* Input wrapper pour la prédiction */
+.input-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* Bouton de suppression */
+.clear-button {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 3;
+}
+
+.clear-button:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.clear-button:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* Prédiction de texte dans l'input */
+.prediction-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+/* Style spécifique pour le gradient de prédiction */
+.prediction-text .gradient-text.prediction-suggestion {
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 107, 107, 0.8),
+    rgba(78, 205, 196, 0.8),
+    rgba(69, 183, 209, 0.8),
+    rgba(150, 206, 180, 0.8)
+  );
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShiftSubtle 4s ease-in-out infinite;
+  display: inline;
+  position: relative;
+}
+
+.prediction-suggestion {
+  font-style: italic;
+  /* L'animation de gradient sera gérée par le composant GradientText */
+}
+
+@keyframes gradientShiftSubtle {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0 16px;
+  }
+  
+  .search-bar {
+    min-width: 300px;
+  }
+
+  .header .header-center {
+    display: none !important;
+  }
+
+  /* Masquer le bouton menu sur mobile car il est remplacé par celui de la search bar */
+  .header-actions button:last-child {
+    display: none;
+  }
+}

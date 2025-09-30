@@ -1,0 +1,10 @@
+.hover-card {
+  cursor: pointer;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.hover-card:hover {
+  z-index: 10;
+}

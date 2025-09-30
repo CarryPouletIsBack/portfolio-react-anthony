@@ -1,0 +1,518 @@
+/* Page À propos */
+.apropos-page {
+  position: relative;
+  min-height: 100vh;
+  background: transparent;
+}
+
+.main-apropos {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: flex-start;
+  padding: 120px 48px 120px 48px;
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 240px);
+  max-width: 1416px;
+  margin: 0 auto;
+  z-index: 0;
+}
+
+/* Section listing - Statistiques */
+.listing-section {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px;
+  position: relative;
+  width: 100%;
+}
+
+.stat-card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.01);
+  box-sizing: border-box;
+  content-stretch: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  position: relative;
+  border-radius: 100px;
+  flex-shrink: 0;
+  width: 141px;
+  height: 141px;
+  border: 3px solid white;
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0 0 8px 0;
+  color: white;
+}
+
+.stat-card p {
+  font-size: 18px;
+  margin: 0;
+  color: white;
+}
+
+/* Carte principale cardLg */
+.card-lg {
+  background: #fff8f5;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 24px 48px;
+  position: relative;
+  border-radius: 16px;
+  width: 100%;
+}
+
+.card-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid #b2aaaa;
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+.card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: normal;
+  color: #f1582a;
+  margin: 0;
+  width: 100%;
+}
+
+.card-content {
+  font-family: 'SF Pro', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: #222222;
+  margin: 0;
+  width: 100%;
+  font-variation-settings: 'wdth' 100;
+}
+
+.card-content p {
+  margin: 0;
+}
+
+/* Section content - Deux colonnes */
+.content-section {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  position: relative;
+  width: 100%;
+}
+
+.content-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+  position: relative;
+  width: 487px;
+}
+
+/* Cartes petites */
+.card-small {
+  background: #fff8f5;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px 48px;
+  position: relative;
+  border-radius: 16px;
+  width: 487px;
+}
+
+.card-large {
+  background: #fff8f5;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px 48px;
+  position: relative;
+  border-radius: 16px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Expériences */
+.experience-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  position: relative;
+  width: 100%;
+}
+
+.experience-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+  position: relative;
+  width: 100%;
+}
+
+.company-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: normal;
+  color: #f1582a;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.experience-badge {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 149, 1, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  position: relative;
+  border-radius: 100px;
+}
+
+.badge-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1.5px solid #ff9501;
+  border-radius: 100px;
+  pointer-events: none;
+}
+
+.badge-text {
+  font-family: 'Sora', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #f1582a;
+  margin: 0;
+  white-space: nowrap;
+  letter-spacing: 1.82px;
+}
+
+.experience-period {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: normal;
+  color: #f1582a;
+  margin: 0;
+  width: 100%;
+}
+
+.experience-description {
+  font-family: 'SF Pro', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: #222222;
+  margin: 0;
+  width: 100%;
+  font-variation-settings: 'wdth' 100;
+}
+
+.experience-description p {
+  margin: 0;
+}
+
+/* Section Formations */
+.formations-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: normal;
+  color: #f1582a;
+  margin: 0;
+  width: 100%;
+}
+
+.formations-table {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  position: relative;
+  width: 100%;
+  padding-bottom: 48px;
+}
+
+.table-header {
+  box-sizing: border-box;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 8px 0;
+  position: relative;
+  width: 100%;
+  font-family: 'SF Pro', sans-serif;
+  font-weight: 510;
+  font-size: 16px;
+  line-height: 0;
+  color: #f0f0f0;
+  text-transform: uppercase;
+  justify-content: flex-end;
+}
+
+.table-col-name {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  width: 275px;
+  flex-shrink: 0;
+}
+
+.table-col-school {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.table-col-year {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+}
+
+.table-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  position: relative;
+  width: 100%;
+}
+
+.table-row {
+  position: relative;
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  font-family: 'IBM Plex Mono', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 0;
+  color: white;
+  padding: 0;
+  border: 0;
+  border-color: transparent;
+  border-style: solid;
+  background-clip: padding-box;
+}
+
+.table-row p {
+  margin: 0;
+  line-height: 1;
+}
+
+.table-separator {
+  height: 0;
+  position: relative;
+  width: 100%;
+}
+
+.table-separator::after {
+  content: '';
+  position: absolute;
+  top: -0.5px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: url('/images/692b42de5bb0516c7fffb7cd596589588a3defd5.svg') no-repeat;
+  background-size: 100% 100%;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .main-apropos {
+    padding: 100px 32px 60px 32px;
+  }
+  
+  .content-section {
+    flex-direction: column;
+  }
+  
+  .content-left {
+    width: 100%;
+  }
+  
+  .card-small {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-apropos {
+    padding: 100px 16px 60px 16px;
+    gap: 24px;
+  }
+
+  .listing-section {
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .stat-card {
+    width: 120px;
+    height: 120px;
+    padding: 12px;
+  }
+
+  .stat-number {
+    font-size: 20px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+  }
+
+  .card-lg,
+  .card-small,
+  .card-large {
+    padding: 16px 24px;
+  }
+
+  .card-title {
+    font-size: 24px;
+  }
+
+  .card-content {
+    font-size: 16px;
+  }
+
+  .company-name {
+    font-size: 20px;
+  }
+
+  .experience-period {
+    font-size: 16px;
+  }
+
+  .experience-description {
+    font-size: 16px;
+  }
+
+  .formations-title {
+    font-size: 24px;
+  }
+
+  .table-header,
+  .table-row > div {
+    font-size: 14px;
+  }
+
+  .table-col-name {
+    width: 200px;
+  }
+
+  .table-col-school {
+    width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-apropos {
+    padding: 80px 12px 40px 12px;
+    gap: 20px;
+  }
+
+  .stat-card {
+    width: 100px;
+    height: 100px;
+    padding: 8px;
+  }
+
+  .stat-number {
+    font-size: 18px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+  }
+
+  .card-lg,
+  .card-small,
+  .card-large {
+    padding: 12px 16px;
+  }
+
+  .card-title {
+    font-size: 20px;
+  }
+
+  .card-content {
+    font-size: 14px;
+  }
+
+  .company-name {
+    font-size: 18px;
+  }
+
+  .experience-period {
+    font-size: 14px;
+  }
+
+  .experience-description {
+    font-size: 14px;
+  }
+
+  .formations-title {
+    font-size: 20px;
+  }
+
+  .table-header,
+  .table-row > div {
+    font-size: 12px;
+  }
+
+  .table-col-name {
+    width: 150px;
+  }
+
+  .table-col-school {
+    width: 100px;
+  }
+}

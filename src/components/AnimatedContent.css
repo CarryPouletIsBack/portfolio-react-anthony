@@ -1,0 +1,11 @@
+/* AnimatedContent Styles */
+.animated-content {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Optimisations pour les performances */
+.animated-content * {
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

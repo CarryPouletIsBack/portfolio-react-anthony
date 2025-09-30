@@ -1,0 +1,43 @@
+/* MagicBento.css - Effet de suivi de souris avec dégradé */
+.magic-bento {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.magic-bento::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 107, 107, 0.1) 0%,
+    rgba(78, 205, 196, 0.08) 40%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  mix-blend-mode: screen;
+}
+
+.magic-bento:hover::before {
+  opacity: 1;
+}
+
+/* Animation des éléments internes */
+.magic-bento .search-input {
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.magic-bento:hover .search-input {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}

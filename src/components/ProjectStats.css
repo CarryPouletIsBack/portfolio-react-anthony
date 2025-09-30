@@ -1,0 +1,244 @@
+/* Project Stats Section */
+.project-stats {
+  width: 100%;
+  background: #fff8f5;
+  padding: 48px 24px;
+  border-radius: 8px;
+  border: 1px solid #b2aaaa;
+  margin-top: 24px;
+}
+
+.project-stats-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.project-stats-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: #f1582a;
+  margin: 0 0 16px 0;
+  text-align: center;
+  letter-spacing: 0.2px;
+  word-spacing: 0.5px;
+}
+
+.project-stats-description {
+  font-family: 'SF Pro', sans-serif;
+  font-size: 18px;
+  color: #222222;
+  margin: 0 0 48px 0;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stats-section {
+  margin-bottom: 48px;
+}
+
+.stats-section:last-child {
+  margin-bottom: 0;
+}
+
+.stats-section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: #222222;
+  margin: 0 0 24px 0;
+  text-align: left;
+  letter-spacing: 0.2px;
+  border-bottom: 2px solid #f1582a;
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.project-stat-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f1582a, #ff9501);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.project-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  border-color: #f1582a;
+}
+
+.project-stat-card:hover::before {
+  transform: scaleX(1);
+}
+
+.stat-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  color: #f1582a;
+  margin: 0 0 16px 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.stat-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #222222;
+  margin: 0 0 12px 0;
+  letter-spacing: 0.2px;
+}
+
+.stat-description {
+  font-family: 'SF Pro', sans-serif;
+  font-size: 14px;
+  color: #666666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  
+  .project-stat-card {
+    padding: 28px 20px;
+  }
+  
+  .stat-value {
+    font-size: 42px;
+  }
+  
+  .stat-label {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-stats {
+    padding: 32px 16px;
+  }
+  
+  .project-stats-title {
+    font-size: 28px;
+  }
+  
+  .project-stats-description {
+    font-size: 16px;
+    margin-bottom: 32px;
+  }
+  
+  .stats-section {
+    margin-bottom: 32px;
+  }
+  
+  .stats-section-title {
+    font-size: 20px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .project-stat-card {
+    padding: 24px 16px;
+  }
+  
+  .stat-value {
+    font-size: 36px;
+  }
+  
+  .stat-label {
+    font-size: 16px;
+  }
+  
+  .stat-description {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-stats {
+    padding: 24px 12px;
+  }
+  
+  .project-stats-title {
+    font-size: 24px;
+  }
+  
+  .project-stats-description {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  
+  .stats-section {
+    margin-bottom: 24px;
+  }
+  
+  .stats-section-title {
+    font-size: 18px;
+  }
+  
+  .project-stat-card {
+    padding: 20px 12px;
+  }
+  
+  .stat-value {
+    font-size: 32px;
+  }
+  
+  .stat-label {
+    font-size: 14px;
+  }
+  
+  .stat-description {
+    font-size: 12px;
+  }
+}
+
+/* Animation d'apparition */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

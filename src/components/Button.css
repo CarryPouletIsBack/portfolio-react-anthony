@@ -1,0 +1,95 @@
+/* Button Component */
+.btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Variante Secondary (style du bouton Contact) */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(216, 216, 216, 0.3);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Variante Primary (style du bouton "Voir tout les projets") */
+.btn-primary {
+  background: rgba(241, 88, 42, 0.1);
+  border: 1.5px solid #f1582a;
+  color: #f1582a;
+  padding: 12px 12px;
+  border-radius: 9999px;
+}
+
+.btn-primary:hover {
+  background: rgba(241, 88, 42, 0.2);
+}
+
+/* Style pour les boutons avec icônes (comme le bouton menu) */
+.btn-icon {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Tailles d'icônes */
+.btn-icon-small {
+  width: 40px;
+  height: 40px;
+}
+
+.btn-icon-medium {
+  width: 48px;
+  height: 48px;
+}
+
+.btn-icon-large {
+  width: 56px;
+  height: 56px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .btn {
+    font-size: 12px;
+    padding: 10px 16px;
+  }
+  
+  .btn-primary {
+    padding: 10px 12px;
+  }
+  
+  /* Tailles d'icônes sur mobile - respecter les tailles spécifiques */
+  .btn-icon-small {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .btn-icon-medium {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .btn-icon-large {
+    width: 48px;
+    height: 48px;
+  }
+}

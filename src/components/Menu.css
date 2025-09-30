@@ -1,0 +1,102 @@
+/* Menu */
+.menu-page {
+  padding: 120px 48px 72px 48px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.main-menu {
+  width: 100%;
+  max-width: 1416px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.menu-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.section-header {
+  position: relative;
+  padding: 12px;
+  border-left: 1px solid white;
+}
+
+.section-header h3 {
+  color: white;
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 1.82px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.projects-row {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+.projects-row.animating {
+  opacity: 0.7;
+  transform: translateY(10px);
+}
+
+.projects-row::-webkit-scrollbar {
+  height: 8px;
+}
+
+.projects-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.projects-row::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.projects-row::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .projects-row {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-page {
+    padding: 120px 16px 72px 16px;
+  }
+
+  .projects-row {
+    gap: 16px;
+  }
+}
+
+/* Les animations sont maintenant gérées par AnimatedContent */
+
+@media (max-width: 480px) {
+  .projects-row {
+    gap: 12px;
+  }
+}

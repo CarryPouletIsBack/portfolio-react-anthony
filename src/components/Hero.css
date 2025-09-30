@@ -1,0 +1,235 @@
+/* Pages */
+.page {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 120px 16px 72px 16px;
+}
+
+.page.active {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Accueil */
+.accueil-page {
+  position: relative;
+}
+
+.main-accueil {
+  box-sizing: border-box;
+  content-stretch: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: flex-end;
+  padding-bottom: 24px;
+  padding-top: 100px;
+  padding-left: 48px;
+  padding-right: 48px;
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  margin-top: 76px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.hero-section {
+  content-stretch: stretch;
+  display: flex;
+  flex-direction: column;
+  height: 469px;
+  align-items: flex-end;
+  position: relative;
+  width: 508px;
+}
+
+.hero-card {
+  content-stretch: stretch;
+  display: flex;
+  gap: 0px;
+  align-items: flex-start;
+  justify-content: ;
+  position: relative;
+  border-radius: 8px;
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff8f5;
+  border: 1px solid #b2aaaa;
+  padding: 24px;
+  flex-wrap: wrap;
+  color: #222;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  align-content: center;
+}
+
+.card-header h2 {
+  color: #f1582a;
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.project-showcase {
+  margin-top: 40px;
+}
+
+.project-image {
+  width: 468px;
+  height: 288px;
+  background: #5398D4;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.project-image.placeholder {
+  background: #bfccd1;
+  border: 1px solid #b2aaaa;
+}
+
+.main-content {
+  content-stretch: stretch;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  position: relative;
+  border-radius: 8px;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.description-card {
+  background: #fff8f5;
+  box-sizing: border-box;
+  content-stretch: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  position: relative;
+  border-radius: 8px;
+  flex-shrink: 0;
+  width: 55%;
+  border: 1px solid #b2aaaa;
+  color: #222;
+}
+
+.description-card h2 {
+  color: #f1582a;
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.description-text {
+  font-size: 18px;
+  line-height: 24px;
+  margin-bottom: 24px;
+}
+
+.description-text p {
+  font-size: 16px;
+}
+
+.main-content .stats-grid {
+  content-start: start;
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 6px !important;
+  align-items: flex-start;
+  flex-shrink: 0;
+  width: 45%;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.stat-card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.01);
+  box-sizing: border-box;
+  content-stretch: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  position: relative;
+  border-radius: 100px;
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+  border: 3px solid white;
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+}
+
+.stat-card p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.btn-primary {
+  background: rgba(241, 88, 42, 0.1);
+  border: 1.5px solid #f1582a;
+  color: #f1582a;
+  padding: 12px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: rgba(241, 88, 42, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-accueil {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero-section {
+    width: 100%;
+    height: auto;
+  }
+
+  .main-content {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .description-card {
+    width: 100%;
+  }
+
+  .stats-grid {
+    width: 100%;
+  }
+}
