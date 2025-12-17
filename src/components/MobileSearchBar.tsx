@@ -457,6 +457,8 @@ const MobileSearchBar = ({ onSearchChange, onMenuClick, onSearchClick, onPageCha
       {isSearchActive && (
         <div className={`mobile-search-bar-overlay active`} />
       )}
+      {/* Temporairement masqué sur les pages de projet */}
+      {isOnProjectPage ? null : (
       <div className={`${isOnProjectPage ? 'mobile-action-buttons' : 'mobile-search-bar'} ${isSearchActive ? 'search-active' : ''} ${isOnProjectPage ? 'on-project-page' : ''}`}>
       {/* Boutons pour single project */}
       {isOnProjectPage && onProjectClose && showButtons && (
@@ -493,7 +495,8 @@ const MobileSearchBar = ({ onSearchChange, onMenuClick, onSearchClick, onPageCha
             </svg>
           </Button>
           
-          {/* Bouton slider */}
+          {/* Bouton slider - Temporairement masqué */}
+          {false && (
           <div 
             ref={sliderRef}
             className="slider-button"
@@ -517,6 +520,7 @@ const MobileSearchBar = ({ onSearchChange, onMenuClick, onSearchClick, onPageCha
               </svg>
             </div>
           </div>
+          )}
           
           {/* Bouton suivant à droite */}
           <Button 
@@ -661,6 +665,7 @@ const MobileSearchBar = ({ onSearchChange, onMenuClick, onSearchClick, onPageCha
         </>
       )}
       </div>
+      )}
     </>
   )
 }

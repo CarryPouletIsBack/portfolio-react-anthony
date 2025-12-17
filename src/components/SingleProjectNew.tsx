@@ -1,9 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
-import type { PanInfo } from 'framer-motion';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import './SingleProject.css';
-import PedaboardWireframe from './PedaboardWireframe';
 import { type ProjectData } from '../data/projectsNew';
+import BlurText from '../../@/components/BlurText.jsx';
+import { Tree, Folder, File } from './ui/file-tree';
 
 // Import des icônes SVG
 import searchIconBlue from '../assets/4610de4ae01e3b351bbcba9c930287159bbda981.svg'
@@ -255,9 +260,33 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
         
         <div className="main-single-project">
 
+        {/* Image/Video Hero - Tout en haut */}
+        <div className="project-hero-image">
+          {(() => {
+            const mediaSrc = coverImage || projectData.image;
+            const isVideo = mediaSrc.match(/\.(mp4|webm|mov|avi|mkv)$/i) || projectData.title.toLowerCase().includes('mp audio');
+            
+            if (isVideo) {
+              return (
+                <video 
+                  src={mediaSrc} 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+              );
+            }
+            return <img src={mediaSrc} alt={projectData.title} />;
+          })()}
+        </div>
+
         {/* 1. Titre Principal avec badges */}
         <div className="project-header-section">
-          <h1 className="project-main-title">{projectData.title}</h1>
+          <h1 className="project-main-title">
+            <BlurText text={projectData.title} className="project-main-title" />
+          </h1>
           {projectData.subtitle && <p className="project-subtitle">{projectData.subtitle}</p>}
           <div className="project-badges">
             {projectCategory && <span className="project-badge">{projectCategory}</span>}
@@ -271,15 +300,24 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
           </div>
         </div>
 
-        {/* Image Hero */}
-        <div className="project-hero-image">
-          <img src={coverImage || projectData.image} alt={projectData.title} />
-        </div>
-
         {/* 2. Résumé / Introduction */}
         <section className="project-section intro-section">
-          <div className="section-card">
+          <div className="section-card intro-metadata-container">
             <p className="intro-text">{projectData.summary}</p>
+            <div className="metadata-bubbles">
+              <div className="metadata-bubble">
+                <span className="metadata-label">Année</span>
+                <span className="metadata-value">{projectData.year}</span>
+              </div>
+              <div className="metadata-bubble">
+                <span className="metadata-label">Durée</span>
+                <span className="metadata-value">{projectData.duration}</span>
+              </div>
+              <div className="metadata-bubble">
+                <span className="metadata-label">Type</span>
+                <span className="metadata-value">{projectData.type}</span>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -287,91 +325,93 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
         <section className="project-section team-section">
           <div className="section-card">
             <h2 className="section-title">L'équipe projet</h2>
-            <div className="team-list">
-              {projectData.team.map((member, index) => {
-                // Séparer le nom et le poste
-                let name, role;
-                
-                if (member.includes(',') && member.includes('(')) {
-                  // Format: "Nom, Poste (détails)"
-                  const parts = member.split(',');
-                  name = parts[0].trim();
-                  role = parts[1].trim();
-                } else if (member.includes(',')) {
-                  // Format: "Nom, Poste"
-                  const parts = member.split(',');
-                  name = parts[0].trim();
-                  role = parts[1].trim();
-                } else if (member.includes('(') && member.includes(')')) {
-                  // Format: "Nom (poste)"
-                  const openParen = member.indexOf('(');
-                  name = member.substring(0, openParen).trim();
-                  role = member.substring(openParen).trim();
-                } else {
-                  // Format: "Nom" seulement
-                  name = member;
-                  role = '';
-                }
-                
-                 return (
-                   <div key={index} className="team-member">
-                     <div className="team-member-header">
-                       <div className="team-member-name">{name}</div>
-                       {role && <div className="team-member-role">{role}</div>}
-                     </div>
-                     <div className="team-member-image-section">
-                       <div className="imguser">
-                         <img 
-                           src="/images/portrait-anthony.jpg" 
-                           alt="Anthony Merault"
-                           className="team-member-image"
-                         />
-                       </div>
-                     </div>
-                     <div className="team-member-contact">
-                       <a 
-                         href="https://www.instagram.com/meraultony" 
-                         className="team-member-contact-link"
-                         target="_blank"
-                         rel="noopener noreferrer"
-                       >
-                         @meraultony
-                       </a>
-                     </div>
-                   </div>
-                 );
-              })}
+            <div className="team-carousel-wrapper">
+              <Swiper
+                modules={[Pagination]}
+                spaceBetween={8}
+                slidesPerView={1.2}
+                centeredSlides={true}
+                pagination={{
+                  clickable: true,
+                  bulletClass: 'swiper-pagination-bullet team-bullet',
+                  bulletActiveClass: 'swiper-pagination-bullet-active team-bullet-active'
+                }}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 2.2,
+                    spaceBetween: 10
+                  },
+                  1024: {
+                    slidesPerView: 3.2,
+                    spaceBetween: 12
+                  }
+                }}
+                className="team-carousel"
+              >
+                {projectData.team.map((member, index) => {
+                  // Séparer le nom et le poste
+                  let name, role;
+                  
+                  if (member.includes(',') && member.includes('(')) {
+                    // Format: "Nom, Poste (détails)"
+                    const parts = member.split(',');
+                    name = parts[0].trim();
+                    role = parts[1].trim();
+                  } else if (member.includes(',')) {
+                    // Format: "Nom, Poste"
+                    const parts = member.split(',');
+                    name = parts[0].trim();
+                    role = parts[1].trim();
+                  } else if (member.includes('(') && member.includes(')')) {
+                    // Format: "Nom (poste)"
+                    const openParen = member.indexOf('(');
+                    name = member.substring(0, openParen).trim();
+                    role = member.substring(openParen).trim();
+                  } else {
+                    // Format: "Nom" seulement
+                    name = member;
+                    role = '';
+                  }
+                  
+                  return (
+                    <SwiperSlide key={index}>
+                      <div className="team-member">
+                        <div className="team-member-header">
+                          <div className="team-member-name">{name}</div>
+                          {role && <div className="team-member-role">{role}</div>}
+                        </div>
+                        <div className="team-member-image-section">
+                          <div className="imguser">
+                            <img 
+                              src="/images/portrait-anthony.jpg" 
+                              alt={name}
+                              className="team-member-image"
+                            />
+                          </div>
+                        </div>
+                        <div className="team-member-contact">
+                          <a 
+                            href="https://www.instagram.com/meraultony" 
+                            className="team-member-contact-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            @meraultony
+                          </a>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
             </div>
           </div>
         </section>
 
-        {/* 4. Métadonnées projet (Année, Durée, Type) */}
-        <section className="project-section metadata-section">
-          <div className="metadata-bubbles">
-            <div className="metadata-bubble">
-              <span className="metadata-label">Année</span>
-              <span className="metadata-value">{projectData.year}</span>
-            </div>
-            <div className="metadata-bubble">
-              <span className="metadata-label">Durée</span>
-              <span className="metadata-value">{projectData.duration}</span>
-            </div>
-            <div className="metadata-bubble">
-              <span className="metadata-label">Type</span>
-              <span className="metadata-value">{projectData.type}</span>
-            </div>
-          </div>
-        </section>
 
         {/* 5. Contexte & Démarche */}
         <section className="project-section context-approach-section">
           <div className="context-approach-container">
-            {/* Contexte & Problématique */}
-            <div className="section-card">
-              <h2 className="section-title">{projectData.context.title}</h2>
-              <p className="section-content">{projectData.context.content}</p>
-            </div>
-
             {/* Démarche & Approche */}
             <div className="section-card">
               <h2 className="section-title">{projectData.approach.title}</h2>
@@ -393,58 +433,65 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
           <section className="project-section wireframes-section">
             <h2 className="section-title">{projectData.wireframes.title}</h2>
             
-            {/* Bloc de texte descriptif */}
-            <div className="wireframe-intro-text">
-              <p>
-                Les wireframes ci-dessous présentent l'architecture de l'interface et les principaux parcours utilisateur. 
-                Chaque élément est interactif : cliquez sur les différentes zones pour découvrir leur fonction et leur rôle dans l'expérience globale.
-              </p>
-              <p className="wireframe-additional-text">
-                Cette maquette interactive permet de comprendre l'organisation visuelle, la hiérarchie de l'information et les différents points d'interaction proposés aux utilisateurs. 
-                Chaque section a été pensée pour optimiser l'expérience et faciliter la navigation au quotidien.
-              </p>
+            {/* File Tree Component */}
+            <div className="wireframe-file-tree-container" style={{ marginTop: '24px', marginBottom: '24px' }}>
+              <Tree
+                elements={[
+                  {
+                    id: 'wireframes',
+                    name: 'Wireframes',
+                    children: [
+                      {
+                        id: 'pages',
+                        name: 'Pages',
+                        children: [
+                          { id: 'home', name: 'Home' },
+                          { id: 'dashboard', name: 'Dashboard' },
+                          { id: 'profile', name: 'Profile' },
+                        ],
+                      },
+                      {
+                        id: 'components',
+                        name: 'Components',
+                        children: [
+                          { id: 'buttons', name: 'Buttons' },
+                          { id: 'forms', name: 'Forms' },
+                          { id: 'cards', name: 'Cards' },
+                        ],
+                      },
+                    ],
+                  },
+                ]}
+                className="w-full"
+              >
+                <Folder element="Wireframes" value="wireframes">
+                  <Folder element="Pages" value="pages">
+                    <File value="home">Home</File>
+                    <File value="dashboard">Dashboard</File>
+                    <File value="profile">Profile</File>
+                  </Folder>
+                  <Folder element="Components" value="components">
+                    <File value="buttons">Buttons</File>
+                    <File value="forms">Forms</File>
+                    <File value="cards">Cards</File>
+                  </Folder>
+                </Folder>
+              </Tree>
             </div>
             
-            {/* Afficher le composant Figma pour Pedaboard */}
-            {projectData.title === 'Pedaboard' ? (
-              <PedaboardWireframe />
-            ) : (
-              projectData.wireframes.items.map((item, index) => (
-                <div key={index} className="wireframe-item">
-                  <div className="wireframe-image">
-                    <img src={item.image} alt={`Wireframe ${index + 1}`} />
-                  </div>
-                  <p className="wireframe-description">{item.description}</p>
-                </div>
-              ))
-            )}
+            <div className="wireframe-link-container">
+              <a 
+                href="https://www.figma.com/design/Pukbs388PcEAKvHJyGphm2/P%C3%A9daboard?node-id=92-10832&m=dev" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="wireframe-figma-link"
+              >
+                Voir le prototype interactif sur Figma →
+              </a>
+            </div>
           </section>
         )}
 
-        {/* 5.5 Galerie */}
-        <section className="project-section gallery-section">
-          <h2 className="section-title">Galerie</h2>
-          <div className="bento-gallery">
-            <div className="bento-item bento-large">
-              <img src="/images/261061ca92433cd63b52fe7f2093041e9d831bbc.png" alt="Galerie 1" />
-            </div>
-            <div className="bento-item bento-tall">
-              <img src="/images/cd378b6bd18decd8192d9ac3264c5e76c9ad6186.png" alt="Galerie 2" />
-            </div>
-            <div className="bento-item bento-wide">
-              <img src="/images/25c86067ea3b2084f730bb1f906759081bc20fac.png" alt="Galerie 3" />
-            </div>
-            <div className="bento-item">
-              <img src="/images/8cbd7b5155c0b3df21ecc2703b145f2d393e07a0.png" alt="Galerie 4" />
-            </div>
-            <div className="bento-item">
-              <img src="/images/8cc5f68c1c8fa66e1ddab4fe1075e9d19645f9d4.png" alt="Galerie 5" />
-            </div>
-            <div className="bento-item bento-wide">
-              <img src="/images/f27446bbc5c96f74d44074bc97b9be64f7cdf4cf.png" alt="Galerie 6" />
-            </div>
-          </div>
-        </section>
 
         {/* 7. Design System - Palette colorimétrique */}
         <section className="project-section design-system-section">
@@ -454,7 +501,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
             
             {/* Neutrals */}
             <div className="color-category">
-              <h3>{projectData.designSystem.colorPalette.categories.neutrals.title}</h3>
+              <h5>{projectData.designSystem.colorPalette.categories.neutrals.title}</h5>
               <div className="table-wrapper">
                 <table className="color-table">
                   <thead>
@@ -485,7 +532,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
 
             {/* Primary */}
             <div className="color-category">
-              <h3>{projectData.designSystem.colorPalette.categories.primary.title}</h3>
+              <h5>{projectData.designSystem.colorPalette.categories.primary.title}</h5>
               <div className="table-wrapper">
                 <table className="color-table">
                   <thead>
@@ -514,7 +561,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
 
             {/* Secondary */}
             <div className="color-category">
-              <h3>{projectData.designSystem.colorPalette.categories.secondary.title}</h3>
+              <h5>{projectData.designSystem.colorPalette.categories.secondary.title}</h5>
               <div className="table-wrapper">
                 <table className="color-table">
                   <thead>
@@ -543,7 +590,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
 
             {/* Accent */}
             <div className="color-category">
-              <h3>{projectData.designSystem.colorPalette.categories.accent.title}</h3>
+              <h5>{projectData.designSystem.colorPalette.categories.accent.title}</h5>
               <div className="table-wrapper">
                 <table className="color-table">
                   <thead>
@@ -572,7 +619,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
 
             {/* Error */}
             <div className="color-category">
-              <h3>{projectData.designSystem.colorPalette.categories.error.title}</h3>
+              <h5>{projectData.designSystem.colorPalette.categories.error.title}</h5>
               <div className="table-wrapper">
                 <table className="color-table">
                   <thead>
@@ -644,7 +691,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
               <h2 className="components-title">Composants</h2>
             </div>
             <div className="components-content">
-              <div className="h-[362px] shrink-0 w-full flex flex-wrap gap-4">
+              <div className="components-wrapper">
                 
                 {/* Groupe Search */}
                 <div className="flex flex-col gap-2">
@@ -964,19 +1011,86 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
           <section className="project-section results-section">
             <div className="section-card">
               <h2 className="section-title">Résultats & Impact</h2>
-              <div className="section-content">
-                {projectData.results.metrics && (
-                  <div className="results-grid">
-                    {projectData.results.metrics.map((metric, index) => (
-                      <div key={index} className="result-item">
-                        <div className="result-metric">
-                          <span className="result-number">{metric.value}</span>
-                          <span className="result-unit">{metric.label}</span>
-                        </div>
-                      </div>
-                    ))}
+              
+              {/* Section deux colonnes en bas */}
+              <div className="results-bottom-section">
+                {/* Contenu deux colonnes - Premier cercle */}
+                <div className="results-bottom-content">
+                  {/* Colonne gauche - Cercle animé */}
+                  <div className="results-left-column">
+                    <div className="animated-circle-container">
+                      <svg className="animated-circle-svg" viewBox="0 0 280 280" preserveAspectRatio="xMidYMid meet">
+                        <circle
+                          className="circle-bg"
+                          cx="140"
+                          cy="140"
+                          r="110"
+                          fill="none"
+                          stroke="#d4d4d4"
+                          strokeWidth="40"
+                        />
+                        <circle
+                          className="circle-progress"
+                          cx="140"
+                          cy="140"
+                          r="110"
+                          fill="none"
+                          stroke="#f1582a"
+                          strokeWidth="40"
+                          strokeLinecap="round"
+                          strokeDasharray={`${2 * Math.PI * 110}`}
+                          strokeDashoffset={`${2 * Math.PI * 110 * 0.65}`}
+                          transform="rotate(-90 140 140)"
+                        />
+                      </svg>
+                    </div>
                   </div>
-                )}
+                  
+                  {/* Colonne droite - Titre et pourcentage */}
+                  <div className="results-right-column">
+                    <p className="results-bottom-subtitle">Gestion des tâches quotidiennes</p>
+                    <p className="results-bottom-percentage">35%</p>
+                  </div>
+                </div>
+                
+                {/* Contenu deux colonnes - Deuxième cercle */}
+                <div className="results-bottom-content">
+                  {/* Colonne gauche - Cercle animé */}
+                  <div className="results-left-column">
+                    <div className="animated-circle-container">
+                      <svg className="animated-circle-svg" viewBox="0 0 280 280" preserveAspectRatio="xMidYMid meet">
+                        <circle
+                          className="circle-bg"
+                          cx="140"
+                          cy="140"
+                          r="110"
+                          fill="none"
+                          stroke="#d4d4d4"
+                          strokeWidth="40"
+                        />
+                        <circle
+                          className="circle-progress"
+                          cx="140"
+                          cy="140"
+                          r="110"
+                          fill="none"
+                          stroke="#f1582a"
+                          strokeWidth="40"
+                          strokeLinecap="round"
+                          strokeDasharray={`${2 * Math.PI * 110}`}
+                          strokeDashoffset={`${2 * Math.PI * 110 * 0.6}`}
+                          transform="rotate(-90 140 140)"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  {/* Colonne droite - Titre et pourcentage */}
+                  <div className="results-right-column">
+                    <p className="results-bottom-subtitle">Gestion quotidienne</p>
+                    <p className="results-bottom-percentage">40%</p>
+                  </div>
+                </div>
               </div>
             </div>
           </section>

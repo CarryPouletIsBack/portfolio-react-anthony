@@ -155,7 +155,7 @@ const Header = ({ onMenuClick, onContactClick, onLogoClick, currentPage, onSearc
               </MagicBento>
             </div>
           )}
-          <div className="header-actions">
+          <div className="header-actions" style={{ display: 'none' }}>
             <Button variant="secondary" onClick={onContactClick} className="hidden-contact-btn">Contact</Button>
             <Button variant="secondary" icon={true} onClick={onMenuClick}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

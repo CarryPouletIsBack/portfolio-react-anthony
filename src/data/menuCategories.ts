@@ -20,7 +20,7 @@ export const menuCategories: MenuCategory[] = [
     title: 'Application',
     projects: [
       { 
-        imageSrc: "/images/261061ca92433cd63b52fe7f2093041e9d831bbc.png", 
+        imageSrc: "/images/playdago-cover.png", 
         imageAlt: "Playdago", 
         title: "Playdago" 
       },
@@ -46,7 +46,7 @@ export const menuCategories: MenuCategory[] = [
     title: 'Site web',
     projects: [
       { 
-        imageSrc: "/images/514dda7a5dbdf8da4239a28ff06c4b36281c7d36.png", 
+        imageSrc: "/images/0134e78478dc1f1d253d2dc665ff3b92b115ee46.png", 
         imageAlt: "Utoi", 
         title: "Utoi" 
       },
@@ -82,7 +82,7 @@ export const menuCategories: MenuCategory[] = [
         title: "Ghadeer market" 
       },
       { 
-        imageSrc: "/images/514dda7a5dbdf8da4239a28ff06c4b36281c7d36.png", 
+        imageSrc: "/images/mpaudio-cover.png", 
         imageAlt: "Mp audio", 
         title: "Mp audio" 
       },
@@ -98,7 +98,7 @@ export const menuCategories: MenuCategory[] = [
     title: 'Motion',
     projects: [
       { 
-        imageSrc: "/images/25c86067ea3b2084f730bb1f906759081bc20fac.png", 
+        imageSrc: "/images/mpaudio-cover.png", 
         imageAlt: "Mp audio", 
         title: "Mp audio" 
       },

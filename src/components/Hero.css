@@ -6,6 +6,18 @@
   padding: 73px 16px 73px 16px;
 }
 
+/* Désactiver le scroll sur la page d'accueil sur les écrans non mobiles */
+@media (min-width: 769px) {
+  .page {
+    overflow-y: hidden !important;
+    overflow: hidden !important;
+  }
+  
+  .accueil-page {
+    overflow: hidden !important;
+  }
+}
+
 .page.active {
   display: flex;
   flex-direction: column;
@@ -14,6 +26,12 @@
 /* Accueil */
 .accueil-page {
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
 }
 
 .main-accueil {
@@ -68,9 +86,11 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
   align-items: flex-start;
   min-width: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .hero-main-title {
@@ -80,6 +100,7 @@
   line-height: normal;
   color: white;
   margin: 0;
+  padding: 0;
   width: 100%;
   flex-shrink: 0;
 }
@@ -131,8 +152,6 @@
 }
 
 .card-header {
-  /* padding: 16px 20px; */
-  /* border-bottom: 1px solid #e5e5e5; */
   background: #f9f9f9;
   display: flex;
   justify-content: center;
@@ -152,8 +171,6 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  /* background: white; */
-  /* border: 2px solid #374151; */
   cursor: pointer;
   font-size: 18px;
   border: none !important;
@@ -505,5 +522,53 @@
   .tag {
     font-size: 11px;
     padding: 2px 4px;
+  }
+}
+
+/* Positionner le titre en bas de l'écran sur les écrans non mobiles */
+@media (min-width: 769px) {
+  .hero-left-column {
+    position: relative;
+  }
+  
+  .hero-title-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    padding-bottom: 16px;
+    margin: 0;
+  }
+  
+  /* Ajouter un scroll vertical à la colonne de droite */
+  .hero-right-column {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - 104px - 100px);
+    padding-right: 8px;
+    padding-bottom: 0 !important;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: auto !important;
+    margin-top: auto;
+  }
+  
+  /* Style de la scrollbar pour la colonne de droite */
+  .hero-right-column::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .hero-right-column::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+  
+  .hero-right-column::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+  
+  .hero-right-column::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
   }
 }

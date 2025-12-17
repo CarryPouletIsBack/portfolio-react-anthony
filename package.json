@@ -1,7 +1,7 @@
 {
   "name": "mon-nouveau-projet-react",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,10 +11,15 @@
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.2.8",
+    "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-slot": "^1.2.4",
     "@types/three": "^0.180.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.22",
     "gsap": "^3.14.2",
+    "lucide-react": "^0.561.0",
     "motion": "^12.23.26",
     "react": "^19.1.1",
     "react-bits": "^1.0.5",
@@ -25,7 +30,7 @@
     "react-swipeable": "^7.0.2",
     "swiper": "^12.0.2",
     "tailwind-merge": "^3.3.1",
-    "three": "^0.180.0"
+    "three": "^0.167.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

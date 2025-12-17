@@ -6,7 +6,7 @@
   right: 0;
   z-index: 3001;
   padding: 0px 16px;
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -546,7 +546,7 @@
 .mobile-search-bar .search-result-image {
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 8px;
+  border-radius: 9999px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -872,9 +872,27 @@
   stroke: currentColor;
 }
 
-/* Afficher sur mobile uniquement */
-@media (max-width: 768px) {
-  .mobile-search-bar {
-    display: flex !important;
+/* Afficher sur tous les appareils */
+
+/* Agrandir les miniatures sur les écrans non mobiles */
+@media (min-width: 769px) {
+  .mobile-search-bar .search-result-item {
+    min-width: 200px;
+    width: 200px;
+    height: 234px;
+  }
+  
+  .mobile-search-bar .search-result-image {
+    aspect-ratio: 1; /* Garde le même ratio carré */
+  }
+  
+  /* Réduire la largeur de la search bar de moitié sur les écrans non mobiles */
+  .mobile-search-bar .search-bar {
+    max-width: 50%;
+  }
+  
+  /* La search bar active garde toute la largeur même sur les écrans non mobiles */
+  .mobile-search-bar.search-active .search-bar {
+    max-width: 100%;
   }
 }

@@ -144,7 +144,7 @@ export const projectsDataNew: { [key: string]: ProjectData } = {
     badges: ['UX/UI', '2024', 'Application'],
     
     // 2. Résumé / Introduction
-    summary: 'Création d\'une plateforme de pédagogie active pour centraliser la gestion des outils métiers. Réalisé en 9 mois, rôle de Directeur Artistique et Concepteur UX/UI en collaboration avec une équipe de développeurs.',
+    summary: 'Ce projet a été réalisé pour une cliente experte en pédagogie active qui utilisait plusieurs plateformes distinctes pour gérer ses bases de données, ses newsletters et ses commandes. La gestion était devenue complexe et fragmentée. L\'objectif principal était de centraliser toutes ses données dans une interface unique afin d\'avoir une vue d\'ensemble claire, optimiser le suivi des clients, recevoir des rappels automatiques et mieux suivre ses formations.',
     
     // 3. Contexte & Problématique
     context: {
@@ -288,7 +288,7 @@ export const projectsDataNew: { [key: string]: ProjectData } = {
     
     // Métadonnées
     year: '2024',
-    image: '/images/261061ca92433cd63b52fe7f2093041e9d831bbc.png',
+    image: '/images/playdago-cover.png',
     skills: ['UX Research', 'Design system', 'UI', 'Branding', 'Figma', 'React js'],
     duration: '9 mois',
     type: 'Application web',
@@ -305,7 +305,7 @@ export const projectsDataNew: { [key: string]: ProjectData } = {
     badges: ['UX/UI', '2025', 'CRM'],
     
     // 2. Résumé / Introduction
-    summary: 'Création d\'un CRM personnalisé pour centraliser la gestion des clients, newsletters et commandes. Réalisé en 9 mois pour une experte en pédagogie active, rôle de Directeur Artistique et Concepteur UX/UI.',
+    summary: 'Ce projet a été réalisé pour une cliente experte en pédagogie active qui utilisait plusieurs plateformes distinctes pour gérer ses bases de données, ses newsletters et ses commandes. La gestion était devenue complexe et fragmentée. L\'objectif principal était de centraliser toutes ses données dans une interface unique afin d\'avoir une vue d\'ensemble claire, optimiser le suivi des clients, recevoir des rappels automatiques et mieux suivre ses formations.',
     
     // 3. Contexte & Problématique
     context: {

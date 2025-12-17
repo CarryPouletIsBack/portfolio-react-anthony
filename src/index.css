@@ -120,3 +120,48 @@ main {
     font-size: 13px;
   }
 }
+
+/* Désactiver le scroll vertical sur les écrans non mobiles */
+@media (min-width: 769px) {
+  body {
+    overflow-y: hidden !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+  }
+  
+  html {
+    overflow-y: hidden !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+  }
+  
+  #root {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+  }
+  
+  .app {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+  }
+  
+  .container {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+  }
+  
+  .accueil-page {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+  }
+  
+  .main-accueil {
+    height: calc(100vh - 104px) !important;
+    max-height: calc(100vh - 104px) !important;
+    overflow: hidden !important;
+  }
+}
