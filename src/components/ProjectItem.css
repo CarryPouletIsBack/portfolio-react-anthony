@@ -1,5 +1,5 @@
 /* Project Item Component */
-.project-item {
+.menu-page .project-item {
   content-stretch: stretch;
   display: flex;
   flex-direction: column;
@@ -11,6 +11,7 @@
   width: 468px;
   cursor: pointer;
   transition: all 0.3s ease;
+  animation: heroMainBounce 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .project-item:hover {
@@ -76,6 +77,8 @@
 @media (max-width: 768px) {
   .project-item {
     width: 300px;
+    animation-duration: 700ms;
+    animation-delay: 80ms;
   }
   
   .project-image {
@@ -93,10 +96,11 @@
 
 @media (max-width: 480px) {
   .project-item {
-    width: 180px; /* 9/16 ratio: 180px width */
+    width: 320px; /* 16/9 ratio: 320px width */
   }
   
   .project-image {
-    height: 320px; /* 9/16 ratio: 320px height (180 * 16/9 = 320) */
+    height: 180px; /* 16/9 ratio: 180px height (320 * 9/16 = 180) */
   }
 }
+

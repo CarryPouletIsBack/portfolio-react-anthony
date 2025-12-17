@@ -13,13 +13,9 @@
   width: 100%;
 }
 
-/* Animation de fond pour le menu */
+/* Fond pour le menu - géré par body.menu-active et GridPattern */
 .container.menu-active {
-  background: #000000;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background: transparent;
 }
 
 /* Masquer l'image de fond sur la page menu */

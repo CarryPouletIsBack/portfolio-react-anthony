@@ -1,0 +1,12 @@
+{
+  "name": "test-cursor-2",
+  "id": "com.anthony.testcursor2",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": ["figma"],
+  "relaunchButtons": [
+    { "command": "open", "name": "Open toolkit" }
+  ]
+}
+

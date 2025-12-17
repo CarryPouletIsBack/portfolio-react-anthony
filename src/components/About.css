@@ -18,6 +18,8 @@
   max-width: 1416px;
   margin: 0 auto;
   z-index: 0;
+  animation: heroMainBounce 900ms cubic-bezier(0.22, 1, 0.36, 1) 160ms both;
+  transform-origin: top center;
 }
 
 /* Section listing - Statistiques */
@@ -77,6 +79,7 @@
   position: relative;
   border-radius: 16px;
   width: 100%;
+  animation: heroMainBounce 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .card-border {
@@ -104,7 +107,7 @@
   font-family: 'SF Pro', sans-serif;
   font-weight: 400;
   font-size: 18px;
-  line-height: 24px;
+  line-height: 28px;
   color: #222222;
   margin: 0;
   width: 100%;
@@ -113,11 +116,14 @@
 
 .card-content p {
   margin: 0;
+  font-size: 18px !important;
 }
 
 /* Section content - Deux colonnes */
 .content-section {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
   gap: 24px;
   align-items: flex-start;
   position: relative;
@@ -126,11 +132,23 @@
 
 .content-left {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 24px;
   align-items: flex-start;
   position: relative;
-  width: 487px;
+  flex: 1;
+  min-width: 300px;
+  max-width: 487px;
+}
+
+.content-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  position: relative;
+  flex: 1;
+  min-width: 300px;
 }
 
 /* Cartes petites */
@@ -145,6 +163,7 @@
   position: relative;
   border-radius: 16px;
   width: 487px;
+  animation: heroMainBounce 800ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
 }
 
 .card-large {
@@ -159,6 +178,7 @@
   border-radius: 16px;
   flex: 1;
   min-width: 0;
+  animation: heroMainBounce 800ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
 }
 
 /* Expériences */
@@ -238,7 +258,7 @@
   font-family: 'SF Pro', sans-serif;
   font-weight: 400;
   font-size: 18px;
-  line-height: 24px;
+  line-height: 28px;
   color: #222222;
   margin: 0;
   width: 100%;
@@ -247,6 +267,7 @@
 
 .experience-description p {
   margin: 0;
+  font-size: 18px !important;
 }
 
 /* Section Formations */
@@ -372,11 +393,11 @@
   }
   
   .content-section {
-    flex-direction: column;
+    flex-direction: row; /* Garder côte à côte */
   }
   
   .content-left {
-    width: 100%;
+    width: 400px; /* Réduire mais garder la colonne */
   }
   
   .card-small {
@@ -386,8 +407,20 @@
 
 @media (max-width: 768px) {
   .main-apropos {
-    padding: 100px 16px 60px 16px;
+    padding: 100px 8px 60px 8px;
     gap: 24px;
+  }
+  
+  .content-section {
+    flex-direction: column; /* Passer en colonne sur mobile */
+  }
+  
+  .content-left {
+    width: 100%;
+  }
+  
+  .card-small {
+    width: 100%;
   }
 
   .listing-section {
@@ -420,7 +453,7 @@
   }
 
   .card-content {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .company-name {
@@ -432,7 +465,7 @@
   }
 
   .experience-description {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .formations-title {
@@ -484,7 +517,7 @@
   }
 
   .card-content {
-    font-size: 14px;
+    font-size: 18px;
   }
 
   .company-name {
@@ -496,7 +529,7 @@
   }
 
   .experience-description {
-    font-size: 14px;
+    font-size: 18px;
   }
 
   .formations-title {
@@ -514,5 +547,86 @@
 
   .table-col-school {
     width: 100px;
+  }
+}
+
+/* Section introduction À propos */
+.about-intro-section {
+  width: 100%;
+  margin-bottom: 48px;
+}
+
+.about-intro-content {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.about-text-column {
+  flex: 1;
+  max-width: 600px;
+}
+
+.about-intro-title {
+  font-family: 'SF Pro', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 24px 0;
+  line-height: 1.2;
+}
+
+.about-intro-description {
+  font-family: 'SF Pro', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: white;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.about-photo-column {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-photo-container {
+  width: 300px;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e0e0e0;
+}
+
+.about-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Responsive pour la section intro */
+@media (max-width: 768px) {
+  .about-intro-content {
+    flex-direction: column;
+    gap: 32px;
+    text-align: center;
+  }
+  
+  .about-text-column {
+    max-width: 100%;
+  }
+  
+  .about-intro-title {
+    font-size: 28px;
+  }
+  
+  .about-photo-container {
+    width: 250px;
+    height: 250px;
   }
 }

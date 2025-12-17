@@ -25,7 +25,7 @@ const DecryptedText = ({ text, className = '', speed = 50, delay = 0 }: Decrypte
       
       const decryptInterval = setInterval(() => {
         if (currentIndex < text.length) {
-          setDisplayedText(prev => {
+          setDisplayedText(_prev => {
             const newText = text.slice(0, currentIndex + 1)
             const remainingChars = text.slice(currentIndex + 1)
             const randomChars = remainingChars

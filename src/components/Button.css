@@ -6,7 +6,7 @@
   font-size: 14px;
   font-weight: 500;
   padding: 12px 20px;
-  border-radius: 100px;
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
@@ -22,6 +22,7 @@
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(216, 216, 216, 0.3);
+  border-radius: 50px;
 }
 
 .btn-secondary:hover {
@@ -33,8 +34,8 @@
   background: rgba(241, 88, 42, 0.1);
   border: 1.5px solid #f1582a;
   color: #f1582a;
-  padding: 12px 12px;
-  border-radius: 9999px;
+  padding: 12px 20px;
+  border-radius: 50px;
 }
 
 .btn-primary:hover {
@@ -47,7 +48,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 50px;
+}
+
+.btn-icon svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 /* Tailles d'icônes */

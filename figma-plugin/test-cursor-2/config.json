@@ -1,0 +1,13 @@
+{
+  "scope": "all",
+  "rename": [
+    { "find": "banniere", "replace": "test c'est moi cursor qui la modifier" }
+  ],
+  "fontReplace": {
+    "findFamily": "",
+    "replaceFamily": "",
+    "style": "Regular"
+  },
+  "extractTokens": false
+}
+

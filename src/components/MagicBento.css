@@ -37,7 +37,23 @@
   transition: all 0.3s ease;
 }
 
-.magic-bento:hover .search-input {
+/* Effet hover uniquement pour le Header, pas pour MobileSearchBar */
+.header .magic-bento:hover .search-input {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* S'assurer que le search-input dans mobile-search-bar n'a pas de box-shadow */
+.mobile-search-bar .magic-bento .search-input,
+.mobile-search-bar .magic-bento:hover .search-input,
+.mobile-search-bar .magic-bento.search-bar .search-input,
+.mobile-search-bar .magic-bento.search-bar.has-results .search-input,
+.mobile-search-bar .magic-bento.search-bar.has-results:hover .search-input {
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.magic-bento.search-bar {
+  padding-top: 16px;
+  padding-bottom: 16px;
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import Button from './Button'
-import ShinyText from './ShinyText'
 import GradientText from './GradientText'
 import MagicBento from './MagicBento'
 import './Header.css'
@@ -99,15 +98,19 @@ const Header = ({ onMenuClick, onContactClick, onLogoClick, currentPage, onSearc
     <>
       <header className="header">
         <div className="header-content">
-          <div className="logo-section" onClick={onLogoClick} style={{cursor: 'pointer'}}>
+          <button className="logo-section" onClick={onLogoClick} aria-label="Retour à l'accueil">
             <div className="logo">
-              <img src="/images/pp-anthony.jpg" alt="Anthony Merault" style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', borderRadius: '50%'}} />
+              <img
+                src="/images/logo.svg"
+                alt="Logo"
+                style={{ width: '85%', height: '85%', objectFit: 'contain', objectPosition: 'center center' }}
+              />
             </div>
             <div className="logo-text">
               <h1>Anthony Merault</h1>
               <p>Product designer & director artistic</p>
             </div>
-          </div>
+          </button>
           {currentPage === 'menu' && (
             <div className="header-center">
               <MagicBento className="search-bar">
@@ -153,14 +156,15 @@ const Header = ({ onMenuClick, onContactClick, onLogoClick, currentPage, onSearc
             </div>
           )}
           <div className="header-actions">
-            <Button variant="secondary" onClick={onContactClick}>Contact</Button>
+            <Button variant="secondary" onClick={onContactClick} className="hidden-contact-btn">Contact</Button>
             <Button variant="secondary" icon={true} onClick={onMenuClick}>
-              <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd" d="M8 2.5C8.55228 2.5 9 2.94772 9 3.5V6.5C9 7.29565 8.68393 8.05871 8.12132 8.62132C7.55871 9.18393 6.79565 9.5 6 9.5H3C2.44772 9.5 2 9.05228 2 8.5C2 7.94772 2.44772 7.5 3 7.5H6C6.26522 7.5 6.51957 7.39464 6.70711 7.20711C6.89464 7.01957 7 6.76522 7 6.5V3.5C7 2.94772 7.44772 2.5 8 2.5ZM16 2.5C16.5523 2.5 17 2.94772 17 3.5V6.5C17 6.76522 17.1054 7.01957 17.2929 7.20711C17.4804 7.39464 17.7348 7.5 18 7.5H21C21.5523 7.5 22 7.94772 22 8.5C22 9.05228 21.5523 9.5 21 9.5H18C17.2044 9.5 16.4413 9.18393 15.8787 8.62132C15.3161 8.05871 15 7.29565 15 6.5V3.5C15 2.94772 15.4477 2.5 16 2.5ZM2 16.5C2 15.9477 2.44772 15.5 3 15.5H6C6.79565 15.5 7.55871 15.8161 8.12132 16.3787C8.68393 16.9413 9 17.7044 9 18.5V21.5C9 22.0523 8.55228 22.5 8 22.5C7.44772 22.5 7 22.0523 7 21.5V18.5C7 18.2348 6.89464 17.9804 6.70711 17.7929C6.51957 17.6054 6.26522 17.5 6 17.5H3C2.44772 17.5 2 17.0523 2 16.5ZM18 17.5C17.7348 17.5 17.4804 17.6054 17.2929 17.7929C17.1054 17.9804 17 18.2348 17 18.5V21.5C17 22.0523 16.5523 22.5 16 22.5C15.4477 22.5 15 22.0523 15 21.5V18.5C15 17.7043 15.3161 16.9413 15.8787 16.3787C16.4413 15.8161 17.2043 15.5 18 15.5H21C21.5523 15.5 22 15.9477 22 16.5C22 17.0523 21.5523 17.5 21 17.5H18Z" fill="white"/>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" clipRule="evenodd" d="M8 2C8.55228 2 9 2.44772 9 3V6C9 6.79565 8.68393 7.55871 8.12132 8.12132C7.55871 8.68393 6.79565 9 6 9H3C2.44772 9 2 8.55228 2 8C2 7.44772 2.44772 7 3 7H6C6.26522 7 6.51957 6.89464 6.70711 6.70711C6.89464 6.51957 7 6.26522 7 6V3C7 2.44772 7.44772 2 8 2ZM16 2C16.5523 2 17 2.44772 17 3V6C17 6.26522 17.1054 6.51957 17.2929 6.70711C17.4804 6.89464 17.7348 7 18 7H21C21.5523 7 22 7.44772 22 8C22 8.55228 21.5523 9 21 9H18C17.2044 9 16.4413 8.68393 15.8787 8.12132C15.3161 7.55871 15 6.79565 15 6V3C15 2.44772 15.4477 2 16 2ZM2 16C2 15.4477 2.44772 15 3 15H6C6.79565 15 7.55871 15.3161 8.12132 15.8787C8.68393 16.4413 9 17.2044 9 18V21C9 21.5523 8.55228 22 8 22C7.44772 22 7 21.5523 7 21V18C7 17.7348 6.89464 17.4804 6.70711 17.2929C6.51957 17.1054 6.26522 17 6 17H3C2.44772 17 2 16.5523 2 16ZM18 17C17.7348 17 17.4804 17.1054 17.2929 17.2929C17.1054 17.4804 17 17.7348 17 18V21C17 21.5523 16.5523 22 16 22C15.4477 22 15 21.5523 15 21V18C15 17.2043 15.3161 16.4413 15.8787 15.8787C16.4413 15.3161 17.2043 15 18 15H21C21.5523 15 22 15.4477 22 16C22 16.5523 21.5523 17 21 17H18Z" fill="white"/>
               </svg>
             </Button>
           </div>
         </div>
+        
       </header>
 
     </>

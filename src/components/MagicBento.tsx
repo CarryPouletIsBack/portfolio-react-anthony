@@ -4,11 +4,15 @@ import './MagicBento.css'
 interface MagicBentoProps {
   children: React.ReactNode
   className?: string
+  onClick?: () => void
+  style?: React.CSSProperties
 }
 
 const MagicBento: React.FC<MagicBentoProps> = ({ 
   children, 
-  className = ''
+  className = '',
+  onClick,
+  style
 }) => {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -46,7 +50,7 @@ const MagicBento: React.FC<MagicBentoProps> = ({
   }, [])
 
   return (
-    <div ref={ref} className={`magic-bento ${className}`}>
+    <div ref={ref} className={`magic-bento ${className}`} onClick={onClick} style={style}>
       {children}
     </div>
   )

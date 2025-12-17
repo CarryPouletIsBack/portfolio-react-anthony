@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './SingleProject.css';
 import HoverCard from './HoverCard';
-import ProjectStats from './ProjectStats';
-import ProjectCharts from './ProjectCharts';
+import Button from './Button';
 
 interface ProjectData {
   title: string;
@@ -61,6 +60,8 @@ interface SingleProjectProps {
 }
 
 const SingleProject: React.FC<SingleProjectProps> = ({ projectData, onBackClick }) => {
+  const [isClosing, setIsClosing] = useState(false);
+
   // Fonction pour calculer la couleur de texte appropriée selon le contraste
   const getTextColor = (backgroundColor: string) => {
     // Convertir hex en RGB
@@ -76,9 +77,26 @@ const SingleProject: React.FC<SingleProjectProps> = ({ projectData, onBackClick 
     return luminance > 0.5 ? '#000000' : '#ffffff';
   };
 
+  const handleClose = () => {
+    setIsClosing(true);
+    // Attendre la fin de l'animation avant de fermer
+    setTimeout(() => {
+      onBackClick();
+    }, 400); // Durée de l'animation
+  };
+
   return (
-    <div className="page active single-project-page">
+    <div className={`page active single-project-page ${isClosing ? 'closing' : ''}`}>
       <div className="main-single-project">
+        {/* Bouton Retour */}
+        <div className="back-button-container">
+          <Button variant="secondary" onClick={handleClose} className="back-button" icon={true}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </Button>
+        </div>
+
         {/* Header */}
         <div className="project-header">
           <h1 className="project-title">{projectData.title}</h1>
@@ -109,11 +127,6 @@ const SingleProject: React.FC<SingleProjectProps> = ({ projectData, onBackClick 
 
         {/* Content Section */}
         <div className="content-section">
-          <div className="description-card">
-            <h2>Description</h2>
-            <p>{projectData.description}</p>
-          </div>
-          
           <div className="project-info-card">
             <div className="info-item">
               <h3>Années</h3>
@@ -135,6 +148,11 @@ const SingleProject: React.FC<SingleProjectProps> = ({ projectData, onBackClick 
                 ))}
               </ul>
             </div>
+          </div>
+          
+          <div className="description-card">
+            <h2>Description</h2>
+            <p>{projectData.description}</p>
           </div>
         </div>
 
@@ -220,147 +238,310 @@ const SingleProject: React.FC<SingleProjectProps> = ({ projectData, onBackClick 
           {/* Neutrals */}
           <div className="color-category">
             <h3>Neutrals (pour les surfaces et textes)</h3>
-            <div className="color-table">
-              <div className="table-header">
-                <span>Rôle</span>
-                <span>Nom Figma (token)</span>
-                <span>Couleur</span>
-                <span>Utilisation</span>
-              </div>
-              {projectData.colorPalette.neutrals.map((color, index) => (
-                <div key={index} className="table-row">
-                  <span>{color.role}</span>
-                  <span>{color.token}</span>
-                  <div className="color-preview" style={{ backgroundColor: color.color }}>
-                    <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
-                  </div>
-                  <span>{color.usage}</span>
-                </div>
-              ))}
+            <div className="table-wrapper">
+              <table className="color-table">
+                <thead>
+                  <tr>
+                    <th>Rôle</th>
+                    <th>Nom Figma (token)</th>
+                    <th>Couleur</th>
+                    <th>Utilisation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projectData.colorPalette.neutrals.map((color, index) => (
+                    <tr key={index}>
+                      <td>{color.role}</td>
+                      <td>{color.token}</td>
+                      <td>
+                        <div className="color-preview" style={{ backgroundColor: color.color }}>
+                          <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+                        </div>
+                      </td>
+                      <td>{color.usage}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
           {/* Primary */}
           <div className="color-category">
             <h3>Primary (action principale)</h3>
-            <div className="color-table">
-              <div className="table-header">
-                <span>Rôle</span>
-                <span>Nom Figma (token)</span>
-                <span>Couleur</span>
-              </div>
-              {projectData.colorPalette.primary.map((color, index) => (
-                <div key={index} className="table-row">
-                  <span>{color.role}</span>
-                  <span>{color.token}</span>
-                  <div className="color-preview" style={{ backgroundColor: color.color }}>
-                    <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
-                  </div>
-                </div>
-              ))}
+            <div className="table-wrapper">
+              <table className="color-table">
+                <thead>
+                  <tr>
+                    <th>Rôle</th>
+                    <th>Nom Figma (token)</th>
+                    <th>Couleur</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projectData.colorPalette.primary.map((color, index) => (
+                    <tr key={index}>
+                      <td>{color.role}</td>
+                      <td>{color.token}</td>
+                      <td>
+                        <div className="color-preview" style={{ backgroundColor: color.color }}>
+                          <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
           {/* Secondary */}
           <div className="color-category">
             <h3>Secondary (action secondaire ou highlight)</h3>
-            <div className="color-table">
-              <div className="table-header">
-                <span>Rôle</span>
-                <span>Nom Figma (token)</span>
-                <span>Couleur</span>
-              </div>
-              {projectData.colorPalette.secondary.map((color, index) => (
-                <div key={index} className="table-row">
-                  <span>{color.role}</span>
-                  <span>{color.token}</span>
-                  <div className="color-preview" style={{ backgroundColor: color.color }}>
-                    <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
-                  </div>
-                </div>
-              ))}
+            <div className="table-wrapper">
+              <table className="color-table">
+                <thead>
+                  <tr>
+                    <th>Rôle</th>
+                    <th>Nom Figma (token)</th>
+                    <th>Couleur</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projectData.colorPalette.secondary.map((color, index) => (
+                    <tr key={index}>
+                      <td>{color.role}</td>
+                      <td>{color.token}</td>
+                      <td>
+                        <div className="color-preview" style={{ backgroundColor: color.color }}>
+                          <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
           {/* Accent */}
           <div className="color-category">
             <h3>Accent / Warning / Highlight</h3>
-            <div className="color-table">
-              <div className="table-header">
-                <span>Rôle</span>
-                <span>Nom Figma (token)</span>
-                <span>Couleur</span>
-              </div>
-              {projectData.colorPalette.accent.map((color, index) => (
-                <div key={index} className="table-row">
-                  <span>{color.role}</span>
-                  <span>{color.token}</span>
-                  <div className="color-preview" style={{ backgroundColor: color.color }}>
-                    <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
-                  </div>
-                </div>
-              ))}
+            <div className="table-wrapper">
+              <table className="color-table">
+                <thead>
+                  <tr>
+                    <th>Rôle</th>
+                    <th>Nom Figma (token)</th>
+                    <th>Couleur</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projectData.colorPalette.accent.map((color, index) => (
+                    <tr key={index}>
+                      <td>{color.role}</td>
+                      <td>{color.token}</td>
+                      <td>
+                        <div className="color-preview" style={{ backgroundColor: color.color }}>
+                          <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
           {/* Error */}
           <div className="color-category">
             <h3>Error / Danger</h3>
-            <div className="color-table">
-              <div className="table-header">
-                <span>Rôle</span>
-                <span>Nom Figma (token)</span>
-                <span>Couleur</span>
-              </div>
-              {projectData.colorPalette.error.map((color, index) => (
-                <div key={index} className="table-row">
-                  <span>{color.role}</span>
-                  <span>{color.token}</span>
-                  <div className="color-preview" style={{ backgroundColor: color.color }}>
-                    <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
-                  </div>
-                </div>
-              ))}
+            <div className="table-wrapper">
+              <table className="color-table">
+                <thead>
+                  <tr>
+                    <th>Rôle</th>
+                    <th>Nom Figma (token)</th>
+                    <th>Couleur</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projectData.colorPalette.error.map((color, index) => (
+                    <tr key={index}>
+                      <td>{color.role}</td>
+                      <td>{color.token}</td>
+                      <td>
+                        <div className="color-preview" style={{ backgroundColor: color.color }}>
+                          <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
         {/* Typography */}
         <div className="typography-section">
-          <h2>Typographique</h2>
-          <p>Le système typographique a été construit autour d'une échelle hiérarchique fine, allant de H1 (32 px) à H9 (13 px), avec un interlignage constant de 150 % pour assurer la lisibilité. J'ai appliqué une logique modulaire en nommant chaque style selon sa fonction (ex. a.var.caption.notification, label, p), ce qui m'a permis d'optimiser leur réutilisabilité dans une approche Atomic Design.</p>
-          <p>L'ensemble repose sur la police Inter Variable, utilisée exclusivement dans différentes graisses pour structurer l'interface sans surcharger le chargement ni la lecture.</p>
+          <h2>Typography & Colors</h2>
           
-          <div className="typography-table">
-            <div className="table-header">
-              <span>Style</span>
-              <span>typographie</span>
-              <span>exemple</span>
-              <span>taille px</span>
-              <span>Interlignage</span>
+          {/* Font Family Display */}
+          <div className="font-family-display">
+            <h3 className="font-name">
+              SF Pr<span className="emoji-o">👋</span>
+            </h3>
+            <div className="font-weights">
+              <span>Regular</span>
+              <span>x</span>
+              <span>Medium</span>
+              <span>x</span>
+              <span>Semibold</span>
             </div>
-            {projectData.typography.map((type, index) => (
-              <div key={index} className="table-row">
-                <span>{type.style}</span>
-                <span>{type.font}</span>
-                <span className="typography-example" style={{ 
-                  fontSize: type.size + 'px',
-                  fontFamily: type.font.includes('Inter') ? 'Inter, sans-serif' : 'inherit'
-                }}>
-                  Hello {projectData.title}
-                </span>
-                <span>{type.size}</span>
-                <span>{type.lineHeight}</span>
+          </div>
+
+          {/* Style Overview */}
+          <div className="style-overview">
+            <div className="large-letter-display">Aa</div>
+            <div className="alphabet-display">
+              <span>Bb</span>
+              <span>Cc</span>
+              <span>Dd</span>
+              <span>Ee</span>
+              <span>Ff</span>
+              <span>Gg</span>
+              <span>Hh</span>
+              <span>Ii</span>
+              <span>Jj</span>
+              <span>Kk</span>
+              <span>Ll</span>
+              <span>Mm</span>
+              <span>Nn</span>
+              <span>Oo</span>
+              <span>Pp</span>
+              <span>Qq</span>
+              <span>Rr</span>
+              <span>Ss</span>
+              <span>Tt</span>
+              <span>Uu</span>
+              <span>Vv</span>
+              <span>Ww</span>
+              <span>Xx</span>
+              <span>Yy</span>
+              <span>Zz</span>
+            </div>
+          </div>
+
+          {/* Font Sizes Scale */}
+          <div className="font-sizes-scale">
+            <div className="scale-line"></div>
+            <div className="font-sizes">
+              <div className="font-size-item">
+                <div className="font-size-tick"></div>
+                <div className="font-size-label">12 pt</div>
               </div>
-            ))}
+              <div className="font-size-item">
+                <div className="font-size-tick"></div>
+                <div className="font-size-label">14 pt</div>
+              </div>
+              <div className="font-size-item">
+                <div className="font-size-tick"></div>
+                <div className="font-size-label">16 pt</div>
+              </div>
+              <div className="font-size-item">
+                <div className="font-size-tick"></div>
+                <div className="font-size-label">18 pt</div>
+              </div>
+              <div className="font-size-item">
+                <div className="font-size-tick"></div>
+                <div className="font-size-label">24 pt</div>
+              </div>
+              <div className="font-size-item">
+                <div className="font-size-tick"></div>
+                <div className="font-size-label highlighted">36 pt</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Composants Section */}
+        <div className="components-section">
+          <div className="section-card">
+            <div className="components-header">
+              <h2 className="components-title">Composants</h2>
+              <p className="components-subtitle">Système de composants Pedaboard</p>
+            </div>
+            
+            <div className="components-content">
+              <div className="components-grid">
+                {/* Boutons avec icônes */}
+                <div className="component-group">
+                  <div className="component-item">
+                    <button className="pedaboard-btn pedaboard-btn-icon pedaboard-btn-white">
+                      <img src="/images/4a0ee018277331dcb02f5b3f940ff6f565bab339.svg" alt="Icon" />
+                    </button>
+                    <span className="component-label">Bouton icône blanc</span>
+                  </div>
+                  
+                  <div className="component-item">
+                    <button className="pedaboard-btn pedaboard-btn-icon pedaboard-btn-orange">
+                      <img src="/images/4a0ee018277331dcb02f5b3f940ff6f565bab339.svg" alt="Icon" />
+                    </button>
+                    <span className="component-label">Bouton icône orange</span>
+                  </div>
+                </div>
+
+                {/* Boutons avec texte */}
+                <div className="component-group">
+                  <div className="component-item">
+                    <button className="pedaboard-btn pedaboard-btn-text pedaboard-btn-white">
+                      <img src="/images/4a0ee018277331dcb02f5b3f940ff6f565bab339.svg" alt="Icon" />
+                      <span>Accueil</span>
+                    </button>
+                    <span className="component-label">Bouton texte blanc</span>
+                  </div>
+                  
+                  <div className="component-item">
+                    <button className="pedaboard-btn pedaboard-btn-text pedaboard-btn-orange">
+                      <img src="/images/4a0ee018277331dcb02f5b3f940ff6f565bab339.svg" alt="Icon" />
+                      <span>Connexion</span>
+                    </button>
+                    <span className="component-label">Bouton texte orange</span>
+                  </div>
+                </div>
+
+                {/* Boutons texte seulement */}
+                <div className="component-group">
+                  <div className="component-item">
+                    <button className="pedaboard-btn pedaboard-btn-text pedaboard-btn-white">
+                      <span>Se connecter</span>
+                    </button>
+                    <span className="component-label">Bouton texte simple</span>
+                  </div>
+                  
+                  <div className="component-item">
+                    <button className="pedaboard-btn pedaboard-btn-text pedaboard-btn-orange">
+                      <span>Commencer</span>
+                    </button>
+                    <span className="component-label">Bouton texte orange</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Nouvelle section */}
+        <div className="new-section">
+          <h2>Approche méthodologique</h2>
+          <p>Cette section présente l'approche méthodologique adoptée pour ce projet, en mettant l'accent sur les processus de recherche, de conception et de validation qui ont guidé le développement de la solution.</p>
+          
+          <div className="methodology-image">
+            <img src="/images/261061ca92433cd63b52fe7f2093041e9d831bbc.png" alt="Méthodologie de conception UX" />
           </div>
         </div>
         
-        {/* Project Stats */}
-        <ProjectStats />
-        
-        {/* Project Charts */}
-        <ProjectCharts />
       </div>
     </div>
   );

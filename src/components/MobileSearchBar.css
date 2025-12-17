@@ -1,16 +1,111 @@
 /* Mobile Search Bar */
 .mobile-search-bar {
   position: fixed;
-  bottom: 0;
+  top: 104px; /* Juste en dessous du header (24px padding top + 24px padding bottom + ~56px contenu = ~104px) */
   left: 0;
   right: 0;
-  z-index: 1000;
-  padding: 20px;
+  z-index: 3001;
+  padding: 0px 16px;
   display: none;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100%;
   gap: 16px;
+  background-color: unset;
+  background: unset;
+  background-image: none;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  isolation: isolate;
+}
+
+/* Boutons d'action mobile pour la single project */
+.mobile-action-buttons {
+  position: fixed;
+  top: auto;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3001;
+  padding: 0px 16px;
+  padding-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+  background-color: unset;
+  background: unset;
+  background-image: none;
+  isolation: isolate;
+}
+
+/* Réduire la largeur à 30% sur les écrans > 1024px */
+@media (min-width: 1025px) {
+  .mobile-action-buttons {
+    width: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Compatibilité : garder on-project-page pour les styles existants */
+.mobile-search-bar.on-project-page,
+.mobile-action-buttons.on-project-page {
+  top: auto;
+  bottom: 0;
+  padding-bottom: 16px;
+}
+
+/* Overlay pour assombrir l'arrière-plan quand la search bar est active */
+.mobile-search-bar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 3000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.mobile-search-bar-overlay.active {
+  opacity: 1;
+  pointer-events: auto; /* Bloque les clics sur le contenu derrière */
+  animation: fadeInOverlay 0.5s ease-in-out;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Bouton de fermeture de projet - même style que le bouton menu */
+.mobile-search-bar .project-close-button {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(216, 216, 216, 0.3) !important;
+  position: relative;
+  z-index: 3000;
+}
+
+.mobile-search-bar .project-close-button svg {
+  stroke: white;
+}
+
+.mobile-search-bar .project-close-button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
 }
 
 .mobile-search-bar .search-bar {
@@ -19,19 +114,77 @@
   min-width: auto;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 100px;
-  padding: 12px 20px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100px;
   display: flex;
   align-items: center;
   gap: 12px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  transform: scale(0.7);
+  transform-origin: center center;
+  isolation: isolate;
+}
+
+/* Quand la search bar est active (bouton menu masqué), elle occupe toute la largeur */
+.mobile-search-bar.search-active {
+  padding-left: 0;
+  padding-right: 0;
+  gap: 0;
+}
+
+.mobile-search-bar.search-active .search-bar {
+  width: 100%;
+  flex: 1 1 100%;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Quand les résultats sont affichés */
+.mobile-search-bar .search-bar.has-results {
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 24px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-left: 16px;
+  margin-right: 16px;
+  width: 100px;
+  gap: 16px;
+  /* Utiliser dvh pour mobile (dynamic viewport height) avec fallback sur vh */
+  max-height: calc(100dvh - 104px - 16px); /* Hauteur écran visible - position top - marge bas */
+  max-height: calc(100vh - 104px - 16px); /* Fallback pour navigateurs non supportés */
+  overflow: hidden;
+  display: flex;
+  box-sizing: border-box;
+  transform: scale(1);
+  transform-origin: left center;
+}
+
+/* Support spécifique pour mobile avec dvh */
+@supports (height: 100dvh) {
+  .mobile-search-bar .search-bar.has-results {
+    max-height: calc(100dvh - 104px - 16px);
+  }
 }
 
 .mobile-search-bar .search-bar input {
   background: none;
   border: none;
   color: white;
-  font-size: 14px;
+  font-size: 16px;
   outline: none;
   flex: 1;
   position: relative;
@@ -40,16 +193,15 @@
 
 .mobile-search-bar .search-placeholder {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 0;
+  transform: translateY(-50%);
   color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
+  font-size: 16px;
   pointer-events: none;
   z-index: 1;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
+  white-space: nowrap;
+  line-height: 1.5;
   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -65,13 +217,86 @@
   flex-shrink: 0;
 }
 
+/* Bouton Accueil - même taille que la search bar */
+.mobile-search-bar .home-button {
+  width: 57px !important;
+  height: 57px !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  border-radius: 100px !important;
+  display: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Masquer le bouton menu quand la search bar est active */
+.mobile-search-bar.search-active .home-button {
+  display: none !important;
+}
+
+.mobile-search-bar .home-button svg {
+  fill: rgba(171, 171, 172, 1) !important;
+  color: rgba(171, 171, 172, 1) !important;
+}
+
 .mobile-search-bar .search-bar:focus-within {
-  background: rgba(241, 88, 42, 0.1);
-  border: 1.5px solid #f1582a;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: none;
 }
 
 .mobile-search-bar .search-bar:focus-within input {
-  color: #f1582a;
+  color: white;
+}
+
+/* Row contenant l'icône et l'input - CRITIQUE pour l'alignement */
+.mobile-search-bar .search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.mobile-search-bar .search-input-row > svg {
+  flex-shrink: 0;
+  display: block;
+  vertical-align: middle;
+  align-self: center;
+}
+
+/* Style de champ texte uniquement quand les résultats sont affichés */
+.mobile-search-bar .search-bar.has-results .search-input-row {
+  flex-direction: row;
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 10px 16px;
+  box-shadow: none;
+}
+
+.mobile-search-bar .search-bar.has-results .search-input-row {
+  border-color: rgba(255, 255, 255, 0);
+}
+
+.mobile-search-bar .search-bar.has-results .search-input-row:focus-within {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: none;
+}
+
+.mobile-search-bar .search-bar.has-results .search-input-row > svg {
+  opacity: 0.7;
+  vertical-align: middle;
+  align-self: center;
 }
 
 /* Conteneur pour l'input */
@@ -80,16 +305,40 @@
   flex: 1;
   display: flex;
   align-items: center;
+  min-width: 0;
+  height: 100%;
+}
+
+.mobile-search-bar .search-input-container .input-wrapper {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 .mobile-search-bar .search-input {
   background: none;
   border: none;
   color: white;
-  font-size: 14px;
+  font-size: 16px;
   outline: none;
   flex: 1;
   width: 100%;
+  min-width: 0;
+  padding: 0;
+  line-height: 20px;
+  box-shadow: none !important;
+  margin: 0;
+  vertical-align: middle;
+  height: 20px;
+}
+
+.mobile-search-bar .search-bar.has-results .search-input {
+  box-shadow: none !important;
+}
+
+.mobile-search-bar .search-bar .search-input {
+  box-shadow: none !important;
 }
 
 /* Input wrapper pour la prédiction mobile */
@@ -98,12 +347,13 @@
   flex: 1;
   display: flex;
   align-items: center;
+  min-width: 0;
 }
 
 /* Bouton de suppression mobile */
 .mobile-search-bar .clear-button {
   position: absolute;
-  right: 12px;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -181,6 +431,445 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
+/* Résultats de recherche */
+.mobile-search-bar .search-results {
+  width: 100%;
+  margin-top: 8px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Masquer les scrollbars sur mobile uniquement */
+@media (max-width: 768px) {
+  .mobile-search-bar .search-results {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE et Edge */
+  }
+  
+  .mobile-search-bar .search-results::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+}
+
+.mobile-search-bar .search-results-category {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.mobile-search-bar .search-category-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 4px;
+}
+
+.mobile-search-bar .search-results-row {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Masquer les scrollbars sur mobile uniquement */
+@media (max-width: 768px) {
+  .mobile-search-bar .search-results-row {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE et Edge */
+  }
+  
+  .mobile-search-bar .search-results-row::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+}
+
+.mobile-search-bar .search-results-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.mobile-search-bar .search-results-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mobile-search-bar .search-results-row::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.mobile-search-bar .search-results-row::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.mobile-search-bar .search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.mobile-search-bar .search-result-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-width: 146px;
+  width: 146px;
+  height: 171px;
+  flex-shrink: 0;
+}
+
+.mobile-search-bar .search-result-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-search-bar .search-result-image {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 0;
+  flex-shrink: 0;
+}
+
+.mobile-search-bar .search-result-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block;
+  min-height: 0;
+}
+
+.mobile-search-bar .search-result-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+}
+
+.mobile-search-bar .search-result-title {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* Boutons pour single project */
+.mobile-search-bar .project-buttons-container,
+.mobile-action-buttons .project-buttons-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  align-content: center;
+}
+
+.mobile-search-bar .project-buttons-container > *,
+.mobile-action-buttons .project-buttons-container > * {
+  vertical-align: middle;
+}
+
+.mobile-search-bar .back-left-button,
+.mobile-action-buttons .back-left-button {
+  width: 56px !important;
+  height: 56px !important;
+  padding: 0 !important;
+  border-radius: 100px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  color: rgba(171, 171, 172, 1) !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  box-sizing: border-box !important;
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.26s ease-out;
+  /* Glass Surface Effect */
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.2),
+    0 2px 16px 0 rgba(31, 38, 135, 0.1),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.2);
+}
+
+.mobile-search-bar .back-left-button:hover,
+.mobile-action-buttons .back-left-button:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(14px) saturate(2) brightness(1.15) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(2) brightness(1.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.3),
+    0 2px 16px 0 rgba(31, 38, 135, 0.15),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.mobile-search-bar .back-left-button svg,
+.mobile-action-buttons .back-left-button svg {
+  stroke: rgba(171, 171, 172, 1) !important;
+  fill: rgba(171, 171, 172, 1) !important;
+  color: rgba(171, 171, 172, 1) !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+  z-index: 1 !important;
+  pointer-events: none;
+}
+
+.mobile-search-bar .back-left-button .back-left-icon,
+.mobile-action-buttons .back-left-button .back-left-icon {
+  transform: translate(-50%, -50%) scaleX(-1) !important;
+}
+
+.mobile-search-bar .back-left-button .preview-image,
+.mobile-action-buttons .back-left-button .preview-image {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border-radius: 50% !important;
+  z-index: 5 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+.mobile-search-bar .back-left-button .preview-image-visible,
+.mobile-action-buttons .back-left-button .preview-image-visible {
+  opacity: 1 !important;
+  transition: opacity 0.4s ease-in-out !important;
+  z-index: 10 !important;
+}
+
+.mobile-search-bar .back-left-button .preview-image-hidden,
+.mobile-action-buttons .back-left-button .preview-image-hidden {
+  opacity: 0 !important;
+  transition: opacity 0.4s ease-in-out !important;
+  pointer-events: none;
+  z-index: 1 !important;
+}
+
+.mobile-search-bar .back-left-button svg.preview-icon,
+.mobile-action-buttons .back-left-button svg.preview-icon {
+  transition: opacity 0.4s ease-in-out !important;
+  z-index: 2 !important;
+}
+
+.mobile-search-bar .back-left-button .preview-icon-visible,
+.mobile-action-buttons .back-left-button .preview-icon-visible {
+  opacity: 1 !important;
+  z-index: 2 !important;
+}
+
+.mobile-search-bar .back-left-button .preview-icon-hidden,
+.mobile-action-buttons .back-left-button .preview-icon-hidden {
+  opacity: 0 !important;
+  pointer-events: none;
+  z-index: 1 !important;
+}
+
+.mobile-search-bar .slider-button,
+.mobile-action-buttons .slider-button {
+  flex: 1;
+  height: 56px;
+  padding-top: 36px;
+  padding-bottom: 36px;
+  padding-left: 8px;
+  padding-right: 8px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 100px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  vertical-align: bottom;
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.2),
+    0 2px 16px 0 rgba(31, 38, 135, 0.1),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.2);
+}
+
+.mobile-search-bar .slider-text,
+.mobile-action-buttons .slider-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(28, 28, 28, 1);
+  font-size: 20px;
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 100;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.mobile-search-bar .slider-button:hover,
+.mobile-action-buttons .slider-button:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(14px) saturate(2) brightness(1.15) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(2) brightness(1.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.3),
+    0 2px 16px 0 rgba(31, 38, 135, 0.15),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.mobile-search-bar .slider-button-circle,
+.mobile-action-buttons .slider-button-circle {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  z-index: 2;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  vertical-align: bottom;
+  color: rgba(255, 255, 255, 1);
+  padding-bottom: 0px;
+}
+
+.mobile-search-bar .slider-button-circle:active,
+.mobile-action-buttons .slider-button-circle:active {
+  cursor: grabbing;
+}
+
+.mobile-search-bar .slider-button-circle svg,
+.mobile-action-buttons .slider-button-circle svg {
+  stroke: #333;
+  stroke-width: 2;
+}
+
+.mobile-search-bar .slider-button:hover .slider-button-circle,
+.mobile-action-buttons .slider-button:hover .slider-button-circle {
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Bouton de fermeture de la search bar active */
+.mobile-search-bar .search-close-button {
+  position: fixed;
+  top: 44px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 3001;
+  padding: 0;
+  opacity: 0;
+  animation: closeButtonBounceUp 1000ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes closeButtonBounceUp {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(100px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  80% {
+    transform: translateX(-50%) translateY(3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.mobile-search-bar .search-close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(-50%) translateY(0) scale(1.05);
+}
+
+.mobile-search-bar .search-close-button:active {
+  transform: translateX(-50%) translateY(0) scale(0.95);
+}
+
+.mobile-search-bar .search-close-button svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
 }
 
 /* Afficher sur mobile uniquement */

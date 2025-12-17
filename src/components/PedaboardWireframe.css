@@ -1,0 +1,586 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Inter:wght@400;600;700&family=Cabin:wght@500;600;700&family=Ubuntu:wght@400;500&family=Lato:wght@700&display=swap');
+
+@keyframes wireframeAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  80% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pedaboard-wireframe {
+  width: 100%;
+  background: #f1f3f4;
+  border-radius: 16px;
+  overflow: hidden;
+  font-family: 'Caveat', cursive;
+  position: relative;
+  border: none;
+  box-shadow: 
+    0 0 0 2px #374151,
+    -1px -1px 0 2px #374151,
+    1px -1px 0 2px #374151,
+    -1px 1px 0 2px #374151,
+    1px 1px 0 2px #374151;
+  filter: url(#pencil-filter);
+  animation: wireframeAppear 1s steps(2, end) backwards;
+  animation-delay: 0.5s;
+}
+
+/* Wrapper - Centre le wireframe ET applique le scale */
+.wireframe-wrapper {
+  display: inline-flex;
+  position: relative;
+  width: max-content;
+  max-width: 100%;
+  transform: scale(0.65);
+  transform-origin: center center;
+  margin-top: -60px;
+}
+
+
+/* Éléments cliquables */
+.clickable-element {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.clickable-element:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 0 2px #f1582a;
+}
+
+/* Info box pour élément sélectionné - Apparaît au clic */
+.selected-element-info {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  padding: 24px 32px;
+  z-index: 10000;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.info-header h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+  margin: 0;
+}
+
+.close-info {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(216, 216, 216, 0.3);
+  border-radius: 50%;
+  color: #000000;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.close-info:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.selected-element-info p {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000000;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Animation appliquée au wireframe entier */
+
+
+/* Effet trait au crayon via SVG filter */
+.pedaboard-wireframe::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 3px
+    );
+}
+
+/* Header */
+.pedaboard-header {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 16px 32px;
+  background: white;
+  border-bottom: 2px solid #374151;
+  box-shadow: 0 1px 0 #374151, 0 -1px 0 #374151;
+}
+
+.pedaboard-header .header-right {
+  margin-left: auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.header-nav, .header-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.nav-btn {
+  background: white;
+  border: 2px solid #374151;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  filter: url(#pencil-filter);
+}
+
+.nav-btn.active {
+  background: #1f2937;
+  color: white;
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #6b7280;
+  border: 2px solid #374151;
+}
+
+/* Main Content */
+.pedaboard-main {
+  padding: 24px 32px;
+}
+
+.greeting {
+  font-size: 32px;
+  color: #1f2937;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 16px;
+}
+
+/* Tasks Column */
+.tasks-column {
+  background: white;
+  border-radius: 28px;
+  padding: 16px;
+  border: 2px solid #374151;
+  filter: url(#pencil-filter);
+}
+
+.task-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.task-tab {
+  background: #f1f3f4;
+  border: 2px solid #374151;
+  padding: 10px 16px;
+  border-radius: 100px;
+  font-size: 14px;
+  color: #4b5563;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-tab .badge {
+  background: #6b7280;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 50%;
+  min-width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #374151;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-card {
+  background: #f1f3f4;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 2px solid #374151;
+  border-left: 4px solid #374151;
+  filter: url(#pencil-filter);
+}
+
+.task-card.yellow {
+  border-left-width: 4px;
+}
+
+.task-header-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.task-client {
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.task-date {
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.task-title {
+  color: #1f2937;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+.task-description {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+/* Main Column */
+.main-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Client Section */
+.client-section {
+  background: white;
+  border-radius: 28px;
+  padding: 24px 16px;
+  border: 2px solid #374151;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-header h2 {
+  font-size: 24px;
+  color: #1f2937;
+  font-weight: 600;
+  margin: 0;
+}
+
+.section-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.client-table {
+  overflow-x: auto;
+}
+
+.client-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.client-table th {
+  text-align: left;
+  padding: 10px 12px;
+  color: #2b2e48;
+  font-weight: 600;
+  border-bottom: 2px solid #374151;
+}
+
+.client-table td {
+  padding: 10px 12px;
+  color: #7d7d7d;
+  border-bottom: 1px solid #374151;
+}
+
+.client-table td.highlight {
+  color: #1f2937;
+  font-weight: 500;
+}
+
+/* Bottom Sections */
+.bottom-sections {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 16px;
+}
+
+/* Formation Section */
+.formation-section {
+  background: #e5e7eb;
+  border-radius: 28px;
+  padding: 16px;
+  border: 2px solid #374151;
+}
+
+.formation-section h2 {
+  font-size: 22px;
+  color: #1f2937;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+
+.formation-cards {
+  display: flex;
+  gap: 12px;
+}
+
+.formation-card {
+  background: white;
+  padding: 12px;
+  border-radius: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 2px solid #374151;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date-badge {
+  background: white;
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  color: #4b5563;
+  border: 2px solid #374151;
+}
+
+.card-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #374151;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.card-subtitle {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.card-title {
+  font-size: 20px;
+  color: #1f2937;
+  font-weight: 700;
+  margin: 0;
+}
+
+.card-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #6b7280;
+  margin: 8px 0;
+}
+
+.icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.places-badge {
+  background: #4b5563;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  text-transform: lowercase;
+  border: 2px solid #374151;
+}
+
+/* Outils Section */
+.outils-section {
+  background: white;
+  border-radius: 28px;
+  padding: 24px 16px;
+  border: 2px solid #374151;
+}
+
+.outils-section h2 {
+  font-size: 22px;
+  color: #1f2937;
+  font-weight: 600;
+  margin: 0;
+}
+
+.outils-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.outil-card {
+  background: #f1f3f4;
+  border-radius: 24px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  border: 2px solid #374151;
+}
+
+.outil-card:hover {
+  opacity: 0.8;
+}
+
+.canva-logo {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bottom-sections {
+    grid-template-columns: 1fr;
+  }
+  
+  .formation-cards {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .pedaboard-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .header-nav, .header-right {
+    flex-wrap: wrap;
+  }
+  
+  .client-table {
+    overflow-x: scroll;
+  }
+  
+  .outils-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+

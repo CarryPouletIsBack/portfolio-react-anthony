@@ -50,7 +50,6 @@ const ProjectItem = ({ imageSrc, imageAlt, title, onClick, className = '', force
       // Si l'image est claire, utiliser du texte sombre, sinon du texte clair
       return brightness > 128 ? 'black' : 'white'
     } catch (error) {
-      console.warn('Erreur lors de l\'analyse de l\'image:', error)
       return 'white' // Fallback en cas d'erreur
     }
   }
@@ -79,7 +78,6 @@ const ProjectItem = ({ imageSrc, imageAlt, title, onClick, className = '', force
             const color = getAverageColor(img)
             setTextColor(color)
           } catch (error) {
-            console.warn('Erreur lors de l\'analyse de l\'image:', error)
             setTextColor('white')
           }
         }
@@ -124,7 +122,9 @@ const ProjectItem = ({ imageSrc, imageAlt, title, onClick, className = '', force
               borderRadius: '4px'
             }} 
           />
-        ) : null}
+        ) : (
+          <div className="w-full h-full rounded-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse" />
+        )}
       </div>
       <p style={{ color: textColor }}>{title}</p>
     </div>
