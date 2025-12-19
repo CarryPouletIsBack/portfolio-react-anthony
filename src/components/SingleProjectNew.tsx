@@ -106,17 +106,32 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
     if (!isDragging || startY === null) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      e.preventDefault();
-      
-      // Vérifier si on peut encore swiper
       const target = pageRef.current;
+      
+      // Vérifier si on peut encore swiper - si on a scrollé, arrêter le drag
       if (target && target.scrollTop > 10) {
+        // Si on scroll, annuler le drag et permettre le scroll normal
+        setIsDragging(false);
+        setStartY(null);
+        setStartYValue(0);
         y.set(0);
+        if (onSwipeYChange) {
+          onSwipeYChange(0);
+        }
         return;
       }
       
+      e.preventDefault();
+      e.stopPropagation();
+      
       // Calculer la translation depuis le point de départ (comme event.translationY en RN)
       const translationY = e.clientY - startY;
+      
+      // Si on tire vers le bas (translationY > 0), continuer le drag
+      // Si on tire vers le haut (translationY < 0), ne rien faire pour permettre le scroll
+      if (translationY < 0) {
+        return;
+      }
       
       // Calculer la prochaine position Y (comme ctx.startY + event.translationY dans l'exemple RN)
       const nextY = startYValue + translationY;
@@ -130,17 +145,32 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      e.preventDefault();
-      
-      // Vérifier si on peut encore swiper
       const target = pageRef.current;
+      
+      // Vérifier si on peut encore swiper - si on a scrollé, arrêter le drag
       if (target && target.scrollTop > 10) {
+        // Si on scroll, annuler le drag et permettre le scroll normal
+        setIsDragging(false);
+        setStartY(null);
+        setStartYValue(0);
         y.set(0);
+        if (onSwipeYChange) {
+          onSwipeYChange(0);
+        }
         return;
       }
       
+      e.preventDefault();
+      e.stopPropagation();
+      
       // Calculer la translation depuis le point de départ (comme event.translationY en RN)
       const translationY = e.touches[0].clientY - startY;
+      
+      // Si on tire vers le bas (translationY > 0), continuer le drag
+      // Si on tire vers le haut (translationY < 0), ne rien faire pour permettre le scroll
+      if (translationY < 0) {
+        return;
+      }
       
       // Calculer la prochaine position Y (comme ctx.startY + event.translationY dans l'exemple RN)
       const nextY = startYValue + translationY;
@@ -233,17 +263,24 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
       <motion.div 
         ref={pageRef}
         className={`page active single-project-page ${isClosing ? 'closing' : ''} ${isDragging ? 'dragging' : ''}`}
-        style={{
+        style={isDragging ? {
           y: y,
+        } : isClosing ? {
+          y: screenHeight,
+        } : {
+          y: 0,
         }}
-        animate={!isDragging ? {
-          y: isClosing ? screenHeight : 0,
+        animate={!isDragging && isClosing ? {
+          y: screenHeight,
+        } : !isDragging ? {
+          y: 0,
         } : undefined}
         transition={{
           type: "spring",
           stiffness: 300,
           damping: 30,
         }}
+        initial={false}
       >
         {/* Barre de fermeture en haut */}
         <div 
@@ -264,7 +301,19 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
         <div className="project-hero-image">
           {(() => {
             const mediaSrc = coverImage || projectData.image;
-            const isVideo = mediaSrc.match(/\.(mp4|webm|mov|avi|mkv)$/i) || projectData.title.toLowerCase().includes('mp audio');
+            
+            // Vérifier si mediaSrc existe et n'est pas vide
+            if (!mediaSrc) {
+              console.warn('No media source found for project:', projectData.title);
+              return null;
+            }
+            
+            // Vérifier si c'est une vidéo (extension vidéo ou projet "mp audio")
+            const hasVideoExtension = /\.(mp4|webm|mov|avi|mkv)$/i.test(mediaSrc);
+            const isMpAudioProject = projectData.title.toLowerCase().includes('mp audio');
+            const isVideo = hasVideoExtension || isMpAudioProject;
+            
+            console.log('Media src:', mediaSrc, 'isVideo:', isVideo);
             
             if (isVideo) {
               return (
@@ -274,11 +323,28 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
                   loop 
                   muted 
                   playsInline
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
+                  onError={(e) => {
+                    console.error('Video load error:', mediaSrc, e);
+                  }}
                 />
               );
             }
-            return <img src={mediaSrc} alt={projectData.title} />;
+            
+            // Sinon, c'est une image
+            return (
+              <img 
+                src={mediaSrc} 
+                alt={projectData.title} 
+                style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
+                onError={(e) => {
+                  console.error('Image load error:', mediaSrc, e);
+                }}
+                onLoad={() => {
+                  console.log('Image loaded successfully:', mediaSrc);
+                }}
+              />
+            );
           })()}
         </div>
 
