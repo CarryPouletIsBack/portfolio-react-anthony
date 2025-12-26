@@ -204,15 +204,7 @@ const MobileSearchBar = ({ onSearchChange, onMenuClick, onSearchClick, onPageCha
     setSearchTerm(value)
     
     // Filtrer les projets - toujours afficher les résultats
-    if (value.length > 0) {
-      const filtered = allProjects.filter(project =>
-        project.title.toLowerCase().includes(value.toLowerCase())
-      )
-      setFilteredResults(filtered)
-    } else {
-      // Afficher tous les projets quand il n'y a pas de recherche
-      setFilteredResults(allProjects)
-    }
+    // Les résultats sont calculés dynamiquement via getGroupedResults()
     setShowResults(true)
     
     if (onSearchChange) {
@@ -222,7 +214,6 @@ const MobileSearchBar = ({ onSearchChange, onMenuClick, onSearchClick, onPageCha
 
   const handleClearSearch = () => {
     setSearchTerm('')
-    setFilteredResults(allProjects)
     setShowResults(true)
     if (onSearchChange) {
       onSearchChange('')
@@ -231,7 +222,6 @@ const MobileSearchBar = ({ onSearchChange, onMenuClick, onSearchClick, onPageCha
 
   const handleCloseSearch = () => {
     setSearchTerm('')
-    setFilteredResults(allProjects)
     setShowResults(false)
     if (onSearchChange) {
       onSearchChange('')
@@ -252,7 +242,6 @@ const MobileSearchBar = ({ onSearchChange, onMenuClick, onSearchClick, onPageCha
 
   const handleResultClick = (project: any) => {
     setSearchTerm(project.title)
-    setFilteredResults([])
     setShowResults(false)
     if (onSearchChange) {
       onSearchChange(project.title)

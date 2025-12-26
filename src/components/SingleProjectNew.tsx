@@ -76,12 +76,6 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
     }
   }, []); // Seulement au montage
 
-  const _handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      onBackClick();
-    }, 400);
-  };
 
   // Vérifier si on peut swiper (on peut toujours swiper depuis la barre)
   const canSwipe = useCallback(() => {
