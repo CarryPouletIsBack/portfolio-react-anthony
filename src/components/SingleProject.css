@@ -937,6 +937,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  max-width: 508px;
   vertical-align: bottom;
   transition: all 0.3s ease;
 }
