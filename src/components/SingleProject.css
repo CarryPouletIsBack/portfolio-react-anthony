@@ -99,7 +99,7 @@
   margin: 0 auto;
   z-index: 1;
   flex: 1;
-  padding-top: 0px;
+  padding-top: calc(56.25vw);
   padding-left: 0px;
   padding-right: 0px;
   padding-bottom: 48px;
