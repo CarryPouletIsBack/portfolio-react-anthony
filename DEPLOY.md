@@ -1,113 +1,142 @@
-# Guide de Déploiement sur Hébergeur
+# 🚀 Guide de Déploiement
 
-## 📋 Étapes de Déploiement
+Ce guide explique comment déployer le portfolio sur différentes plateformes.
 
-### 1. Build du Projet
+## Vercel (Recommandé) ⚡
 
-Exécutez la commande de build pour générer les fichiers de production :
+Vercel est la solution la plus simple et rapide pour déployer ce projet React/Vite.
+
+### Option 1 : Connexion GitHub (Automatique)
+
+1. **Créer un compte Vercel**
+   - Aller sur [vercel.com](https://vercel.com)
+   - S'inscrire avec ton compte GitHub
+
+2. **Importer le projet**
+   - Cliquer sur "New Project"
+   - Sélectionner le dépôt `portfolio-react-anthony`
+   - Vercel détectera automatiquement les paramètres :
+     - Framework: Vite
+     - Build Command: `npm run build`
+     - Output Directory: `dist`
+     - Install Command: `npm install`
+
+3. **Déployer**
+   - Cliquer sur "Deploy"
+   - Le déploiement se fera automatiquement
+   - Une URL sera générée (ex: `portfolio-react-anthony.vercel.app`)
+
+4. **Déploiements automatiques**
+   - Chaque push sur `main` déclenchera un nouveau déploiement
+   - Les Pull Requests créeront des preview deployments
+
+### Option 2 : CLI Vercel
 
 ```bash
-npm run build
+# Installer Vercel CLI globalement
+npm i -g vercel
+
+# Se connecter à Vercel
+vercel login
+
+# Déployer
+vercel
+
+# Déployer en production
+vercel --prod
 ```
 
-Cette commande va créer un dossier `dist/` contenant tous les fichiers optimisés pour la production.
+## Netlify 🌐
 
-### 2. Préparer les Fichiers
+1. **Créer un compte**
+   - Aller sur [netlify.com](https://netlify.com)
+   - S'inscrire avec GitHub
 
-Le dossier `dist/` contient tous les fichiers nécessaires :
-- `index.html` - Point d'entrée de l'application
-- `assets/` - Fichiers JavaScript et CSS optimisés
-- `images/` - Images et assets
-- `figma-assets/` - Assets Figma
+2. **Nouveau site depuis Git**
+   - Cliquer sur "New site from Git"
+   - Sélectionner le dépôt
+   - Configurer :
+     - Build command: `npm run build`
+     - Publish directory: `dist`
 
-### 3. Transférer les Fichiers
+3. **Déployer**
+   - Cliquer sur "Deploy site"
 
-#### Option A : Via FTP/SFTP (FileZilla, WinSCP, etc.)
+## GitHub Pages 📄
 
-1. Connectez-vous à votre hébergeur via FTP/SFTP
-2. Naviguez vers le dossier public (généralement `public_html`, `www`, ou `htdocs`)
-3. **Si vous déployez à la racine** : Transférez TOUT le contenu du dossier `dist/` dans le dossier public
-4. **Si vous déployez dans un sous-dossier** : Créez un dossier (ex: `portfolio`) et transférez le contenu de `dist/` dedans
+### Via GitHub Actions (Automatique)
 
-#### Option B : Via cPanel File Manager
+1. **Créer un workflow GitHub Actions**
+   - Le fichier `.github/workflows/deploy.yml` sera créé automatiquement
+   - Ou créer manuellement : `.github/workflows/deploy.yml`
 
-1. Connectez-vous à votre cPanel
-2. Ouvrez le File Manager
-3. Naviguez vers `public_html` (ou votre dossier public)
-4. Uploadez tous les fichiers du dossier `dist/`
+2. **Configurer GitHub Pages**
+   - Aller dans Settings → Pages
+   - Source: GitHub Actions
 
-### 4. Configuration du Serveur
+3. **Créer un Personal Access Token** (si nécessaire)
+   - Settings → Developer settings → Personal access tokens
+   - Générer un token avec les permissions `repo`
 
-#### Pour Apache (la plupart des hébergeurs)
+### Configuration Vite pour GitHub Pages
 
-Le fichier `.htaccess` est déjà créé à la racine du projet. **Copiez-le dans le dossier `dist/`** avant de transférer, ou transférez-le avec les autres fichiers.
-
-**Important** : Si vous déployez dans un sous-dossier (ex: `example.com/portfolio/`), modifiez la ligne `RewriteBase /` dans `.htaccess` en `RewriteBase /portfolio/`
-
-#### Pour Nginx
-
-Si votre hébergeur utilise Nginx, vous devrez configurer le serveur différemment. Contactez votre hébergeur ou ajoutez cette configuration :
-
-```nginx
-location / {
-  try_files $uri $uri/ /index.html;
-}
-```
-
-### 5. Vérifier le Déploiement
-
-1. Visitez votre site web
-2. Vérifiez que toutes les pages fonctionnent
-3. Testez la navigation entre les pages
-4. Vérifiez que les images et assets se chargent correctement
-
-## 🔧 Configuration Spéciale
-
-### Si vous déployez dans un sous-dossier
-
-Si votre site n'est pas à la racine (ex: `example.com/portfolio/`), vous devez modifier `vite.config.ts` :
+Si le projet est dans un sous-dossier (ex: `/portfolio`), ajouter dans `vite.config.ts`:
 
 ```typescript
 export default defineConfig({
-  base: '/portfolio/', // Remplacez par votre chemin
-  plugins: [react()],
+  base: '/portfolio-react-anthony/', // Remplacer par le nom du repo
   // ... reste de la config
 })
 ```
 
-Puis rebuilder : `npm run build`
+## Variables d'environnement 🔐
 
-## ⚠️ Points d'Attention
+Si tu as des variables d'environnement :
 
-1. **Chemins relatifs** : Les fichiers dans `dist/` utilisent des chemins absolus (`/assets/...`). Si vous déployez dans un sous-dossier, configurez la `base` dans `vite.config.ts`
+### Vercel
+- Settings → Environment Variables
+- Ajouter les variables nécessaires
 
-2. **Fichier .htaccess** : Assurez-vous qu'il est bien transféré avec les autres fichiers
+### Netlify
+- Site settings → Build & deploy → Environment
+- Ajouter les variables
 
-3. **Permissions** : Les fichiers doivent avoir les permissions de lecture (644) et les dossiers (755)
+## Domaine personnalisé 🌍
 
-4. **Taille des fichiers** : Vérifiez que votre hébergeur accepte les fichiers de la taille de vos assets
+### Vercel
+1. Aller dans Project Settings → Domains
+2. Ajouter ton domaine
+3. Suivre les instructions DNS
 
-## 🐛 Dépannage
+### Netlify
+1. Domain settings → Add custom domain
+2. Configurer les DNS selon les instructions
 
-### Les pages ne se chargent pas (erreur 404)
-- Vérifiez que le fichier `.htaccess` est bien présent
-- Vérifiez la configuration `RewriteBase` si vous êtes dans un sous-dossier
+## Checklist de déploiement ✅
 
-### Les assets ne se chargent pas
-- Vérifiez les chemins dans le navigateur (F12 > Network)
-- Vérifiez que tous les fichiers du dossier `dist/` ont été transférés
-- Vérifiez les permissions des fichiers
+- [ ] Tous les tests passent (`npm run build` fonctionne)
+- [ ] Les variables d'environnement sont configurées
+- [ ] Le domaine personnalisé est configuré (optionnel)
+- [ ] Les redirections SPA sont configurées (déjà dans `vercel.json`)
+- [ ] Les assets statiques sont accessibles
+- [ ] Le site fonctionne sur mobile et desktop
 
-### Erreur de CORS
-- Contactez votre hébergeur pour configurer les en-têtes CORS si nécessaire
+## Résolution de problèmes 🔧
 
-## 📞 Support
+### Erreur 404 sur les routes
+- Vérifier que les rewrites SPA sont configurées (déjà fait dans `vercel.json`)
 
-Si vous rencontrez des problèmes, vérifiez :
-1. Les logs d'erreur de votre hébergeur
-2. La console du navigateur (F12)
-3. La configuration de votre serveur web
+### Build échoue
+- Vérifier les logs de build dans la console
+- Tester en local avec `npm run build`
 
+### Assets non chargés
+- Vérifier les chemins relatifs dans le code
+- Vérifier que le dossier `public` est bien à la racine
 
+## Support 📞
 
-
+Pour plus d'aide :
+- [Documentation Vercel](https://vercel.com/docs)
+- [Documentation Netlify](https://docs.netlify.com)
+- [Documentation GitHub Pages](https://docs.github.com/en/pages)

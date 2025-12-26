@@ -240,10 +240,23 @@ src/
 
 ## 📦 Déploiement
 
-Le projet est prêt pour être déployé sur :
-- **Vercel** : Connexion automatique avec GitHub
+Le projet est prêt pour être déployé sur différentes plateformes. Voir le [Guide de Déploiement](./DEPLOY.md) pour les instructions détaillées.
+
+### Déploiement rapide sur Vercel
+
+1. Aller sur [vercel.com](https://vercel.com) et se connecter avec GitHub
+2. Cliquer sur "New Project" et importer `portfolio-react-anthony`
+3. Vercel détectera automatiquement les paramètres (Vite, build, etc.)
+4. Cliquer sur "Deploy" → C'est fait ! 🎉
+
+Le projet inclut :
+- ✅ Fichier `vercel.json` configuré pour le routing SPA
+- ✅ Cache optimisé pour les assets
+- ✅ Configuration prête pour production
+
+### Autres options
 - **Netlify** : Build command `npm run build`, publish directory `dist`
-- **GitHub Pages** : Utiliser l'action GitHub Pages avec Vite
+- **GitHub Pages** : Voir le guide pour configurer GitHub Actions
 
 ---
 
