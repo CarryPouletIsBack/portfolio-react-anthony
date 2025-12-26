@@ -8,12 +8,8 @@
 
 /* Désactiver le scroll sur la page d'accueil sur les écrans non mobiles */
 @media (min-width: 769px) {
-  .page {
-    overflow-y: hidden !important;
-    overflow: hidden !important;
-  }
-  
   .accueil-page {
+    overflow-y: hidden !important;
     overflow: hidden !important;
   }
 }
@@ -21,6 +17,8 @@
 .page.active {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Accueil */
