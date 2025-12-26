@@ -128,6 +128,7 @@ Toutes les données sont centralisées dans `/src/data/` :
 - **JavaScript** : Aucun console.log, imports optimisés
 - **Accessibilité** : Attributs alt, éléments interactifs accessibles
 - **Performance** : Build optimisé, pas d'erreurs de linting
+- **Build** : Toutes les erreurs TypeScript corrigées (variables non utilisées, imports manquants)
 
 ### Structure Sémantique
 - Balises HTML appropriées (`<header>`, `<section>`, `<footer>`)
@@ -209,6 +210,7 @@ src/
 - **TypeScript strict** avec `verbatimModuleSyntax` activé
 - **Tableaux HTML natifs** pour garantir le scroll horizontal
 - **Code propre et optimisé** : Nettoyage complet de tous les fichiers
+- **Menu temporairement masqué** : Le menu redirige vers l'accueil (code commenté pour réactivation future)
 
 ## 🎯 Fonctionnalités Clés
 
@@ -229,6 +231,20 @@ src/
 - Contraste de couleurs respecté
 - Labels descriptifs
 
+## 🔧 Corrections Récentes (Janvier 2025)
+
+- ✅ Correction de toutes les erreurs TypeScript du build
+- ✅ Suppression des imports non utilisés (`Menu`, `swiper/css/navigation`)
+- ✅ Nettoyage des variables non utilisées (`searchTerm`, `filteredResults`, `groupIndex`, `handleClose`, `ref`)
+- ✅ Code prêt pour le déploiement sur Vercel/GitHub Pages
+
+## 📦 Déploiement
+
+Le projet est prêt pour être déployé sur :
+- **Vercel** : Connexion automatique avec GitHub
+- **Netlify** : Build command `npm run build`, publish directory `dist`
+- **GitHub Pages** : Utiliser l'action GitHub Pages avec Vite
+
 ---
 
-*Dernière mise à jour : Janvier 2025 - Code propre et optimisé*
+*Dernière mise à jour : Janvier 2025 - Code propre et optimisé, prêt pour production*

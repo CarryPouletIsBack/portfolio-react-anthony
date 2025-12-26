@@ -5,8 +5,6 @@ import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
-// Icônes du design Figma
-const imgLine17 = "/images/e845fbf1511c5629d908314b3c857ba0be85dafa.svg"
 
 interface HeroProps {
   onPageChange: (page: string, projectImage?: string, projectCategory?: string) => void
@@ -104,9 +102,6 @@ const Hero = ({ onPageChange }: HeroProps) => {
                     <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
-              </div>
-              <div className="card-divider">
-                <img src={imgLine17} alt="Divider line" className="divider-line" />
               </div>
               <div className="services-content">
                 <div className="service-item">

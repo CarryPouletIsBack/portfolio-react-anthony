@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Hero from './components/Hero'
-import Menu from './components/Menu'
 import About from './components/About'
 import Project from './components/Project'
 import MobileSearchBar from './components/MobileSearchBar'
@@ -9,7 +8,7 @@ import './App.css'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('accueil')
-  const [searchTerm, setSearchTerm] = useState('')
+  const [_searchTerm, setSearchTerm] = useState('')
   const [previousPage, setPreviousPage] = useState('accueil')
   const [currentProjectImage, setCurrentProjectImage] = useState<string | null>(null)
   const [currentProjectCategory, setCurrentProjectCategory] = useState<string | null>(null)

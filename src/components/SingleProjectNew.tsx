@@ -1,14 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import './SingleProject.css';
 import { type ProjectData } from '../data/projectsNew';
-import BlurText from '../../@/components/BlurText.jsx';
+import BlurText from './BlurText';
 import { Tree, Folder, File } from './ui/file-tree';
+
+// Constantes en dehors du composant pour éviter les re-créations
+const CLOSE_THRESHOLD = 100;
+
+// Fonction utilitaire en dehors du composant
+const getTextColor = (backgroundColor: string): string => {
+  const hex = backgroundColor.replace('#', '');
+  const r = parseInt(hex.substr(0, 2), 16);
+  const g = parseInt(hex.substr(2, 2), 16);
+  const b = parseInt(hex.substr(4, 2), 16);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.5 ? '#000000' : '#ffffff';
+};
 
 // Import des icônes SVG
 import searchIconBlue from '../assets/4610de4ae01e3b351bbcba9c930287159bbda981.svg'
@@ -52,7 +64,10 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
   // Motion values pour le swipe down
   const y = useMotionValue(0);
   
-  const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+  // Mémoriser la hauteur de l'écran pour éviter les recalculs
+  const screenHeight = useMemo(() => {
+    return typeof window !== 'undefined' ? window.innerHeight : 800;
+  }, []);
 
   // Notifier le parent de la valeur initiale
   useEffect(() => {
@@ -61,30 +76,33 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
     }
   }, []); // Seulement au montage
 
-  const handleClose = () => {
+  const _handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
       onBackClick();
     }, 400);
   };
 
-  // Vérifier si on peut swiper (au début du scroll)
-  const canSwipe = () => {
+  // Vérifier si on peut swiper (on peut toujours swiper depuis la barre)
+  const canSwipe = useCallback(() => {
     const target = pageRef.current;
     if (!target) return false;
-    return target.scrollTop <= 10;
-  };
+    // Permettre le swipe même si on a scrollé un peu
+    return true;
+  }, []);
 
   // Gestion du drag avec logique exacte comme React Native (comportement Facebook)
   // Comme useAnimatedGestureHandler avec ctx.startY et event.translationY
   const [startY, setStartY] = useState<number | null>(null);
   const [startYValue, setStartYValue] = useState<number>(0); // ctx.startY
-  const CLOSE_THRESHOLD = 100;
+  const [initialScrollTop, setInitialScrollTop] = useState<number>(0); // Sauvegarder le scroll initial
 
   const handleBarMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (canSwipe()) {
+      const target = pageRef.current;
+      setInitialScrollTop(target ? target.scrollTop : 0);
       setIsDragging(true);
       setStartY(e.clientY);
       setStartYValue(y.get()); // Sauvegarder la position Y actuelle (comme ctx.startY)
@@ -95,6 +113,8 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
     e.preventDefault();
     e.stopPropagation();
     if (canSwipe()) {
+      const target = pageRef.current;
+      setInitialScrollTop(target ? target.scrollTop : 0);
       setIsDragging(true);
       setStartY(e.touches[0].clientY);
       setStartYValue(y.get()); // Sauvegarder la position Y actuelle (comme ctx.startY)
@@ -108,30 +128,29 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
     const handleMouseMove = (e: MouseEvent) => {
       const target = pageRef.current;
       
-      // Vérifier si on peut encore swiper - si on a scrollé, arrêter le drag
-      if (target && target.scrollTop > 10) {
-        // Si on scroll, annuler le drag et permettre le scroll normal
-        setIsDragging(false);
-        setStartY(null);
-        setStartYValue(0);
-        y.set(0);
-        if (onSwipeYChange) {
-          onSwipeYChange(0);
-        }
-        return;
-      }
-      
-      e.preventDefault();
-      e.stopPropagation();
-      
       // Calculer la translation depuis le point de départ (comme event.translationY en RN)
       const translationY = e.clientY - startY;
       
-      // Si on tire vers le bas (translationY > 0), continuer le drag
-      // Si on tire vers le haut (translationY < 0), ne rien faire pour permettre le scroll
+      // Si on tire vers le haut (translationY < 0), vérifier si on scroll
       if (translationY < 0) {
+        // Si on a scrollé depuis le début du drag, annuler le drag pour permettre le scroll
+        if (target && target.scrollTop > initialScrollTop + 5) {
+          setIsDragging(false);
+          setStartY(null);
+          setStartYValue(0);
+          y.set(0);
+          if (onSwipeYChange) {
+            onSwipeYChange(0);
+          }
+          return;
+        }
+        // Sinon, ne rien faire pour permettre le scroll normal
         return;
       }
+      
+      // Si on tire vers le bas (translationY > 0), continuer le drag même si on a scrollé
+      e.preventDefault();
+      e.stopPropagation();
       
       // Calculer la prochaine position Y (comme ctx.startY + event.translationY dans l'exemple RN)
       const nextY = startYValue + translationY;
@@ -147,30 +166,29 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
     const handleTouchMove = (e: TouchEvent) => {
       const target = pageRef.current;
       
-      // Vérifier si on peut encore swiper - si on a scrollé, arrêter le drag
-      if (target && target.scrollTop > 10) {
-        // Si on scroll, annuler le drag et permettre le scroll normal
-        setIsDragging(false);
-        setStartY(null);
-        setStartYValue(0);
-        y.set(0);
-        if (onSwipeYChange) {
-          onSwipeYChange(0);
-        }
-        return;
-      }
-      
-      e.preventDefault();
-      e.stopPropagation();
-      
       // Calculer la translation depuis le point de départ (comme event.translationY en RN)
       const translationY = e.touches[0].clientY - startY;
       
-      // Si on tire vers le bas (translationY > 0), continuer le drag
-      // Si on tire vers le haut (translationY < 0), ne rien faire pour permettre le scroll
+      // Si on tire vers le haut (translationY < 0), vérifier si on scroll
       if (translationY < 0) {
+        // Si on a scrollé depuis le début du drag, annuler le drag pour permettre le scroll
+        if (target && target.scrollTop > initialScrollTop + 5) {
+          setIsDragging(false);
+          setStartY(null);
+          setStartYValue(0);
+          y.set(0);
+          if (onSwipeYChange) {
+            onSwipeYChange(0);
+          }
+          return;
+        }
+        // Sinon, ne rien faire pour permettre le scroll normal
         return;
       }
+      
+      // Si on tire vers le bas (translationY > 0), continuer le drag même si on a scrollé
+      e.preventDefault();
+      e.stopPropagation();
       
       // Calculer la prochaine position Y (comme ctx.startY + event.translationY dans l'exemple RN)
       const nextY = startYValue + translationY;
@@ -183,32 +201,8 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
       }
     };
 
-    const handleMouseUp = (e: MouseEvent) => {
-      e.preventDefault();
-      const currentY = y.get();
-      
-      setIsDragging(false);
-      setStartY(null);
-      setStartYValue(0);
-      
-      // onEnd : décider de fermer ou revenir (comme dans l'exemple RN)
-      if (currentY > CLOSE_THRESHOLD) {
-        // Fermer avec animation (comme withSpring(SCREEN_HEIGHT))
-        y.set(screenHeight);
-        setIsClosing(true);
-        setTimeout(() => {
-          onBackClick();
-        }, 400);
-      } else {
-        // Revenir à 0 avec animation (comme withSpring(0))
-        y.set(0);
-        if (onSwipeYChange) {
-          onSwipeYChange(0);
-        }
-      }
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
+    // Handler unifié pour mouseup et touchend
+    const handleEnd = (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
       const currentY = y.get();
       
@@ -234,29 +228,19 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: false });
-    window.addEventListener('mouseup', handleMouseUp, { passive: false });
+    window.addEventListener('mouseup', handleEnd, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('touchend', handleTouchEnd, { passive: false });
+    window.addEventListener('touchend', handleEnd, { passive: false });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mouseup', handleEnd);
       window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchend', handleEnd);
     };
-  }, [isDragging, startY, startYValue, y, screenHeight]);
+  }, [isDragging, startY, startYValue, initialScrollTop, y, screenHeight, onSwipeYChange, onBackClick]);
 
   // Notifier le parent des changements de y directement dans les handlers
-
-  // Fonction pour calculer la couleur de texte selon le contraste
-  const getTextColor = (backgroundColor: string) => {
-    const hex = backgroundColor.replace('#', '');
-    const r = parseInt(hex.substr(0, 2), 16);
-    const g = parseInt(hex.substr(2, 2), 16);
-    const b = parseInt(hex.substr(4, 2), 16);
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return luminance > 0.5 ? '#000000' : '#ffffff';
-  };
 
   return (
     <>
@@ -304,7 +288,6 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
             
             // Vérifier si mediaSrc existe et n'est pas vide
             if (!mediaSrc) {
-              console.warn('No media source found for project:', projectData.title);
               return null;
             }
             
@@ -312,8 +295,6 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
             const hasVideoExtension = /\.(mp4|webm|mov|avi|mkv)$/i.test(mediaSrc);
             const isMpAudioProject = projectData.title.toLowerCase().includes('mp audio');
             const isVideo = hasVideoExtension || isMpAudioProject;
-            
-            console.log('Media src:', mediaSrc, 'isVideo:', isVideo);
             
             if (isVideo) {
               return (
@@ -323,10 +304,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
                   loop 
                   muted 
                   playsInline
-                  style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
-                  onError={(e) => {
-                    console.error('Video load error:', mediaSrc, e);
-                  }}
+                  style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', pointerEvents: 'none' }}
                 />
               );
             }
@@ -336,13 +314,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
               <img 
                 src={mediaSrc} 
                 alt={projectData.title} 
-                style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
-                onError={(e) => {
-                  console.error('Image load error:', mediaSrc, e);
-                }}
-                onLoad={() => {
-                  console.log('Image loaded successfully:', mediaSrc);
-                }}
+                style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', pointerEvents: 'none' }}
               />
             );
           })()}

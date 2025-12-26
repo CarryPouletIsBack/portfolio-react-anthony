@@ -23,7 +23,6 @@ const MobileSearchBar = ({ onSearchChange, onMenuClick, onSearchClick, onPageCha
   const [isPlaceholderVisible, setIsPlaceholderVisible] = useState(true)
   // Récupérer tous les projets depuis les données centralisées
   const allProjects = getAllProjects()
-  const [filteredResults, setFilteredResults] = useState<MenuItem[]>(allProjects)
   
   // Calculer l'opacité en fonction de projectSwipeY (uniquement sur la page projet)
   const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 800
@@ -611,7 +610,7 @@ const MobileSearchBar = ({ onSearchChange, onMenuClick, onSearchClick, onPageCha
             {/* Résultats de recherche en dessous de l'input */}
         {showResults && hasResults && (
           <div className="search-results">
-            {groupedResults.map((group, groupIndex) => (
+            {groupedResults.map((group) => (
               <div key={group.category.key} className="search-results-category">
                 <h3 className="search-category-title">{group.category.title}</h3>
                 <div className="search-results-row">
