@@ -1188,9 +1188,17 @@
   line-height: 1.8;
   color: #222;
   font-weight: 400;
-  max-width: 420px;
+  width: 100%;
   flex: 1;
   min-width: 300px;
+}
+
+/* Sur laptop/desktop et plus, limiter la largeur à 420px */
+@media (min-width: 1024px) {
+  .intro-section .intro-text {
+    max-width: 420px;
+    width: fit-content;
+  }
 }
 
 .intro-metadata-container .metadata-bubbles {
