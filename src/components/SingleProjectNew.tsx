@@ -60,6 +60,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
   const [isDragging, setIsDragging] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
+  const tocRef = useRef<HTMLDivElement>(null);
   
   // Motion values pour le swipe down
   const y = useMotionValue(0);
@@ -75,6 +76,67 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
       onSwipeYChange(0);
     }
   }, []); // Seulement au montage
+
+  // Gestion du sticky pour le sommaire avec JavaScript
+  useEffect(() => {
+    const page = pageRef.current;
+    const toc = tocRef.current;
+    
+    if (!page || !toc) return;
+
+    const tocSection = toc.closest('.table-of-contents-section') as HTMLElement;
+    if (!tocSection) return;
+
+    const mainProject = tocSection.closest('.main-single-project') as HTMLElement;
+    if (!mainProject) return;
+
+    let rafId: number | null = null;
+
+    const handleScroll = () => {
+      if (rafId) return;
+      
+      rafId = requestAnimationFrame(() => {
+        const sectionRect = tocSection.getBoundingClientRect();
+        const pageRect = page.getBoundingClientRect();
+        
+        const shouldStick = sectionRect.top <= pageRect.top;
+        
+        if (shouldStick) {
+          const mainRect = mainProject.getBoundingClientRect();
+          toc.style.position = 'fixed';
+          toc.style.top = '0';
+          toc.style.left = `${mainRect.left}px`;
+          toc.style.width = `${mainRect.width}px`;
+          toc.style.zIndex = '1001';
+        } else {
+          toc.style.position = '';
+          toc.style.top = '';
+          toc.style.left = '';
+          toc.style.width = '';
+          toc.style.zIndex = '';
+        }
+        
+        rafId = null;
+      });
+    };
+
+    const handleResize = () => {
+      handleScroll();
+    };
+
+    page.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
+
+    // Appel initial
+    const timeoutId = setTimeout(handleScroll, 200);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (rafId) cancelAnimationFrame(rafId);
+      page.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
 
   // Vérifier si on peut swiper (on peut toujours swiper depuis la barre)
@@ -332,8 +394,34 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
           </div>
         </div>
 
+        {/* 1.5. Sommaire */}
+        <section className="project-section table-of-contents-section">
+          <div ref={tocRef} className="section-card">
+            <nav className="table-of-contents">
+              <ul className="toc-list">
+                <li><a href="#introduction" className="toc-link">Résumé / Introduction</a></li>
+                <li><a href="#team" className="toc-link">L'équipe projet</a></li>
+                {projectData.approach && (
+                  <li><a href="#approach" className="toc-link">{projectData.approach.title}</a></li>
+                )}
+                {projectData.wireframes && (
+                  <li><a href="#wireframes" className="toc-link">{projectData.wireframes.title}</a></li>
+                )}
+                {projectData.designSystem && (
+                  <li><a href="#design-system" className="toc-link">{projectData.designSystem.colorPalette.title}</a></li>
+                )}
+                {projectData.designSystem?.typography && (
+                  <li><a href="#typography" className="toc-link">{projectData.designSystem.typography.title}</a></li>
+                )}
+                <li><a href="#implementation" className="toc-link">Implémentation & Technologies</a></li>
+                <li><a href="#results" className="toc-link">Résultats & Impact</a></li>
+              </ul>
+            </nav>
+          </div>
+        </section>
+
         {/* 2. Résumé / Introduction */}
-        <section className="project-section intro-section">
+        <section id="introduction" className="project-section intro-section">
           <div className="section-card intro-metadata-container">
             <p className="intro-text">{projectData.summary}</p>
             <div className="metadata-bubbles">
@@ -354,13 +442,13 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
         </section>
 
         {/* 3. L'équipe projet */}
-        <section className="project-section team-section">
+        <section id="team" className="project-section team-section">
           <div className="section-card">
             <h2 className="section-title">L'équipe projet</h2>
             <div className="team-carousel-wrapper">
               <Swiper
                 modules={[Pagination]}
-                spaceBetween={8}
+                spaceBetween={0}
                 slidesPerView={1.2}
                 centeredSlides={true}
                 pagination={{
@@ -371,11 +459,11 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
                 breakpoints={{
                   640: {
                     slidesPerView: 2.2,
-                    spaceBetween: 10
+                    spaceBetween: 0
                   },
                   1024: {
                     slidesPerView: 3.2,
-                    spaceBetween: 12
+                    spaceBetween: 0
                   }
                 }}
                 className="team-carousel"
@@ -442,7 +530,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
 
 
         {/* 5. Contexte & Démarche */}
-        <section className="project-section context-approach-section">
+        <section id="approach" className="project-section context-approach-section">
           <div className="context-approach-container">
             {/* Démarche & Approche */}
             <div className="section-card">
@@ -462,7 +550,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
 
         {/* 7. Wireframes & Maquettes */}
         {projectData.wireframes && (
-          <section className="project-section wireframes-section">
+          <section id="wireframes" className="project-section wireframes-section">
             <h2 className="section-title">{projectData.wireframes.title}</h2>
             
             {/* File Tree Component */}
@@ -526,7 +614,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
 
 
         {/* 7. Design System - Palette colorimétrique */}
-        <section className="project-section design-system-section">
+        <section id="design-system" className="project-section design-system-section">
           <div className="color-palette-section">
             <h2>{projectData.designSystem.colorPalette.title}</h2>
             <p>{projectData.designSystem.colorPalette.description}</p>
@@ -534,7 +622,9 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
             {/* Neutrals */}
             <div className="color-category">
               <h5>{projectData.designSystem.colorPalette.categories.neutrals.title}</h5>
-              <div className="table-wrapper">
+              <div className="neutrals-content-grid">
+                <div className="neutrals-table-container">
+                  <div className="table-wrapper">
                 <table className="color-table">
                   <thead>
                     <tr>
@@ -559,160 +649,416 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
                     ))}
                   </tbody>
                 </table>
+                  </div>
+                </div>
+                
+                {/* Grille Bento avec 7 carrés représentant les rôles */}
+                <div className="neutrals-bento-container">
+                  <div className="neutrals-bento-grid">
+                {projectData.designSystem.colorPalette.categories.neutrals.colors.map((colorRole, index) => {
+                  // Déterminer quelle surface et quel texte afficher selon le rôle
+                  const getVisualConfig = (role: string) => {
+                    const neutrals = projectData.designSystem.colorPalette.categories.neutrals.colors;
+                    const surfacePrim = neutrals.find(c => c.role === 'Surface principale');
+                    const surfaceSec = neutrals.find(c => c.role === 'Surface secondaire');
+                    const surfaceElev = neutrals.find(c => c.role === 'Surface surélevée');
+                    const textPrim = neutrals.find(c => c.role === 'Texte principal');
+                    const textSec = neutrals.find(c => c.role === 'Texte secondaire');
+                    const textInv = neutrals.find(c => c.role === 'Texte inversé');
+                    
+                    if (role === 'Surface principale') {
+                      return { bg: surfacePrim?.color || '#F1F3F4', text: textPrim?.color || '#1C1C1C', label: 'Texte principal', usage: surfacePrim?.usage };
+                    } else if (role === 'Surface secondaire') {
+                      return { bg: surfaceSec?.color || '#DCE3EB', text: textPrim?.color || '#1C1C1C', label: 'Texte principal', usage: surfaceSec?.usage };
+                    } else if (role === 'Surface surélevée') {
+                      return { bg: surfaceElev?.color || '#FFFFFF', text: textPrim?.color || '#1C1C1C', label: 'Texte principal', usage: surfaceElev?.usage };
+                    } else if (role === 'Texte principal') {
+                      return { bg: surfacePrim?.color || '#F1F3F4', text: textPrim?.color || '#1C1C1C', label: 'Texte principal', usage: textPrim?.usage };
+                    } else if (role === 'Texte secondaire') {
+                      return { bg: surfaceSec?.color || '#DCE3EB', text: textSec?.color || '#4D4D4D', label: 'Texte secondaire', usage: textSec?.usage };
+                    } else if (role === 'Bordure') {
+                      return { bg: surfacePrim?.color || '#F1F3F4', text: '#DCDCDD', label: 'Bordure', usage: colorRole.usage };
+                    } else if (role === 'Texte inversé') {
+                      // Texte inversé sur un fond coloré (simuler un bouton)
+                      return { bg: '#007D9F', text: textInv?.color || '#FFFFFF', label: 'Texte inversé', usage: textInv?.usage };
+                    }
+                    return { bg: colorRole.color, text: '#000', label: colorRole.role, usage: colorRole.usage };
+                  };
+                  
+                  const config = getVisualConfig(colorRole.role);
+                  
+                  return (
+                    <div 
+                      key={index}
+                      className="bento-square" 
+                      style={{ 
+                        backgroundColor: config.bg,
+                        color: config.text
+                      }}
+                    >
+                      <div className="bento-square-content">
+                        <span className="bento-role">{config.label}</span>
+                        {config.usage && <span className="bento-usage">{config.usage}</span>}
+                      </div>
+                    </div>
+                  );
+                })}
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Primary */}
             <div className="color-category">
               <h5>{projectData.designSystem.colorPalette.categories.primary.title}</h5>
-              <div className="table-wrapper">
-                <table className="color-table">
-                  <thead>
-                    <tr>
-                      <th>Rôle</th>
-                      <th>Nom Figma (token)</th>
-                      <th>Couleur</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {projectData.designSystem.colorPalette.categories.primary.colors.map((color, index) => (
-                      <tr key={index}>
-                        <td>{color.role}</td>
-                        <td>{color.token}</td>
-                        <td>
-                          <div className="color-preview" style={{ backgroundColor: color.color }}>
-                            <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+              <div className="neutrals-content-grid">
+                <div className="neutrals-table-container">
+                  <div className="table-wrapper">
+                    <table className="color-table">
+                      <thead>
+                        <tr>
+                          <th>Rôle</th>
+                          <th>Nom Figma (token)</th>
+                          <th>Couleur</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {projectData.designSystem.colorPalette.categories.primary.colors.map((color, index) => (
+                          <tr key={index}>
+                            <td>{color.role}</td>
+                            <td>{color.token}</td>
+                            <td>
+                              <div className="color-preview" style={{ backgroundColor: color.color }}>
+                                <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <div className="neutrals-bento-container">
+                  <div className="color-bento-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)' }}>
+                    {projectData.designSystem.colorPalette.categories.primary.colors.map((colorRole, index) => {
+                      const neutrals = projectData.designSystem.colorPalette.categories.neutrals.colors;
+                      const textOnPrimary = projectData.designSystem.colorPalette.categories.primary.colors.find(c => c.role.includes('Texte'));
+                      const surfacePrim = neutrals.find(c => c.role === 'Surface principale');
+                      
+                      let config;
+                      if (colorRole.role === 'Primaire') {
+                        config = { bg: colorRole.color, text: textOnPrimary?.color || '#FFFFFF', label: 'Primaire', showText: 'Texte sur bouton' };
+                      } else if (colorRole.role === 'Hover') {
+                        config = { bg: colorRole.color, text: textOnPrimary?.color || '#FFFFFF', label: 'Hover', showText: 'État survol' };
+                      } else if (colorRole.role === 'Pressed') {
+                        config = { bg: colorRole.color, text: textOnPrimary?.color || '#FFFFFF', label: 'Pressed', showText: 'État pressé' };
+                      } else if (colorRole.role.includes('Texte')) {
+                        config = { bg: surfacePrim?.color || '#F1F3F4', text: colorRole.color, label: colorRole.role, showText: 'Exemple texte' };
+                      } else {
+                        config = { bg: colorRole.color, text: getTextColor(colorRole.color), label: colorRole.role };
+                      }
+                      
+                      return (
+                        <div 
+                          key={index}
+                          className="bento-square" 
+                          style={{ 
+                            backgroundColor: config.bg,
+                            color: config.text
+                          }}
+                        >
+                          <div className="bento-square-content">
+                            <span className="bento-role">{config.label}</span>
+                            {config.showText && <span className="bento-usage">{config.showText}</span>}
                           </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Secondary */}
             <div className="color-category">
               <h5>{projectData.designSystem.colorPalette.categories.secondary.title}</h5>
-              <div className="table-wrapper">
-                <table className="color-table">
-                  <thead>
-                    <tr>
-                      <th>Rôle</th>
-                      <th>Nom Figma (token)</th>
-                      <th>Couleur</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {projectData.designSystem.colorPalette.categories.secondary.colors.map((color, index) => (
-                      <tr key={index}>
-                        <td>{color.role}</td>
-                        <td>{color.token}</td>
-                        <td>
-                          <div className="color-preview" style={{ backgroundColor: color.color }}>
-                            <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+              <div className="neutrals-content-grid">
+                <div className="neutrals-table-container">
+                  <div className="table-wrapper">
+                    <table className="color-table">
+                      <thead>
+                        <tr>
+                          <th>Rôle</th>
+                          <th>Nom Figma (token)</th>
+                          <th>Couleur</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {projectData.designSystem.colorPalette.categories.secondary.colors.map((color, index) => (
+                          <tr key={index}>
+                            <td>{color.role}</td>
+                            <td>{color.token}</td>
+                            <td>
+                              <div className="color-preview" style={{ backgroundColor: color.color }}>
+                                <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <div className="neutrals-bento-container">
+                  <div className="color-bento-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: '1fr' }}>
+                    {projectData.designSystem.colorPalette.categories.secondary.colors.map((colorRole, index) => {
+                      const neutrals = projectData.designSystem.colorPalette.categories.neutrals.colors;
+                      const textOnSecondary = projectData.designSystem.colorPalette.categories.secondary.colors.find(c => c.role.includes('Texte'));
+                      const surfacePrim = neutrals.find(c => c.role === 'Surface principale');
+                      
+                      let config;
+                      if (colorRole.role === 'Secondaire') {
+                        config = { bg: colorRole.color, text: textOnSecondary?.color || '#FFFFFF', label: 'Secondaire', showText: 'Texte sur bouton' };
+                      } else if (colorRole.role === 'Hover') {
+                        config = { bg: colorRole.color, text: textOnSecondary?.color || '#FFFFFF', label: 'Hover', showText: 'État survol' };
+                      } else if (colorRole.role.includes('Texte')) {
+                        config = { bg: surfacePrim?.color || '#F1F3F4', text: colorRole.color, label: colorRole.role, showText: 'Exemple texte' };
+                      } else {
+                        config = { bg: colorRole.color, text: getTextColor(colorRole.color), label: colorRole.role };
+                      }
+                      
+                      return (
+                        <div 
+                          key={index}
+                          className="bento-square" 
+                          style={{ 
+                            backgroundColor: config.bg,
+                            color: config.text
+                          }}
+                        >
+                          <div className="bento-square-content">
+                            <span className="bento-role">{config.label}</span>
+                            {config.showText && <span className="bento-usage">{config.showText}</span>}
                           </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Accent */}
             <div className="color-category">
               <h5>{projectData.designSystem.colorPalette.categories.accent.title}</h5>
-              <div className="table-wrapper">
-                <table className="color-table">
-                  <thead>
-                    <tr>
-                      <th>Rôle</th>
-                      <th>Nom Figma (token)</th>
-                      <th>Couleur</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {projectData.designSystem.colorPalette.categories.accent.colors.map((color, index) => (
-                      <tr key={index}>
-                        <td>{color.role}</td>
-                        <td>{color.token}</td>
-                        <td>
-                          <div className="color-preview" style={{ backgroundColor: color.color }}>
-                            <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+              <div className="neutrals-content-grid">
+                <div className="neutrals-table-container">
+                  <div className="table-wrapper">
+                    <table className="color-table">
+                      <thead>
+                        <tr>
+                          <th>Rôle</th>
+                          <th>Nom Figma (token)</th>
+                          <th>Couleur</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {projectData.designSystem.colorPalette.categories.accent.colors.map((color, index) => (
+                          <tr key={index}>
+                            <td>{color.role}</td>
+                            <td>{color.token}</td>
+                            <td>
+                              <div className="color-preview" style={{ backgroundColor: color.color }}>
+                                <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <div className="neutrals-bento-container">
+                  <div className="color-bento-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: '1fr' }}>
+                    {projectData.designSystem.colorPalette.categories.accent.colors.map((colorRole, index) => {
+                      const neutrals = projectData.designSystem.colorPalette.categories.neutrals.colors;
+                      const textOnAccent = projectData.designSystem.colorPalette.categories.accent.colors.find(c => c.role.includes('Texte'));
+                      const surfacePrim = neutrals.find(c => c.role === 'Surface principale');
+                      
+                      let config;
+                      if (colorRole.role === 'Accent') {
+                        config = { bg: colorRole.color, text: textOnAccent?.color || '#1C1C1C', label: 'Accent', showText: 'Texte sur accent' };
+                      } else if (colorRole.role.includes('Texte')) {
+                        config = { bg: surfacePrim?.color || '#F1F3F4', text: colorRole.color, label: colorRole.role, showText: 'Exemple texte' };
+                      } else {
+                        config = { bg: colorRole.color, text: getTextColor(colorRole.color), label: colorRole.role };
+                      }
+                      
+                      return (
+                        <div 
+                          key={index}
+                          className="bento-square" 
+                          style={{ 
+                            backgroundColor: config.bg,
+                            color: config.text
+                          }}
+                        >
+                          <div className="bento-square-content">
+                            <span className="bento-role">{config.label}</span>
+                            {config.showText && <span className="bento-usage">{config.showText}</span>}
                           </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Error */}
             <div className="color-category">
               <h5>{projectData.designSystem.colorPalette.categories.error.title}</h5>
-              <div className="table-wrapper">
-                <table className="color-table">
-                  <thead>
-                    <tr>
-                      <th>Rôle</th>
-                      <th>Nom Figma (token)</th>
-                      <th>Couleur</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {projectData.designSystem.colorPalette.categories.error.colors.map((color, index) => (
-                      <tr key={index}>
-                        <td>{color.role}</td>
-                        <td>{color.token}</td>
-                        <td>
-                          <div className="color-preview" style={{ backgroundColor: color.color }}>
-                            <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+              <div className="neutrals-content-grid">
+                <div className="neutrals-table-container">
+                  <div className="table-wrapper">
+                    <table className="color-table">
+                      <thead>
+                        <tr>
+                          <th>Rôle</th>
+                          <th>Nom Figma (token)</th>
+                          <th>Couleur</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {projectData.designSystem.colorPalette.categories.error.colors.map((color, index) => (
+                          <tr key={index}>
+                            <td>{color.role}</td>
+                            <td>{color.token}</td>
+                            <td>
+                              <div className="color-preview" style={{ backgroundColor: color.color }}>
+                                <span style={{ color: getTextColor(color.color) }}>{color.color}</span>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <div className="neutrals-bento-container">
+                  <div className="color-bento-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: '1fr' }}>
+                    {projectData.designSystem.colorPalette.categories.error.colors.map((colorRole, index) => {
+                      const neutrals = projectData.designSystem.colorPalette.categories.neutrals.colors;
+                      const textOnError = projectData.designSystem.colorPalette.categories.error.colors.find(c => c.role.includes('Texte'));
+                      const surfacePrim = neutrals.find(c => c.role === 'Surface principale');
+                      
+                      let config;
+                      if (colorRole.role === 'Erreur') {
+                        config = { bg: colorRole.color, text: textOnError?.color || '#FFFFFF', label: 'Erreur', showText: 'Texte sur erreur' };
+                      } else if (colorRole.role === 'Hover') {
+                        config = { bg: colorRole.color, text: textOnError?.color || '#FFFFFF', label: 'Hover', showText: 'État survol' };
+                      } else if (colorRole.role.includes('Texte')) {
+                        config = { bg: surfacePrim?.color || '#F1F3F4', text: colorRole.color, label: colorRole.role, showText: 'Exemple texte' };
+                      } else {
+                        config = { bg: colorRole.color, text: getTextColor(colorRole.color), label: colorRole.role };
+                      }
+                      
+                      return (
+                        <div 
+                          key={index}
+                          className="bento-square" 
+                          style={{ 
+                            backgroundColor: config.bg,
+                            color: config.text
+                          }}
+                        >
+                          <div className="bento-square-content">
+                            <span className="bento-role">{config.label}</span>
+                            {config.showText && <span className="bento-usage">{config.showText}</span>}
                           </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* 8. Design System - Typographie */}
-        <section className="project-section typography-section">
+        <section id="typography" className="project-section typography-section">
           <h2>{projectData.designSystem.typography.title}</h2>
           <p>{projectData.designSystem.typography.description}</p>
           
-          <div className="table-wrapper">
-            <table className="typography-table">
-              <thead>
-                <tr>
-                  <th>Style</th>
-                  <th>typographie</th>
-                  <th>exemple</th>
-                  <th>taille px</th>
-                  <th>Interlignage</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projectData.designSystem.typography.items.map((type, index) => (
-                  <tr key={index}>
-                    <td>{type.style}</td>
-                    <td>{type.font}</td>
-                    <td className="typography-example" style={{ 
-                      fontSize: type.size + 'px',
-                      fontFamily: type.font.includes('Inter') ? 'Inter, sans-serif' : 'inherit'
-                    }}>
-                      Hello {projectData.title}
-                    </td>
-                    <td>{type.size}</td>
-                    <td>{type.lineHeight}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="typography-content-grid">
+            {/* Colonne gauche - Tableau */}
+            <div className="typography-table-container">
+              <div className="table-wrapper">
+                <table className="typography-table">
+                  <thead>
+                    <tr>
+                      <th>Style</th>
+                      <th>typographie</th>
+                      <th>exemple</th>
+                      <th>taille px</th>
+                      <th>Interlignage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projectData.designSystem.typography.items.map((type, index) => (
+                      <tr key={index}>
+                        <td>{type.style}</td>
+                        <td>{type.font}</td>
+                        <td className="typography-example" style={{ 
+                          fontSize: type.size + 'px',
+                          fontFamily: type.font.includes('Inter') ? 'Inter, sans-serif' : 'inherit'
+                        }}>
+                          Hello {projectData.title}
+                        </td>
+                        <td>{type.size}</td>
+                        <td>{type.lineHeight}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            {/* Colonne droite - Alphabet */}
+            <div className="typography-alphabet-container">
+              <div className="alphabet-display">
+                {(() => {
+                  // Obtenir la police principale du projet
+                  const mainFont = projectData.designSystem.typography.items[0]?.font || 'Inter';
+                  const fontFamily = mainFont.includes('Inter') ? 'Inter, sans-serif' : mainFont;
+                  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                  const numbers = '0123456789';
+                  
+                  return (
+                    <>
+                      <div className="alphabet-font-name">
+                        <h3>{mainFont}</h3>
+                      </div>
+                      <div className="alphabet-letters" style={{ fontFamily }}>
+                        {alphabet.split('').map((letter, idx) => (
+                          <span key={idx} className="alphabet-letter">{letter}</span>
+                        ))}
+                      </div>
+                      <div className="alphabet-numbers" style={{ fontFamily }}>
+                        {numbers.split('').map((number, idx) => (
+                          <span key={idx} className="alphabet-number">{number}</span>
+                        ))}
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1024,7 +1370,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
 
         {/* 10. Implémentation & Technologies */}
         {projectData.implementation && (
-          <section className="project-section implementation-section">
+          <section id="implementation" className="project-section implementation-section">
             <div className="section-card">
               <h2 className="section-title">Implémentation & Technologies</h2>
               <div className="section-content">
@@ -1040,7 +1386,7 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
 
         {/* 11. Résultats & Impact */}
         {projectData.results && (
-          <section className="project-section results-section">
+          <section id="results" className="project-section results-section">
             <div className="section-card">
               <h2 className="section-title">Résultats & Impact</h2>
               

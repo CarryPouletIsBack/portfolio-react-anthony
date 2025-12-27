@@ -86,14 +86,14 @@ Toutes les données sont centralisées dans `/src/data/` :
 
 ### Structure de Page Projet
 1. **Titre principal** - Avec badges et sous-titre (effet BlurText)
-2. **Résumé / Introduction** - Synopsis du projet
-3. **Contexte & Problématique** - Besoin client et enjeux
-4. **Démarche & Approche** - Recherche UX, veille, tests
-5. **Wireframes & Maquettes** - Prototypes et architecture (avec file-tree)
-6. **Design System** - Palette colorimétrique et typographie
-7. **Implémentation & Technologies** - Stack technique
-8. **Impacts & Résultats** - Métriques et retours
-9. **Conclusion** - Bilan et pistes d'évolution
+2. **Sommaire** - Navigation horizontale scrollable, fixe en haut lors du scroll
+3. **Résumé / Introduction** - Synopsis du projet
+4. **L'équipe projet** - Présentation des membres de l'équipe (carousel)
+5. **Contexte & Démarche** - Besoin client, enjeux, recherche UX, veille, tests
+6. **Wireframes & Maquettes** - Prototypes et architecture (avec file-tree)
+7. **Design System** - Palette colorimétrique et typographie
+8. **Implémentation & Technologies** - Stack technique
+9. **Impacts & Résultats** - Métriques et retours
 
 ## ✨ Fonctionnalités Récentes
 
@@ -114,11 +114,15 @@ Toutes les données sont centralisées dans `/src/data/` :
 
 ### Single Project
 - **Effet BlurText** : Animation de blur progressif sur le titre principal
+- **Sommaire (Table of Contents)** : Navigation horizontale scrollable avec liens vers toutes les sections
+- **Sommaire sticky** : Le sommaire reste fixe en haut de la page lors du scroll (implémenté avec JavaScript)
 - **ProgressiveBlur** : Effet de blur en bas de page qui suit le scroll
 - **File Tree** : Affichage des wireframes avec composant file-tree
 - **Support vidéo** : Affichage de vidéos en couverture (ex: Mp audio)
 - **Tableaux scrollables** : Scroll horizontal pour les tableaux de couleurs
-- **Sections organisées** : 9 sections professionnelles avec espacement optimisé
+- **Responsive mobile** : Paragraphes en pleine largeur avec text-align: left sur mobile
+- **Sections organisées** : Sections professionnelles avec espacement optimisé
+- **Carousel équipe** : Présentation des membres de l'équipe avec Swiper.js
 
 ## 🧹 Code Propre et Optimisé
 
@@ -236,6 +240,10 @@ src/
 - ✅ Correction de toutes les erreurs TypeScript du build
 - ✅ Suppression des imports non utilisés (`Menu`, `swiper/css/navigation`)
 - ✅ Nettoyage des variables non utilisées (`searchTerm`, `filteredResults`, `groupIndex`, `handleClose`, `ref`)
+- ✅ Ajout d'une section Sommaire avec navigation horizontale scrollable
+- ✅ Implémentation du sticky positioning pour le sommaire (JavaScript)
+- ✅ Amélioration du responsive mobile : paragraphes en pleine largeur
+- ✅ Nettoyage du code CSS et JavaScript (suppression des duplications)
 - ✅ Code prêt pour le déploiement sur Vercel/GitHub Pages
 
 ## 📦 Déploiement
