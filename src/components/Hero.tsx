@@ -52,6 +52,27 @@ const Hero = ({ onPageChange }: HeroProps) => {
               </div>
             </div>
 
+            {/* Bouton pour AboutNew - Test */}
+            <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'center' }}>
+              <button 
+                onClick={() => onPageChange('aproposnew')} 
+                style={{
+                  padding: '12px 24px',
+                  backgroundColor: '#f1582a',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontFamily: 'Space Grotesk, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: '500'
+                }}
+                aria-label="Aller à la page À propos (nouvelle version)"
+              >
+                About New (Test)
+              </button>
+            </div>
+
             {/* Carte Projet Carousel */}
             <div className="hero-card project-card">
               <div className="project-content">

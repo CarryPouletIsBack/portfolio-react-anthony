@@ -93,7 +93,7 @@
   flex-direction: column;
   gap: 0px;
   align-items: flex-start;
-  position: relative;
+  position: static;
   width: 100%;
   max-width: 1416px;
   margin: 0 auto;
@@ -104,6 +104,12 @@
   padding-right: 0px;
   padding-bottom: 48px;
   min-height: calc(100vh - 112px);
+}
+
+@media (max-width: 768px) {
+  .main-single-project {
+    padding-top: 0;
+  }
 }
 
 /* Bouton Retour - Masqué */
@@ -680,12 +686,18 @@
 .alphabet-display {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
   width: 100%;
 }
 
+.alphabet-font-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .alphabet-font-name {
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 
 .alphabet-font-name h3 {
@@ -698,7 +710,8 @@
 }
 
 .alphabet-letters,
-.alphabet-numbers {
+.alphabet-numbers,
+.alphabet-special-chars {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -710,7 +723,8 @@
 }
 
 .alphabet-letter,
-.alphabet-number {
+.alphabet-number,
+.alphabet-special-char {
   display: inline-block;
   min-width: 32px;
   text-align: center;
@@ -1415,6 +1429,9 @@
   backdrop-filter: blur(10px);
   padding: 16px 32px;
   margin: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1001;
 }
 
 .table-of-contents {
@@ -2577,14 +2594,23 @@
     z-index: 2000;
   }
 
+  .swipe-indicator-bar {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
   .project-hero-image {
     position: relative !important;
+    top: 0 !important;
+    margin-top: -16px !important;
+    padding-bottom: 56.25%;
   }
   
   .main-single-project {
-    padding: 24px 0px 48px 0px;
-    padding-top: 24px !important;
-    gap: 16px;
+    padding: 0px 0px 48px 0px;
+    padding-top: 0 !important;
+    gap: 0 !important;
+    margin-top: 0 !important;
   }
   
   /* Responsive pour nouvelle structure */
@@ -2728,13 +2754,15 @@
   }
   
   .alphabet-letters,
-  .alphabet-numbers {
+  .alphabet-numbers,
+  .alphabet-special-chars {
     font-size: 24px;
     gap: 6px;
   }
   
   .alphabet-letter,
-  .alphabet-number {
+  .alphabet-number,
+  .alphabet-special-char {
     min-width: 24px;
   }
   

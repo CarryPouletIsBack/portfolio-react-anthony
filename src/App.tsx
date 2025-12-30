@@ -3,6 +3,7 @@ import { SpeedInsights } from '@vercel/speed-insights/react'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import About from './components/About'
+import AboutNew from './components/AboutNew'
 import Project from './components/Project'
 import MobileSearchBar from './components/MobileSearchBar'
 import './App.css'
@@ -84,6 +85,7 @@ function App() {
         {!isProjectPage && currentPage !== 'accueil' && (
           <>
             {currentPage === 'apropos' && <About />}
+            {currentPage === 'aproposnew' && <AboutNew />}
             {/* TEMPORAIRE : Menu masqué */}
             {/* {currentPage === 'menu' && <Menu onPageChange={handlePageChange} searchTerm={searchTerm} />} */}
           </>
@@ -94,6 +96,7 @@ function App() {
           <>
             {previousPage === 'accueil' && <Hero onPageChange={handlePageChange} />}
             {previousPage === 'apropos' && <About />}
+            {previousPage === 'aproposnew' && <AboutNew />}
             {/* {previousPage === 'menu' && <Menu onPageChange={handlePageChange} searchTerm={searchTerm} />} */}
           </>
         )}

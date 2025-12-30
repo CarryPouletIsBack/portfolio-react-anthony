@@ -8,6 +8,7 @@ import './SingleProject.css';
 import { type ProjectData } from '../data/projectsNew';
 import BlurText from './BlurText';
 import { Tree, Folder, File } from './ui/file-tree';
+import { Safari } from './ui/safari';
 
 // Constantes en dehors du composant pour éviter les re-créations
 const CLOSE_THRESHOLD = 100;
@@ -77,66 +78,6 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
     }
   }, []); // Seulement au montage
 
-  // Gestion du sticky pour le sommaire avec JavaScript
-  useEffect(() => {
-    const page = pageRef.current;
-    const toc = tocRef.current;
-    
-    if (!page || !toc) return;
-
-    const tocSection = toc.closest('.table-of-contents-section') as HTMLElement;
-    if (!tocSection) return;
-
-    const mainProject = tocSection.closest('.main-single-project') as HTMLElement;
-    if (!mainProject) return;
-
-    let rafId: number | null = null;
-
-    const handleScroll = () => {
-      if (rafId) return;
-      
-      rafId = requestAnimationFrame(() => {
-        const sectionRect = tocSection.getBoundingClientRect();
-        const pageRect = page.getBoundingClientRect();
-        
-        const shouldStick = sectionRect.top <= pageRect.top;
-        
-        if (shouldStick) {
-          const mainRect = mainProject.getBoundingClientRect();
-          toc.style.position = 'fixed';
-          toc.style.top = '0';
-          toc.style.left = `${mainRect.left}px`;
-          toc.style.width = `${mainRect.width}px`;
-          toc.style.zIndex = '1001';
-        } else {
-          toc.style.position = '';
-          toc.style.top = '';
-          toc.style.left = '';
-          toc.style.width = '';
-          toc.style.zIndex = '';
-        }
-        
-        rafId = null;
-      });
-    };
-
-    const handleResize = () => {
-      handleScroll();
-    };
-
-    page.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleResize);
-
-    // Appel initial
-    const timeoutId = setTimeout(handleScroll, 200);
-
-    return () => {
-      clearTimeout(timeoutId);
-      if (rafId) cancelAnimationFrame(rafId);
-      page.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
 
   // Vérifier si on peut swiper (on peut toujours swiper depuis la barre)
@@ -552,6 +493,18 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
         {projectData.wireframes && (
           <section id="wireframes" className="project-section wireframes-section">
             <h2 className="section-title">{projectData.wireframes.title}</h2>
+            
+            {/* Safari Browser Mockup */}
+            {projectData.wireframes && projectData.wireframes.items && projectData.wireframes.items.length > 0 && projectData.wireframes.items[0].image && (
+              <div style={{ marginTop: '24px', marginBottom: '24px', width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <div style={{ width: '100%', maxWidth: '1203px' }}>
+                  <Safari
+                    url="https://example.com"
+                    imageSrc={projectData.wireframes.items[0].image}
+                  />
+                </div>
+              </div>
+            )}
             
             {/* File Tree Component */}
             <div className="wireframe-file-tree-container" style={{ marginTop: '24px', marginBottom: '24px' }}>
@@ -1033,29 +986,45 @@ const SingleProjectNew: React.FC<SingleProjectProps> = ({ projectData, onBackCli
             <div className="typography-alphabet-container">
               <div className="alphabet-display">
                 {(() => {
-                  // Obtenir la police principale du projet
-                  const mainFont = projectData.designSystem.typography.items[0]?.font || 'Inter';
-                  const fontFamily = mainFont.includes('Inter') ? 'Inter, sans-serif' : mainFont;
+                  // Obtenir les typographies uniques utilisées (normaliser le cas)
+                  const fontsMap = new Map<string, string>();
+                  projectData.designSystem.typography.items.forEach(item => {
+                    const normalizedFont = item.font.trim();
+                    if (!fontsMap.has(normalizedFont.toLowerCase())) {
+                      fontsMap.set(normalizedFont.toLowerCase(), normalizedFont);
+                    }
+                  });
+                  const uniqueFonts = Array.from(fontsMap.values());
                   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                   const numbers = '0123456789';
                   
-                  return (
-                    <>
-                      <div className="alphabet-font-name">
-                        <h3>{mainFont}</h3>
+                  return uniqueFonts.map((font, fontIndex) => {
+                    const fontFamily = 'Inter, sans-serif';
+                    const specialChars = '!@#$%&*()[]{}+-=_|\\:;"\'<>,.?/~`';
+                    
+                    return (
+                      <div key={fontIndex} className="alphabet-font-group">
+                        <div className="alphabet-font-name">
+                          <h3>{font}</h3>
+                        </div>
+                        <div className="alphabet-letters" style={{ fontFamily }}>
+                          {alphabet.split('').map((letter, idx) => (
+                            <span key={idx} className="alphabet-letter">{letter}</span>
+                          ))}
+                        </div>
+                        <div className="alphabet-numbers" style={{ fontFamily }}>
+                          {numbers.split('').map((number, idx) => (
+                            <span key={idx} className="alphabet-number">{number}</span>
+                          ))}
+                        </div>
+                        <div className="alphabet-special-chars" style={{ fontFamily }}>
+                          {specialChars.split('').map((char, idx) => (
+                            <span key={idx} className="alphabet-special-char">{char}</span>
+                          ))}
+                        </div>
                       </div>
-                      <div className="alphabet-letters" style={{ fontFamily }}>
-                        {alphabet.split('').map((letter, idx) => (
-                          <span key={idx} className="alphabet-letter">{letter}</span>
-                        ))}
-                      </div>
-                      <div className="alphabet-numbers" style={{ fontFamily }}>
-                        {numbers.split('').map((number, idx) => (
-                          <span key={idx} className="alphabet-number">{number}</span>
-                        ))}
-                      </div>
-                    </>
-                  );
+                    );
+                  });
                 })()}
               </div>
             </div>
