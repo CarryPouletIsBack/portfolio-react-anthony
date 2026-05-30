@@ -43,8 +43,8 @@ body.accueil-page .page.active:not(.single-project-page) {
   overflow: visible; /* Permettre overflow visible pour que les enfants puissent dépasser */
 }
 
-/* Quadrillage en arrière-plan de l'accueil - couvre toute la page (fixe au scroll) */
-.hero-bg-grid {
+/* Light Rays (React Bits) — fond accueil, fixe au scroll */
+.hero-bg-light-rays {
   position: fixed;
   top: 0;
   left: 0;
@@ -55,10 +55,7 @@ body.accueil-page .page.active:not(.single-project-page) {
   min-height: 100%;
   z-index: 0;
   pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-  background-size: 40px 40px;
+  overflow: hidden;
 }
 
 .main-accueil {

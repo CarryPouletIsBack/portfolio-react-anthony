@@ -71,7 +71,7 @@ const TRANSLATIONS: Record<Language, Record<string, unknown>> = {
     },
     hero: {
       title: 'Penser, structurer, et donner forme aux idées.',
-      infos: 'Infos',
+      infos: 'À propos',
       services: 'Mes services',
       servicesDescription: "Design d'interface (site web, Saas, tableau de bord)",
       footer: '© {year} Anthony Merault',
@@ -236,7 +236,7 @@ const TRANSLATIONS: Record<Language, Record<string, unknown>> = {
     },
     hero: {
       title: 'Think, structure, and give shape to ideas.',
-      infos: 'Info',
+      infos: 'About',
       services: 'My services',
       servicesDescription: 'Interface design (website, SaaS, dashboard)',
       footer: '© {year} Anthony Merault',

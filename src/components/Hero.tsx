@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { trackEvent } from '../services/googleAnalyticsTracking'
 import LanguageSwitcher from './LanguageSwitcher'
+import LightRays from './LightRays'
 import './Hero.css'
 import { getProjectsGroupedByCategory, type MenuItem } from '../services/projectService'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -61,7 +62,18 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
 
   return (
     <div className="page active">
-      <div className="hero-bg-grid" aria-hidden />
+      <div className="hero-bg-light-rays" aria-hidden>
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#ffffff"
+          raysSpeed={0.85}
+          lightSpread={1.15}
+          rayLength={1.8}
+          followMouse
+          mouseInfluence={0.07}
+          saturation={1}
+        />
+      </div>
       <div className="main-accueil">
         <div className="hero-main">
           {/* Colonne de gauche */}
@@ -76,7 +88,7 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
           {/* Colonne de droite */}
           <div className="hero-right-column">
             <div className="hero-right-column-scroll">
-              {/* Carte Infos (entièrement cliquable) */}
+              {/* Carte À propos (entièrement cliquable) */}
               <div
                 className="hero-card info-card"
                 onClick={() => onPageChange('aproposnew')}
