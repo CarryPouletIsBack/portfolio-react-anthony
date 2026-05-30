@@ -14,21 +14,22 @@ import {
   REUNION_MAP_MAX_BOUNDS,
 } from '../../constants/reunionIsland';
 import trailFeatureData from '../../data/utoi/ultra-terrestre-224.geo.json';
+import { applyKalderaMapEnvironment } from './applyKalderaMapEnvironment';
 import {
   getKalderaMapboxToken,
   KALDERA_MAP_MAX_PITCH,
   KALDERA_MAP_MAX_ZOOM,
   KALDERA_MAP_MIN_ZOOM,
   KALDERA_MAP_PITCH,
-  KALDERA_MAPBOX_DEM_SOURCE,
   KALDERA_MAPBOX_STYLE,
-  KALDERA_TERRAIN_EXAGGERATION,
+  KALDERA_TRAIL_COLOR,
+  KALDERA_TRAIL_OUTLINE_COLOR,
+  KALDERA_TRAIL_OUTLINE_WIDTH,
+  KALDERA_TRAIL_WIDTH,
 } from './kalderaMapConfig';
 import './UtoidCoverMap.css';
 
 const CAMERA_ANIM_MS = 720;
-const TRAIL_COLOR = '#f97316';
-const TRAIL_CASING_COLOR = 'rgba(255, 255, 255, 0.9)';
 
 type TrailFeature = {
   type: 'Feature';
@@ -58,21 +59,6 @@ function bboxFromCoords(coords: [number, number][]): [[number, number], [number,
   ];
 }
 
-function applyKaldera3DEnvironment(map: MapboxMap) {
-  if (!map.getSource(KALDERA_MAPBOX_DEM_SOURCE)) {
-    map.addSource(KALDERA_MAPBOX_DEM_SOURCE, {
-      type: 'raster-dem',
-      url: 'mapbox://mapbox.mapbox-terrain-dem',
-      tileSize: 512,
-      maxzoom: 14,
-    });
-  }
-  map.setTerrain({
-    source: KALDERA_MAPBOX_DEM_SOURCE,
-    exaggeration: KALDERA_TERRAIN_EXAGGERATION,
-  });
-}
-
 const UtoidCoverMap = () => {
   const mapRef = useRef<MapRef>(null);
   const entranceDoneRef = useRef(false);
@@ -85,7 +71,7 @@ const UtoidCoverMap = () => {
     const bounds = bboxFromCoords(coords as [number, number][]);
     if (!bounds) return;
     map.fitBounds(bounds, {
-      padding: 72,
+      padding: 48,
       duration: CAMERA_ANIM_MS,
       maxZoom: KALDERA_MAP_MAX_ZOOM,
       essential: true,
@@ -106,7 +92,7 @@ const UtoidCoverMap = () => {
 
       window.setTimeout(() => {
         try {
-          applyKaldera3DEnvironment(map);
+          applyKalderaMapEnvironment(map);
         } catch {
           /* relief optionnel */
         }
@@ -126,7 +112,16 @@ const UtoidCoverMap = () => {
   const handleMapLoad = useCallback(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
-    const start = () => runEntranceAnimation(map);
+
+    const start = () => {
+      try {
+        applyKalderaMapEnvironment(map);
+      } catch {
+        /* style pas prêt */
+      }
+      runEntranceAnimation(map);
+    };
+
     if (map.isStyleLoaded()) start();
     else map.once('style.load', start);
   }, [runEntranceAnimation]);
@@ -152,7 +147,9 @@ const UtoidCoverMap = () => {
   if (!mapboxToken) {
     return (
       <div className="utoi-cover-map utoi-cover-map--missing-token">
-        <p>Carte Kaldera : définir <code>VITE_MAPBOX_ACCESS_TOKEN</code> dans <code>.env</code>.</p>
+        <p>
+          Carte Kaldera : définir <code>VITE_MAPBOX_ACCESS_TOKEN</code> dans <code>.env</code>.
+        </p>
       </div>
     );
   }
@@ -186,13 +183,12 @@ const UtoidCoverMap = () => {
       >
         <Source id="utoi-trail" type="geojson" data={trailFeature}>
           <Layer
-            id="utoi-trail-casing"
+            id="utoi-trail-outline"
             type="line"
             layout={{ 'line-join': 'round', 'line-cap': 'round' }}
             paint={{
-              'line-color': TRAIL_CASING_COLOR,
-              'line-width': 6,
-              'line-opacity': 0.95,
+              'line-color': KALDERA_TRAIL_OUTLINE_COLOR,
+              'line-width': KALDERA_TRAIL_OUTLINE_WIDTH,
             }}
           />
           <Layer
@@ -200,13 +196,12 @@ const UtoidCoverMap = () => {
             type="line"
             layout={{ 'line-join': 'round', 'line-cap': 'round' }}
             paint={{
-              'line-color': TRAIL_COLOR,
-              'line-width': 4.5,
-              'line-opacity': 1,
+              'line-color': KALDERA_TRAIL_COLOR,
+              'line-width': KALDERA_TRAIL_WIDTH,
             }}
           />
         </Source>
-        <NavigationControl position="bottom-right" showCompass visualizePitch />
+        <NavigationControl position="bottom-left" showCompass visualizePitch />
         <AttributionControl compact />
       </Map>
       {userCameraLocked ? (
