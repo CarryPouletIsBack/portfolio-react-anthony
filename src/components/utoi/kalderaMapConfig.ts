@@ -13,6 +13,19 @@ export const KALDERA_MAP_MIN_ZOOM = 8;
 export const KALDERA_MAP_MAX_ZOOM = 15;
 export const KALDERA_MAP_MAX_PITCH = 85;
 
+/** Cirque de Mafate — vue 3D fixe (pitch horizon / trackali). */
+export const MAFATE_CIRQUE_BOUNDS: [[number, number], [number, number]] = [
+  [55.352, -21.128],
+  [55.478, -21.042],
+];
+
+export const MAFATE_CIRQUE_FIT = {
+  padding: 52,
+  maxZoom: 13.6,
+  pitch: KALDERA_MAP_PITCH,
+  bearing: 22,
+} as const;
+
 export const KALDERA_FOG = {
   color: '#0a0e14',
   'high-color': '#060a10',
