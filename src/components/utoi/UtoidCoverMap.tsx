@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import Map, {
   AttributionControl,
   Layer,
@@ -21,8 +21,9 @@ import {
   KALDERA_TRAIL_OUTLINE_COLOR,
   KALDERA_TRAIL_OUTLINE_WIDTH,
   KALDERA_TRAIL_WIDTH,
-  MAFATE_CIRQUE_BOUNDS,
-  MAFATE_CIRQUE_FIT,
+  SALAZES_ILET_BOUNDS,
+  SALAZES_ILET_CENTER,
+  SALAZES_ILET_FIT,
 } from './kalderaMapConfig';
 import './UtoidCoverMap.css';
 
@@ -35,12 +36,12 @@ type TrailFeature = {
 const trailFeature = trailFeatureData as TrailFeature;
 const mapboxToken = getKalderaMapboxToken();
 
-function fitMafateCirqueView(map: MapboxMap) {
-  map.fitBounds(MAFATE_CIRQUE_BOUNDS, {
-    padding: MAFATE_CIRQUE_FIT.padding,
-    maxZoom: MAFATE_CIRQUE_FIT.maxZoom,
-    pitch: MAFATE_CIRQUE_FIT.pitch,
-    bearing: MAFATE_CIRQUE_FIT.bearing,
+function fitSalazesIletView(map: MapboxMap) {
+  map.fitBounds(SALAZES_ILET_BOUNDS, {
+    padding: SALAZES_ILET_FIT.padding,
+    maxZoom: SALAZES_ILET_FIT.maxZoom,
+    pitch: SALAZES_ILET_FIT.pitch,
+    bearing: SALAZES_ILET_FIT.bearing,
     duration: 0,
     essential: true,
   });
@@ -48,8 +49,6 @@ function fitMafateCirqueView(map: MapboxMap) {
 
 const UtoidCoverMap = () => {
   const mapRef = useRef<MapRef>(null);
-  const userCameraLockedRef = useRef(false);
-  const [userCameraLocked, setUserCameraLocked] = useState(false);
 
   const handleMapLoad = useCallback(() => {
     const map = mapRef.current?.getMap();
@@ -61,29 +60,11 @@ const UtoidCoverMap = () => {
       } catch {
         /* style pas prêt */
       }
-      fitMafateCirqueView(map);
+      fitSalazesIletView(map);
     };
 
     if (map.isStyleLoaded()) setup();
     else map.once('style.load', setup);
-  }, []);
-
-  const handleRecenter = useCallback(() => {
-    const map = mapRef.current?.getMap();
-    if (!map) return;
-    userCameraLockedRef.current = false;
-    setUserCameraLocked(false);
-    try {
-      map.stop();
-    } catch {
-      /* ignore */
-    }
-    fitMafateCirqueView(map);
-  }, []);
-
-  const markUserInteraction = useCallback(() => {
-    userCameraLockedRef.current = true;
-    setUserCameraLocked(true);
   }, []);
 
   if (!mapboxToken) {
@@ -102,11 +83,11 @@ const UtoidCoverMap = () => {
         ref={mapRef}
         mapboxAccessToken={mapboxToken}
         initialViewState={{
-          longitude: 55.415,
-          latitude: -21.085,
-          zoom: MAFATE_CIRQUE_FIT.maxZoom,
-          pitch: MAFATE_CIRQUE_FIT.pitch,
-          bearing: MAFATE_CIRQUE_FIT.bearing,
+          longitude: SALAZES_ILET_CENTER.longitude,
+          latitude: SALAZES_ILET_CENTER.latitude,
+          zoom: SALAZES_ILET_FIT.maxZoom,
+          pitch: SALAZES_ILET_FIT.pitch,
+          bearing: SALAZES_ILET_FIT.bearing,
         }}
         mapStyle={KALDERA_MAPBOX_STYLE}
         style={{ width: '100%', height: '100%' }}
@@ -118,15 +99,6 @@ const UtoidCoverMap = () => {
         antialias
         attributionControl={false}
         onLoad={handleMapLoad}
-        onMoveEnd={(e) => {
-          if (e.originalEvent) markUserInteraction();
-        }}
-        onZoomEnd={(e) => {
-          if (e.originalEvent) markUserInteraction();
-        }}
-        onDragEnd={(e) => {
-          if (e.originalEvent) markUserInteraction();
-        }}
         cursor="grab"
       >
         <Source id="utoi-trail" type="geojson" data={trailFeature}>
@@ -152,20 +124,6 @@ const UtoidCoverMap = () => {
         <NavigationControl position="bottom-left" showCompass visualizePitch />
         <AttributionControl compact />
       </Map>
-      {userCameraLocked ? (
-        <button
-          type="button"
-          className="utoi-cover-map__recenter"
-          onClick={handleRecenter}
-          aria-label="Recentrer sur le cirque de Mafate"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-            <circle cx="12" cy="12" r="3" />
-          </svg>
-          Mafate
-        </button>
-      ) : null}
     </div>
   );
 };

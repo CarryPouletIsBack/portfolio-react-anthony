@@ -34,36 +34,5 @@
 }
 
 .utoi-cover-map .mapboxgl-ctrl-bottom-right {
-  margin: 0 12px 56px 0;
-}
-
-.utoi-cover-map__recenter {
-  position: absolute;
-  right: 24px;
-  bottom: 72px;
-  z-index: 5;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 100px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  color: #0f172a;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.utoi-cover-map__recenter:hover {
-  background: #fff;
-  transform: scale(1.03);
-}
-
-.utoi-cover-map__recenter:active {
-  transform: scale(0.98);
+  margin: 0 12px 12px 0;
 }

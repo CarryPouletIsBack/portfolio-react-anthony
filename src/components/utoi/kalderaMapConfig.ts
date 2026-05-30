@@ -13,17 +13,22 @@ export const KALDERA_MAP_MIN_ZOOM = 8;
 export const KALDERA_MAP_MAX_ZOOM = 15;
 export const KALDERA_MAP_MAX_PITCH = 85;
 
-/** Cirque de Mafate — vue 3D fixe (pitch horizon / trackali). */
-export const MAFATE_CIRQUE_BOUNDS: [[number, number], [number, number]] = [
-  [55.352, -21.128],
-  [55.478, -21.042],
+/** Îlet des Salazes (cirque de Cilaos) — vue 3D rapprochée, pitch horizon. */
+export const SALAZES_ILET_CENTER = {
+  longitude: 55.44924,
+  latitude: -21.11256,
+} as const;
+
+export const SALAZES_ILET_BOUNDS: [[number, number], [number, number]] = [
+  [55.434, -21.122],
+  [55.464, -21.102],
 ];
 
-export const MAFATE_CIRQUE_FIT = {
-  padding: 52,
-  maxZoom: 13.6,
+export const SALAZES_ILET_FIT = {
+  padding: 28,
+  maxZoom: 14.85,
   pitch: KALDERA_MAP_PITCH,
-  bearing: 22,
+  bearing: 38,
 } as const;
 
 export const KALDERA_FOG = {
