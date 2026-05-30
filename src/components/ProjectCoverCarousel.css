@@ -10,6 +10,63 @@
   background-color: #509ED8; /* Fond bleu derrière l'image cover */
 }
 
+.project-cover-image-above--map {
+  background-color: #0d1117;
+}
+
+.project-cover-image-above--map::before {
+  display: none;
+}
+
+.project-cover-map-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.35) 0%,
+    transparent 40%,
+    rgba(15, 23, 42, 0.2) 100%
+  );
+}
+
+.project-cover-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.project-cover-map--utoi {
+  background: transparent;
+}
+
+/* Fond opaque : masque l’accueil derrière la carte semi-transparente */
+.project-cover-map-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: #0d1117;
+}
+
+.project-cover-map--utoi .utoi-cover-map {
+  position: relative;
+  z-index: 1;
+}
+
+.project-cover-map-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  background: #1e293b;
+}
+
 /* Quand la page projet glisse vers le bas (fullscreen), la cover prend toute la hauteur */
 .project-cover-image-above.project-cover-fullscreen-expanded {
   height: 100vh;
@@ -38,7 +95,7 @@
   pointer-events: auto;
 }
 
-/* Bouton fermer (croix) en haut à gauche sur l'image de couverture */
+/* Bouton retour (chevron gauche) en haut à gauche sur l'image de couverture */
 .project-cover-close-btn {
   position: absolute;
   top: 24px;

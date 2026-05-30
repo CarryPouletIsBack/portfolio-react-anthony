@@ -18,6 +18,20 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import './SingleProject.css';
 import { type ProjectData } from '../data/projectsNew';
+import {
+  getCaseStudyVariant,
+  usesExtendedCaseStudyLayout,
+  usesPlaydagoCaseStudyLayout,
+  usesUtoidCaseStudyLayout,
+} from '../utils/caseStudyLayout';
+import {
+  buildUtoiAuditCarouselImages,
+  UTOI_CONCEPTION_CONCEPT_GROUPS,
+  UTOI_CARD_SWAP_SLIDE_SRCS,
+  UTOI_DS_BENTO_IMAGE_SOURCES,
+  UTOI_PRESENTATION_IMAGES,
+  utoiFrameAlt,
+} from '../data/utoiCaseStudyAssets';
 import BlurText from './BlurText';
 import DonutChartRace from './DonutChartRace';
 import PositionnementMatrixChart from './PositionnementMatrixChart';
@@ -163,22 +177,24 @@ function buildAuditCarouselImages(
   playdagoSecondSlideSrc: string = auditCarouselCreationAtelierLancerDes,
   playdagoThirdSlideSrc: string = auditCarouselCreationAtelierPersonnalisationDes
 ): Array<{ src: string; alt: string }> {
-  const first =
-    title === 'Playdago'
-      ? { src: auditCarouselBluePlaydago, alt: 'Audit – veille UX/UI 1' }
-      : { src: AUDIT_CAROUSEL_FIRST_DEFAULT.src, alt: AUDIT_CAROUSEL_FIRST_DEFAULT.alt };
-  const second =
-    title === 'Playdago'
-      ? { src: playdagoSecondSlideSrc, alt: 'Audit – veille UX/UI 2' }
-      : { src: AUDIT_CAROUSEL_SLIDE_2_DEFAULT_SRC, alt: 'Audit – veille UX/UI 2' };
-  const third =
-    title === 'Playdago'
-      ? { src: playdagoThirdSlideSrc, alt: 'Audit – veille UX/UI 3' }
-      : { src: AUDIT_CAROUSEL_SLIDE_3_DEFAULT.src, alt: AUDIT_CAROUSEL_SLIDE_3_DEFAULT.alt };
-  const fourth =
-    title === 'Playdago'
-      ? { src: auditCarouselCreationAtelierActionPopup, alt: 'Audit – veille UX/UI 4' }
-      : null;
+  if (getCaseStudyVariant(title) === 'utoi') {
+    return buildUtoiAuditCarouselImages().map((slide) => ({
+      src: slide.src,
+      alt: slide.alt ?? 'UTOI — audit',
+    }));
+  }
+  const first = usesPlaydagoCaseStudyLayout(title)
+    ? { src: auditCarouselBluePlaydago, alt: 'Audit – veille UX/UI 1' }
+    : { src: AUDIT_CAROUSEL_FIRST_DEFAULT.src, alt: AUDIT_CAROUSEL_FIRST_DEFAULT.alt };
+  const second = usesPlaydagoCaseStudyLayout(title)
+    ? { src: playdagoSecondSlideSrc, alt: 'Audit – veille UX/UI 2' }
+    : { src: AUDIT_CAROUSEL_SLIDE_2_DEFAULT_SRC, alt: 'Audit – veille UX/UI 2' };
+  const third = usesPlaydagoCaseStudyLayout(title)
+    ? { src: playdagoThirdSlideSrc, alt: 'Audit – veille UX/UI 3' }
+    : { src: AUDIT_CAROUSEL_SLIDE_3_DEFAULT.src, alt: AUDIT_CAROUSEL_SLIDE_3_DEFAULT.alt };
+  const fourth = usesPlaydagoCaseStudyLayout(title)
+    ? { src: auditCarouselCreationAtelierActionPopup, alt: 'Audit – veille UX/UI 4' }
+    : null;
   return fourth ? [first, second, third, fourth] : [first, second, third];
 }
 
@@ -311,15 +327,37 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
     [projectData.title]
   );
 
-  /** Design system Playdago — Bento 6 tuiles (grille 4×3 type dashboard) */
+  /** Design system — Bento 6 tuiles (Playdago & UTOI) */
   const playdagoDsBentoItems = useMemo(() => {
     const n = auditCarouselImages.length;
-    if (projectData.title !== 'Playdago' || !projectData.designSystem) {
+    const variant = getCaseStudyVariant(projectData.title);
+    if (!variant || !projectData.designSystem) {
       return auditCarouselImages.map((img, index) => ({
         src: img.src,
         alt: t(`project.auditAlt${index + 1}`),
         label: `${index + 1} / ${n}`,
       }));
+    }
+    if (variant === 'utoi') {
+      /* Bento 6 : tuiles 3 et 4 = grandes (F1, Grand Tourismo). */
+      return [
+        { src: UTOI_DS_BENTO_IMAGE_SOURCES.auditStrategy, alt: utoiFrameAlt('Composants UI') },
+        { src: UTOI_DS_BENTO_IMAGE_SOURCES.forme, alt: utoiFrameAlt('Formes topographiques') },
+        { src: UTOI_DS_BENTO_IMAGE_SOURCES.frame1, alt: utoiFrameAlt('La F1 des montagnes') },
+        { src: UTOI_DS_BENTO_IMAGE_SOURCES.frame2, alt: utoiFrameAlt('Grand Tourismo') },
+        {
+          content: (
+            <PlaydagoTypescaleTable
+              projectData={projectData}
+              t={t}
+              typographyHeadingId="utoi-bento-typescale"
+            />
+          ),
+        },
+        {
+          content: <PlaydagoPaletteTable projectData={projectData} isEn={isEn} t={t} />,
+        },
+      ];
     }
     const frameAlt = (id: string) => `Playdago — Design system (${id})`;
     return [
@@ -355,9 +393,11 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
     ];
   }, [projectData, isEn, t, auditCarouselImages]);
 
-  /** Groupes d’images par concept (Conception Playdago uniquement ; autres projets : repli 1 concept / 1 image) */
+  /** Groupes d’images par concept (Playdago & UTOI) */
   const playdagoConceptionConceptGroups = useMemo(() => {
-    if (projectData.title === 'Playdago') return PLAYDAGO_CONCEPTION_CONCEPT_GROUPS;
+    const variant = getCaseStudyVariant(projectData.title);
+    if (variant === 'utoi') return UTOI_CONCEPTION_CONCEPT_GROUPS;
+    if (variant === 'playdago') return PLAYDAGO_CONCEPTION_CONCEPT_GROUPS;
     return [[{ src: AUDIT_CAROUSEL_FIRST_DEFAULT.src }]];
   }, [projectData.title]);
 
@@ -371,9 +411,14 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
 
   const playdagoConceptionCurrentSlides = playdagoConceptionConceptGroups[conceptionSafeConceptIdx] ?? [];
 
+  const caseStudyCardSwapSlideSrcs = useMemo(() => {
+    if (getCaseStudyVariant(projectData.title) === 'utoi') return UTOI_CARD_SWAP_SLIDE_SRCS;
+    return PLAYDAGO_CARD_SWAP_SLIDE_SRCS;
+  }, [projectData.title]);
+
   /** Conception & Itération (Playdago) : H3 + corps — priorité aux champs conception*, repli sur le doublon design system */
   const playdagoConceptionPivotH3 = useMemo(() => {
-    if (projectData.title !== 'Playdago') return undefined;
+    if (!usesExtendedCaseStudyLayout(projectData.title)) return undefined;
     return (
       (isEn && projectData.translations?.en?.conceptionDuplicatePivotH3
         ? projectData.translations.en.conceptionDuplicatePivotH3
@@ -385,7 +430,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
   }, [projectData, isEn]);
 
   const playdagoConceptionBody = useMemo(() => {
-    if (projectData.title !== 'Playdago') return '';
+    if (!usesExtendedCaseStudyLayout(projectData.title)) return '';
     return (
       (isEn && projectData.translations?.en?.conceptionDuplicateBody
         ? projectData.translations.en.conceptionDuplicateBody
@@ -1017,7 +1062,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                 {projectData.designSystem && (
                   <li><a href="#design-system" className="toc-link">{projectData.designSystem.colorPalette.title}</a></li>
                 )}
-                {projectData.designSystem?.typography && projectData.title !== 'Playdago' && (
+                {projectData.designSystem?.typography && !usesExtendedCaseStudyLayout(projectData.title) && (
                   <li><a href="#typography" className="toc-link">{projectData.designSystem.typography.title}</a></li>
                 )}
                 <li><a href="#implementation" className="toc-link">{t('project.implementation')}</a></li>
@@ -1156,7 +1201,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
         {/* Audit */}
         <motion.section id="audit" className="project-section figma-audit-section" {...scrollSectionProps}>
           <h2 className="section-title">{t('project.audit')}</h2>
-          {projectData.title === 'Playdago' && (
+          {usesExtendedCaseStudyLayout(projectData.title) && (
             <p className="figma-audit-subtitle">
               {isEn ? 'Competitive benchmarking' : 'Benchmark concurrentiel'}
             </p>
@@ -1187,7 +1232,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                 centeredSlides={false}
                 pagination={{ clickable: true }}
                 className={
-                  projectData.title === 'Playdago'
+                  usesExtendedCaseStudyLayout(projectData.title)
                     ? 'figma-audit-carousel figma-audit-carousel--playdago'
                     : 'figma-audit-carousel'
                 }
@@ -1210,7 +1255,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                   <SwiperSlide key={index}>
                     <div
                       className={
-                        projectData.title === 'Playdago' && index === 0
+                        usesExtendedCaseStudyLayout(projectData.title) && index === 0
                           ? 'figma-audit-slide figma-audit-slide--playdago-blue'
                           : 'figma-audit-slide'
                       }
@@ -1269,7 +1314,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
           </div>
 
           {/* Playdago : Design system — texte + bento (palette & typéchelle intégrés aux tuiles) */}
-          {projectData.title === 'Playdago' && (
+          {usesExtendedCaseStudyLayout(projectData.title) && (
             <>
               <div id="design-system" className="figma-audit-playdago-duplicate">
                 <h3 className="figma-subsection-title">{t('project.designSystem')}</h3>
@@ -1285,11 +1330,19 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                       : projectData.architectureDsDuplicateBody ?? ''}
                   </p>
                 </div>
-                <div className="playdago-ds-magic-bento-wrap">
+                <div
+                  className={
+                    usesUtoidCaseStudyLayout(projectData.title)
+                      ? 'playdago-ds-magic-bento-wrap playdago-ds-magic-bento-wrap--utoi'
+                      : 'playdago-ds-magic-bento-wrap'
+                  }
+                >
                   <MagicBento
                     className="playdago-ds-magic-bento"
                     imageItems={playdagoDsBentoItems}
-                    glowColor="241, 88, 42"
+                    glowColor={
+                      usesUtoidCaseStudyLayout(projectData.title) ? '27, 122, 78' : '241, 88, 42'
+                    }
                   />
                 </div>
               </div>
@@ -1301,13 +1354,20 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                     ? projectData.translations.en.conceptionDuplicateLead
                     : projectData.conceptionDuplicateLead ?? ''}
                 </p>
-                <div className="playdago-conception-swap-copy-row">
+                <div
+                  className={
+                    usesUtoidCaseStudyLayout(projectData.title)
+                      ? 'playdago-conception-swap-copy-row playdago-conception-swap-copy-row--text-only'
+                      : 'playdago-conception-swap-copy-row'
+                  }
+                >
                   <div className="playdago-ds-stacked-body-col playdago-ds-stacked-body-col--swap-row">
                     {playdagoConceptionPivotH3 && (
                       <h3 className="figma-ds-pivot-h3">{playdagoConceptionPivotH3}</h3>
                     )}
                     <p className="figma-body whitespace-pre-line">{playdagoConceptionBody}</p>
                   </div>
+                  {usesPlaydagoCaseStudyLayout(projectData.title) && (
                   <div className="figma-audit-carousel-wrapper playdago-conception-gallery-wrap playdago-conception-gallery-wrap--swap-copy-row">
                     <div
                       className="playdago-conception-gallery playdago-conception-gallery--hidden"
@@ -1401,7 +1461,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                       </div>
                     </div>
                   </div>
-                  {PLAYDAGO_CARD_SWAP_SLIDE_SRCS.length >= 2 && (
+                  {caseStudyCardSwapSlideSrcs.length >= 2 && (
                     <div
                       className="playdago-conception-card-swap-wrap"
                       role="region"
@@ -1419,9 +1479,9 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                         easing="elastic"
                         containerClassName="playdago-card-swap-aspect relative mx-auto perspective-[900px] overflow-visible max-[480px]:scale-[0.88]"
                       >
-                        {PLAYDAGO_CARD_SWAP_SLIDE_SRCS.map((src, idx) => (
+                        {caseStudyCardSwapSlideSrcs.map((src, idx) => (
                           <Card
-                            key={`playdago-card-swap-${idx}`}
+                            key={`case-study-card-swap-${idx}`}
                             customClass="!border-[#b2aaaa] !bg-[#EAEAE6] shadow-md box-border overflow-hidden p-2"
                           >
                             <img
@@ -1437,6 +1497,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                     </div>
                   )}
                   </div>
+                  )}
                 </div>
               </div>
             </>
@@ -1444,7 +1505,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
         </motion.section>
 
         {/* Design system — Playdago : contenu déplacé sous Architecture (switch carrousel / tables) */}
-        {projectData.designSystem && projectData.title !== 'Playdago' && (
+        {projectData.designSystem && !usesExtendedCaseStudyLayout(projectData.title) && (
           <motion.section id="design-system" className="project-section figma-design-system-section" {...scrollSectionProps}>
             <h2 className="section-title">{t('project.designSystem')}</h2>
             <h3 className="figma-palette-title">{t('project.palette')}</h3>
@@ -1536,7 +1597,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
         )}
 
         {/* Conception & Itération (Figma 100-424) — masqué sur Playdago (doublon couvert par le bloc sous l’arbre user flow) */}
-        {projectData.title !== 'Playdago' && (
+        {!usesExtendedCaseStudyLayout(projectData.title) && (
         <motion.section id="conception" className="project-section figma-conception-section" {...scrollSectionProps}>
           <h2 className="section-title">{t('project.conception')}</h2>
           <div className="figma-two-cols">
@@ -1566,16 +1627,22 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
         </motion.section>
         )}
 
-        {/* Bloc light-mode : logo Playdago (hors <section>) collé visuellement juste au-dessus de #light-mode */}
-        <div className="figma-light-mode-group">
-          {projectData.title === 'Playdago' && (
+        {/* Bloc présentation plein écran (scroll stack) — Playdago & UTOI */}
+        {(usesPlaydagoCaseStudyLayout(projectData.title) ||
+          usesUtoidCaseStudyLayout(projectData.title)) && (
+        <div
+          className={
+            usesUtoidCaseStudyLayout(projectData.title)
+              ? 'figma-light-mode-group figma-light-mode-group--utoi'
+              : 'figma-light-mode-group'
+          }
+        >
+          {usesPlaydagoCaseStudyLayout(projectData.title) && (
             <PlaydagoH1HandwritingLogo className="figma-light-mode-h1-logo" scrollContainerRef={pageRef} />
           )}
-          {/* Suite aux tests de contraste */}
           <motion.section id="light-mode" className="project-section figma-light-mode-section" {...scrollSectionProps}>
             <ScrollStack
               scrollRootRef={pageRef}
-              className="figma-light-mode-scroll-stack"
               centerStackVertically
               smoothFactor={0.22}
               itemDistance={72}
@@ -1583,43 +1650,36 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
               stackPosition="22%"
               baseScale={0.82}
               itemScale={0.035}
+              className="figma-light-mode-scroll-stack"
             >
-              <ScrollStackItem itemClassName="figma-light-mode-scroll-stack-card">
-                <div className="figma-light-mode-img-frame figma-light-mode-img-frame--stack-item">
-                  <img
-                    src={playdagoLightModeMaine}
-                    alt={t('project.contrastImageAlt')}
-                    className="figma-light-mode-zoom-img"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </ScrollStackItem>
-              <ScrollStackItem itemClassName="figma-light-mode-scroll-stack-card">
-                <div className="figma-light-mode-img-frame figma-light-mode-img-frame--stack-item">
-                  <img
-                    src={playdagoLightModeSinglePage}
-                    alt={t('project.lightModeSinglePageAlt')}
-                    className="figma-light-mode-zoom-img figma-light-mode-extra-img"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </ScrollStackItem>
-              <ScrollStackItem itemClassName="figma-light-mode-scroll-stack-card">
-                <div className="figma-light-mode-img-frame figma-light-mode-img-frame--stack-item">
-                  <img
-                    src={playdagoLightModeSetp1}
-                    alt={t('project.lightModeSetp1Alt')}
-                    className="figma-light-mode-zoom-img figma-light-mode-extra-img"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </ScrollStackItem>
+              {(usesUtoidCaseStudyLayout(projectData.title)
+                ? UTOI_PRESENTATION_IMAGES
+                : [
+                    { src: playdagoLightModeMaine, alt: t('project.contrastImageAlt') },
+                    { src: playdagoLightModeSinglePage, alt: t('project.lightModeSinglePageAlt') },
+                    { src: playdagoLightModeSetp1, alt: t('project.lightModeSetp1Alt') },
+                  ]
+              ).map((slide, index) => (
+                <ScrollStackItem key={index} itemClassName="figma-light-mode-scroll-stack-card">
+                  <div className="figma-light-mode-img-frame figma-light-mode-img-frame--stack-item">
+                    <img
+                      src={slide.src}
+                      alt={slide.alt ?? ''}
+                      className={
+                        index === 0
+                          ? 'figma-light-mode-zoom-img'
+                          : 'figma-light-mode-zoom-img figma-light-mode-extra-img'
+                      }
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </ScrollStackItem>
+              ))}
             </ScrollStack>
           </motion.section>
         </div>
+        )}
 
         {/* Mes autres projets (Figma 117-135 : slider type carousel) */}
         <motion.section id="autres-projets" className="project-section figma-autres-projets-section" {...scrollSectionProps}>
@@ -1655,6 +1715,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
               {[
                 { slug: 'Pedaboard', title: 'Pedaboard', date: t('project.december2023'), badges: [t('hero.categoryApplicationWeb'), 'UX/UI', 'CRM'], coverImage: '/images/cover-project-pedaboard.png' },
                 { slug: 'Playdago', title: 'Playdago', date: t('project.february2025'), badges: [t('hero.categoryApplication'), 'UX/UI', 'SaaS'], coverImage: '/images/cover-project-playdago.png' },
+                { slug: 'UTOI', title: 'UTOI', date: '2025', badges: [t('hero.categorySiteWeb'), 'UX/UI'], coverImage: '/images/cover-project-utoi.png' },
                 { slug: 'Kaldera', title: 'Kaldera', date: '2025', badges: [t('hero.categorySiteWeb'), 'UX/UI', 'Simulation'], coverImage: '/images/cover-project-kaldera.png' },
               ].map((proj) => (
                 <SwiperSlide key={proj.slug}>

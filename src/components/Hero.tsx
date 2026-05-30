@@ -145,12 +145,13 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
               </div>
             )}
 
-            {/* Liste des 3 projets : Playdago, Kaldera, Pedaboard (même style que le carousel) */}
+            {/* Liste des projets : Playdago, UTOI, Pedaboard, Kaldera */}
             <div className="hero-projects-list">
               {[
+                { title: 'Playdago', imageSrc: '/images/cover-project-playdago.png', category: 'Application', date: '01/01/2025' },
+                { title: 'UTOI', imageSrc: '/images/cover-project-utoi.png', category: 'Site web', date: '01/03/2025' },
                 { title: 'Pedaboard', imageSrc: '/images/cover-project-pedaboard.png', category: 'Application web', date: '10/11/2024' },
                 { title: 'Kaldera', imageSrc: '/images/cover-project-kaldera.png', category: 'Site web', date: '15/12/2024' },
-                { title: 'Playdago', imageSrc: '/images/cover-project-playdago.png', category: 'Application', date: '01/01/2025' },
               ].map((project) => (
                 <div key={project.title} className="hero-card project-card">
                   <div className="project-content">
@@ -204,6 +205,18 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
                   }}
                 >
                   Playdago
+                </a>
+                <span className="hero-seo-desc"> — {t('hero.seoUtoidDesc')}</span>
+                <a
+                  href={`${prefix}/utoi`}
+                  className="hero-seo-link"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    onPageChange('project-UTOI', '/images/cover-project-utoi.png', 'Site web')
+                    trackEvent('click', 'seo_link', 'utoi')
+                  }}
+                >
+                  UTOI
                 </a>
                 <span className="hero-seo-desc"> — {t('hero.seoPlaydagoDesc')}</span>
                 <a

@@ -5,6 +5,7 @@ import './ErrorPage.css'
 
 const PROJECTS = [
   { slug: 'Playdago', title: 'Playdago', cover: '/images/cover-project-playdago.png' },
+  { slug: 'UTOI', title: 'UTOI', cover: '/images/cover-project-utoi.png' },
   { slug: 'Pedaboard', title: 'Pedaboard', cover: '/images/cover-project-pedaboard.png' },
   { slug: 'Kaldera', title: 'Kaldera', cover: '/images/cover-project-kaldera.png' },
 ]

@@ -1305,12 +1305,21 @@
   }
 }
 
-/* Chiffres / labels des points : masqués au départ, apparaissent après la fin du tracé des axes (4s + 0.6s) */
+/* Points + labels : masqués au départ, visibles après le tracé des axes (sans dépendre du hover) */
+.positionnement-matrix.in-view .positionnement-matrix-chart-area .highcharts-series .highcharts-point,
 .positionnement-matrix.in-view .positionnement-matrix-chart-area .positionnement-matrix-point-label,
 .positionnement-matrix.in-view .positionnement-matrix-chart-area .highcharts-data-labels,
 .positionnement-matrix.in-view .positionnement-matrix-chart-area .highcharts-data-label {
   opacity: 0 !important;
   animation: positionnement-matrix-show-labels 0.5s ease-out 4.65s forwards;
+}
+
+.positionnement-matrix.in-view .positionnement-matrix-chart-area .highcharts-series .highcharts-point {
+  visibility: visible !important;
+}
+
+.positionnement-matrix-chart-area .highcharts-series .highcharts-halo {
+  display: none !important;
 }
 
 @keyframes positionnement-matrix-show-labels {
@@ -1755,6 +1764,10 @@
   max-width: 100%;
   margin-top: var(--sp-space-md, 16px);
   box-sizing: border-box;
+}
+
+.playdago-conception-swap-copy-row--text-only {
+  grid-template-columns: 1fr;
 }
 
 .figma-lead--playdago-conception-stacked {
@@ -2405,6 +2418,47 @@
 .playdago-ds-tables .figma-palette-title,
 .playdago-ds-tables .figma-typescale-title {
   margin-top: 0;
+}
+
+/* UTOI — F1 & Grand Tourismo dans les tuiles 3 et 4 (plus grandes du bento 6) */
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--media:nth-child(3),
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--media:nth-child(4) {
+  background: #e8ece9;
+}
+
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--media:nth-child(3) .magic-bento-media-frame img,
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--media:nth-child(4) .magic-bento-media-frame img {
+  object-fit: contain;
+  object-position: center;
+}
+
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--content:nth-child(5) .magic-bento-cell--content,
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--content:nth-child(6) .magic-bento-cell--content {
+  padding: clamp(4px, 1cqi, 8px);
+  font-size: clamp(0.55rem, 1.8cqi, 0.7rem);
+}
+
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--content:nth-child(5) .figma-typescale-table--bento .figma-typescale-header,
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--content:nth-child(5) .figma-typescale-table--bento .figma-typescale-row {
+  grid-template-columns:
+    minmax(0, 0.5fr)
+    minmax(0, 1fr)
+    minmax(0, 0.55fr)
+    minmax(0, 0.6fr)
+    minmax(0, 0.85fr);
+  column-gap: clamp(4px, 1.5cqi, 8px);
+  padding: clamp(4px, 1.2cqi, 8px);
+}
+
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--content:nth-child(6) .figma-palette-header,
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--content:nth-child(6) .figma-palette-row {
+  gap: 0.25rem;
+  padding: clamp(4px, 1.2cqi, 8px);
+}
+
+.playdago-ds-magic-bento-wrap--utoi .magic-bento-image-grid--6 .magic-bento-card--content:nth-child(6) .figma-swatch {
+  width: clamp(14px, 4cqi, 22px);
+  height: clamp(14px, 4cqi, 22px);
 }
 
 /* Arbre User flow – style arbre de compétences (fond sombre, scroll horizontal, bulles type Login) */

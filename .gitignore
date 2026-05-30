@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+.venv-pdf/
 /.pnp
 .pnp.js
 
@@ -45,3 +46,4 @@ Thumbs.db
 /coverage
 .vercel
 .env*.local
+

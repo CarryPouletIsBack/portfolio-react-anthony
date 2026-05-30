@@ -19,11 +19,19 @@ import './App.css'
 
 const PROJECT_COVER_IMAGES: Record<string, string> = {
   Playdago: '/images/cover-project-playdago.png',
+  UTOI: '/images/cover-project-utoi.png',
   Pedaboard: '/images/cover-project-pedaboard.png',
   Kaldera: '/images/cover-project-kaldera.png',
 }
 
-const PROJECT_ORDER = ['Playdago', 'Pedaboard', 'Kaldera'] as const
+const PROJECT_ORDER = ['Playdago', 'UTOI', 'Pedaboard', 'Kaldera'] as const
+
+const SLUG_TO_PROJECT_NAME: Record<string, string> = {
+  playdago: 'Playdago',
+  utoi: 'UTOI',
+  pedaboard: 'Pedaboard',
+  kaldera: 'Kaldera',
+}
 
 function App() {
   const { language, setLanguage } = useLanguage()
@@ -100,10 +108,12 @@ function App() {
         targetPage = 'contact'
       } else if (pathToMatch.startsWith('/project/')) {
         const projectId = pathToMatch.replace(/^\/project\//, '').toLowerCase()
-        const projectName = projectId === 'playdago' ? 'Playdago' : projectId === 'pedaboard' ? 'Pedaboard' : projectId === 'kaldera' ? 'Kaldera' : projectId.charAt(0).toUpperCase() + projectId.slice(1)
+        const projectName = SLUG_TO_PROJECT_NAME[projectId] ?? projectId.charAt(0).toUpperCase() + projectId.slice(1)
         targetPage = `project-${projectName}`
       } else if (/^\/playdago$/i.test(pathToMatch)) {
         targetPage = 'project-Playdago'
+      } else if (/^\/utoi$/i.test(pathToMatch)) {
+        targetPage = 'project-UTOI'
       } else if (/^\/pedaboard$/i.test(pathToMatch)) {
         targetPage = 'project-Pedaboard'
       } else if (/^\/kaldera$/i.test(pathToMatch)) {
@@ -170,6 +180,7 @@ function App() {
       const name = page.replace('project-', '')
       const slug = name.toLowerCase()
       if (slug === 'playdago') return `${prefix}/playdago`
+      if (slug === 'utoi') return `${prefix}/utoi`
       if (slug === 'pedaboard') return `${prefix}/pedaboard`
       if (slug === 'kaldera') return `${prefix}/kaldera`
       return `${prefix}/project/${name}`
@@ -254,6 +265,9 @@ function App() {
       } else if (/^\/playdago$/i.test(pathToMatch)) {
         setPreviousPage('accueil')
         setCurrentPage('project-Playdago')
+      } else if (/^\/utoi$/i.test(pathToMatch)) {
+        setPreviousPage('accueil')
+        setCurrentPage('project-UTOI')
       } else if (/^\/pedaboard$/i.test(pathToMatch)) {
         setPreviousPage('accueil')
         setCurrentPage('project-Pedaboard')

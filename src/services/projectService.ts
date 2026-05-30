@@ -3,8 +3,75 @@ import { projectsDataNew } from '../data/projectsNew';
 
 const STORAGE_KEY = 'portfolio_projects';
 /** Incrémenter pour forcer la réutilisation des données du code (ex. nouveaux champs positionnementMatrix, userFlow) */
-const DATA_VERSION = 10;
+const DATA_VERSION = 14;
 const DATA_VERSION_KEY = 'portfolio_projects_version';
+
+/** Projets dont le contenu éditorial doit toujours venir du code (évite localStorage corrompu). */
+const CONTENT_FROM_CODE_ONLY = new Set(['UTOI']);
+
+function resolveCoverImage(key: string, savedCover?: string): string {
+  if (key === 'Pedaboard') return '/images/cover-project-pedaboard.png';
+  if (key === 'Playdago') return '/images/cover-project-playdago.png';
+  if (key === 'UTOI') return '/images/cover-project-utoi.png';
+  if (key === 'Kaldera') return '/images/cover-project-kaldera.png';
+  return savedCover ?? `/images/${key.toLowerCase()}-cover.png`;
+}
+
+function resolveCategory(key: string, savedCategory?: string): string {
+  if (savedCategory) return savedCategory;
+  if (key === 'Pedaboard') return 'applicationWeb';
+  if (key === 'UTOI') return 'siteWeb';
+  return 'application';
+}
+
+function mergeStoredProject(
+  key: string,
+  defaults: ProjectData,
+  saved: Partial<ProjectWithMeta> | undefined,
+): ProjectWithMeta {
+  if (CONTENT_FROM_CODE_ONLY.has(key) || !saved) {
+    return {
+      ...defaults,
+      id: saved?.id ?? key,
+      coverImage: resolveCoverImage(key, saved?.coverImage),
+      category: resolveCategory(key, saved?.category),
+      status: saved?.status ?? 'published',
+      lastModified: saved?.lastModified ?? new Date().toISOString(),
+      createdAt: saved?.createdAt ?? new Date().toISOString(),
+    };
+  }
+
+  return {
+    ...defaults,
+    ...saved,
+    userFlow: defaults.userFlow ?? saved?.userFlow,
+    auditLeadAfterCarousel: defaults.auditLeadAfterCarousel ?? saved?.auditLeadAfterCarousel,
+    auditBodyAfterCarousel: defaults.auditBodyAfterCarousel ?? saved?.auditBodyAfterCarousel,
+    translations:
+      defaults.translations || saved?.translations
+        ? {
+            ...defaults.translations,
+            ...saved?.translations,
+            en: {
+              ...defaults.translations?.en,
+              ...saved?.translations?.en,
+              auditLeadAfterCarousel:
+                defaults.translations?.en?.auditLeadAfterCarousel ??
+                saved?.translations?.en?.auditLeadAfterCarousel,
+              auditBodyAfterCarousel:
+                defaults.translations?.en?.auditBodyAfterCarousel ??
+                saved?.translations?.en?.auditBodyAfterCarousel,
+            },
+          }
+        : undefined,
+    id: saved?.id ?? key,
+    coverImage: resolveCoverImage(key, saved?.coverImage),
+    category: resolveCategory(key, saved?.category),
+    status: saved?.status ?? 'published',
+    lastModified: saved?.lastModified ?? new Date().toISOString(),
+    createdAt: saved?.createdAt ?? new Date().toISOString(),
+  } as ProjectWithMeta;
+}
 
 export interface ProjectWithMeta extends ProjectData {
   id: string;
@@ -28,37 +95,8 @@ export const loadProjects = (): { [key: string]: ProjectWithMeta } => {
       const merged: { [key: string]: ProjectWithMeta } = {};
       Object.keys(projectsDataNew).forEach((key) => {
         const defaults = projectsDataNew[key];
-        const saved = parsed[key];
-        merged[key] = {
-          ...defaults,
-          ...saved,
-          userFlow: defaults.userFlow ?? saved?.userFlow,
-          auditLeadAfterCarousel: defaults.auditLeadAfterCarousel ?? saved?.auditLeadAfterCarousel,
-          auditBodyAfterCarousel: defaults.auditBodyAfterCarousel ?? saved?.auditBodyAfterCarousel,
-          translations:
-            defaults.translations || saved?.translations
-              ? {
-                  ...defaults.translations,
-                  ...saved?.translations,
-                  en: {
-                    ...defaults.translations?.en,
-                    ...saved?.translations?.en,
-                    auditLeadAfterCarousel:
-                      defaults.translations?.en?.auditLeadAfterCarousel ??
-                      saved?.translations?.en?.auditLeadAfterCarousel,
-                    auditBodyAfterCarousel:
-                      defaults.translations?.en?.auditBodyAfterCarousel ??
-                      saved?.translations?.en?.auditBodyAfterCarousel,
-                  },
-                }
-              : undefined,
-          id: saved?.id ?? key,
-          coverImage: key === 'Pedaboard' ? '/images/cover-project-pedaboard.png' : key === 'Playdago' ? '/images/cover-project-playdago.png' : key === 'Kaldera' ? '/images/cover-project-kaldera.png' : saved?.coverImage ?? `/images/${key.toLowerCase()}-cover.png`,
-          category: saved?.category ?? (key === 'Pedaboard' ? 'applicationWeb' : 'application'),
-          status: saved?.status ?? 'published',
-          lastModified: saved?.lastModified ?? new Date().toISOString(),
-          createdAt: saved?.createdAt ?? new Date().toISOString(),
-        } as ProjectWithMeta;
+        const saved = parsed[key] as Partial<ProjectWithMeta> | undefined;
+        merged[key] = mergeStoredProject(key, defaults, saved);
       });
       return merged;
     }
@@ -72,18 +110,12 @@ export const loadProjects = (): { [key: string]: ProjectWithMeta } => {
   // Convertir les données par défaut en format avec métadonnées
   const projectsWithMeta: { [key: string]: ProjectWithMeta } = {};
   Object.keys(projectsDataNew).forEach(key => {
-    const coverImage = key === 'Pedaboard'
-      ? '/images/cover-project-pedaboard.png'
-      : key === 'Playdago'
-        ? '/images/cover-project-playdago.png'
-        : key === 'Kaldera'
-          ? '/images/cover-project-kaldera.png'
-          : `/images/${key.toLowerCase()}-cover.png`;
+    const coverImage = resolveCoverImage(key);
     projectsWithMeta[key] = {
       ...projectsDataNew[key],
       id: key,
       coverImage,
-      category: key === 'Pedaboard' ? 'applicationWeb' : 'application',
+      category: resolveCategory(key),
       status: 'published',
       lastModified: new Date().toISOString(),
       createdAt: new Date().toISOString(),

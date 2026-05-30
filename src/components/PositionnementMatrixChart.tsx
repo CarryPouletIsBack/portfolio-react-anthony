@@ -90,19 +90,40 @@ const PositionnementMatrixChart: FC<PositionnementMatrixChartProps> = ({ data, c
     tooltip: { enabled: false },
     plotOptions: {
       scatter: {
+        stickyTracking: false,
         marker: {
-          enabled: false,
+          enabled: true,
+          radius: 6,
+          symbol: 'circle',
+          fillColor: '#222222',
+          lineWidth: 2,
+          lineColor: '#ffffff',
+        },
+        states: {
+          hover: {
+            lineWidthPlus: 0,
+            halo: { size: 0 },
+            marker: {
+              enabled: true,
+              radius: 6,
+            },
+          },
+          inactive: {
+            opacity: 1,
+          },
         },
         dataLabels: {
           enabled: true,
           format: '{point.name}',
+          className: 'positionnement-matrix-point-label',
           style: {
             fontSize: '12px',
             fontWeight: '600',
             textOutline: 'none',
+            color: '#000000',
           },
-          verticalAlign: 'middle',
-          y: 0,
+          verticalAlign: 'bottom',
+          y: -10,
         },
       },
     },

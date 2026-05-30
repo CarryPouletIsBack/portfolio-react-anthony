@@ -16,6 +16,19 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: ['mapbox-gl', 'react-map-gl/mapbox'],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/mapbox-gl')) return 'mapbox-gl';
+          if (id.includes('node_modules/react-map-gl')) return 'react-map-gl';
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     /** Ouvre le navigateur sur l’URL réelle (important si 5173 est déjà pris : Vite passe à 5174, 5175…). */

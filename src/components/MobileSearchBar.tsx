@@ -9,7 +9,7 @@ import { getProjectByTitle, type MenuItem, type MenuCategory } from '../services
 import { getAllProjects as getAllProjectsFromService } from '../services/projectService'
 import { menuCategories as staticMenuCategories } from '../data/menuCategories'
 
-const ENABLED_PROJECT_TITLES = ['Playdago', 'Pedaboard', 'Kaldera']
+const ENABLED_PROJECT_TITLES = ['Playdago', 'UTOI', 'Pedaboard', 'Kaldera']
 
 interface MobileSearchBarProps {
   onSearchChange?: (searchTerm: string) => void

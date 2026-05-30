@@ -1,9 +1,14 @@
-import { useMemo, useState, useCallback, useEffect } from 'react';
+import { useMemo, useState, useCallback, useEffect, lazy, Suspense } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import './ProjectCoverCarousel.css';
+
+const loadUtoidCoverMap = () => import('./utoi/UtoidCoverMap');
+const UtoidCoverMap = lazy(loadUtoidCoverMap);
+
+const isUtoidCoverMap = (projectName: string) => projectName === 'UTOI';
 
 interface ProjectCoverCarouselProps {
   coverImage: string;
@@ -73,25 +78,46 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
 
   const hasVideoExtension = (src: string) => /\.(mp4|webm|mov|avi|mkv)$/i.test(src);
   const isMpAudioProject = projectName.toLowerCase().includes('mp audio');
+  const showUtoidMap = isUtoidCoverMap(projectName);
+
+  useEffect(() => {
+    if (!showUtoidMap) return;
+    void loadUtoidCoverMap();
+  }, [showUtoidMap]);
 
   return (
     <>
       <div 
-        className={`project-cover-image-above ${coverFullscreenActive ? 'project-cover-fullscreen-expanded' : ''}`}
+        className={`project-cover-image-above${showUtoidMap ? ' project-cover-image-above--map' : ''}${coverFullscreenActive ? ' project-cover-fullscreen-expanded' : ''}`}
         style={{
           transform: `translateY(${swipeY}px)`,
           transition: swipeY === 0 ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' : 'none'
         }}
       >
-        {/* Overlay sombre : s'intensifie quand le panneau monte vers le haut */}
-        <div
-          className="project-cover-dark-overlay"
-          style={{
-            opacity: coverLiftProgress * 0.5,
-            transition: 'opacity 0.15s ease-out'
-          }}
-          aria-hidden
-        />
+        {!showUtoidMap ? (
+          <div
+            className="project-cover-dark-overlay"
+            style={{
+              opacity: coverLiftProgress * 0.5,
+              transition: 'opacity 0.15s ease-out'
+            }}
+            aria-hidden
+          />
+        ) : null}
+        {showUtoidMap ? (
+          <div className="project-cover-map project-cover-map--utoi" aria-label="Carte du parcours Ultra terrestre 224">
+            <div className="project-cover-map-bg" aria-hidden />
+            <Suspense
+              fallback={
+                <div className="project-cover-map-fallback" aria-busy="true">
+                  Chargement de la carte…
+                </div>
+              }
+            >
+              <UtoidCoverMap />
+            </Suspense>
+          </div>
+        ) : (
         <Swiper
         modules={[Pagination, Autoplay]}
         pagination={{
@@ -131,9 +157,10 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
           );
         })}
       </Swiper>
+        )}
       </div>
 
-      {/* Icône fullscreen en bas à droite de l'image cover */}
+      {!showUtoidMap ? (
       <div className="project-cover-fullscreen-trigger-layer" aria-hidden>
         <button
           type="button"
@@ -146,6 +173,7 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
           </svg>
         </button>
       </div>
+      ) : null}
 
       {/* Couche boutons au premier plan (z-index 2001) pour rester cliquables au scroll */}
       <div className="project-cover-buttons-layer">
@@ -154,13 +182,12 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
             type="button"
             className={`project-cover-close-btn${hideCloseOnScroll ? ' project-cover-close-btn--scroll-hidden' : ''}`}
             onClick={onClose}
-            aria-label="Fermer"
+            aria-label="Retour"
             aria-hidden={hideCloseOnScroll}
             tabIndex={hideCloseOnScroll ? -1 : undefined}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
+              <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
         )}
@@ -194,8 +221,7 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
         )}
       </div>
 
-      {/* Modal plein écran : image en grand avec carousel (flèches) */}
-      {isFullscreenModalOpen && (
+      {!showUtoidMap && isFullscreenModalOpen && (
         <div
           className="project-cover-fullscreen-overlay"
           role="dialog"

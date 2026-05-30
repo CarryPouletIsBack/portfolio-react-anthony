@@ -139,7 +139,9 @@ export function PlaydagoTypescaleTable({
   const ds = projectData.designSystem;
   if (!ds) return null;
   const typoRows = buildTypoRows(projectData);
-  const bentoTile = typographyHeadingId === 'playdago-bento-typescale';
+  const bentoTile =
+    typographyHeadingId === 'playdago-bento-typescale' ||
+    typographyHeadingId === 'utoi-bento-typescale';
 
   return (
     <div className={`playdago-ds-tables playdago-ds-tables--typescale${bentoTile ? ' playdago-ds-tables--typescale-bento' : ''}`}>

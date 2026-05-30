@@ -1,3 +1,5 @@
+import { utoiProjectData } from './utoiProject';
+
 export interface ProjectData {
   // 1. Titre principal
   title: string;
@@ -229,8 +231,7 @@ export interface ProjectData {
   };
 }
 
-export const projectsDataNew: { [key: string]: ProjectData } = {
-  'Playdago': {
+const playdagoProjectBase: ProjectData = {
     // 1. Titre principal
     title: 'Playdago',
     subtitle: 'Application de pédagogie active',
@@ -601,8 +602,12 @@ Although aligned with the initial specification, this structure later evolved to
         ]
       }
     }
-  },
-  'Pedaboard': {
+};
+
+export const projectsDataNew: { [key: string]: ProjectData } = {
+  Playdago: playdagoProjectBase,
+  UTOI: utoiProjectData,
+  Pedaboard: {
     // 1. Titre principal
     title: 'Pedaboard',
     badges: ['Application', 'UX/UI', '2025', 'CRM'],

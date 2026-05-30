@@ -52,8 +52,8 @@ export const menuCategories: MenuCategory[] = [
     projects: [
       { 
         imageSrc: "/images/0134e78478dc1f1d253d2dc665ff3b92b115ee46.png", 
-        imageAlt: "Utoi", 
-        title: "Utoi" 
+        imageAlt: "UTOI", 
+        title: "UTOI" 
       },
       { 
         imageSrc: "/images/25c86067ea3b2084f730bb1f906759081bc20fac.png", 
