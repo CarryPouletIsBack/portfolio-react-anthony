@@ -20,15 +20,15 @@ export const SALAZES_ILET_CENTER = {
 } as const;
 
 export const SALAZES_ILET_BOUNDS: [[number, number], [number, number]] = [
-  [55.434, -21.122],
-  [55.464, -21.102],
+  [55.438, -21.118],
+  [55.460, -21.106],
 ];
 
 export const SALAZES_ILET_FIT = {
-  padding: 28,
-  maxZoom: 14.85,
+  padding: 20,
+  maxZoom: 15,
   pitch: KALDERA_MAP_PITCH,
-  bearing: 38,
+  bearing: 54,
 } as const;
 
 export const KALDERA_FOG = {
