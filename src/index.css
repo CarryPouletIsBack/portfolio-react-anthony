@@ -22,6 +22,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Transitions fond accueil (couleurs interpolables) */
+@property --accueil-bg-top {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #509ed8;
+}
+
+@property --accueil-bg-bottom {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #4593c9;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -32,6 +45,14 @@ html {
   background: #509ED8; /* Fond par défaut bleu ciel pour l'accueil */
 }
 
+html:has(body.accueil-page:not(:has(.apropos-new-page))) {
+  background: linear-gradient(
+    180deg,
+    var(--accueil-bg-top, #509ed8) 0%,
+    var(--accueil-bg-bottom, #4593c9) 100%
+  );
+}
+
 /* Fond noir pour html sur AboutNew (mobile safe area iOS) */
 html:has(body:has(.apropos-new-page)) {
   background: #111 !important;
@@ -39,7 +60,7 @@ html:has(body:has(.apropos-new-page)) {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #509ED8; /* Bleu ciel pour l'accueil */
+  background: #509ED8; /* Bleu ciel par défaut (hors accueil dynamique) */
   color: white;
   line-height: 1.6;
   height: 100vh;
@@ -48,6 +69,16 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
+}
+
+/* Fond accueil dynamique (hors @layer Tailwind — priorité sur #509ED8) */
+body.accueil-page:not(:has(.apropos-new-page)) {
+  background: linear-gradient(
+    180deg,
+    var(--accueil-bg-top, #509ed8) 0%,
+    var(--accueil-bg-bottom, #4593c9) 100%
+  ) !important;
+  background-color: var(--accueil-bg-top, #509ed8) !important;
 }
 
 /* Fond noir pour body sur AboutNew (mobile safe area iOS) */

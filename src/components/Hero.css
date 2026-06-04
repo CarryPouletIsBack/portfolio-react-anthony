@@ -43,7 +43,7 @@ body.accueil-page .page.active:not(.single-project-page) {
   overflow: visible; /* Permettre overflow visible pour que les enfants puissent dépasser */
 }
 
-/* Light Rays (React Bits) — fond accueil, fixe au scroll */
+/* Light Rays + Side Rays (React Bits) — fond accueil, fixe au scroll */
 .hero-bg-light-rays {
   position: fixed;
   top: 0;
@@ -56,6 +56,10 @@ body.accueil-page .page.active:not(.single-project-page) {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+}
+
+.hero-bg-light-rays .light-rays {
+  z-index: 3;
 }
 
 .main-accueil {

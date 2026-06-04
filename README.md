@@ -665,7 +665,7 @@ src/
 - Orange principal : `#FF6B35`
 - Texte sombre : `#222`
 - Fond sombre : `#0a0a0a`
-- Fond accueil : `#509ED8` (bleu ciel)
+- Fond accueil : dégradé dynamique selon l’heure (île de la Réunion, `Indian/Reunion`) ; référence midi `#509ED8`
 
 ### Typographie
 - Titres : `Space Grotesk` (depuis `public/fonts/`)
@@ -677,6 +677,51 @@ src/
 - Durée standard : `0.3s ease`
 - Effets de bounce pour les entrées
 - Transitions fluides entre les pages
+
+## 🌅 Fond d’accueil selon l’heure (Réunion)
+
+La page d’accueil adapte automatiquement l’ambiance à l’heure locale **île de la Réunion** (UTC+4, même heure civile que Dubaï).
+
+### Comportement
+
+- **Fond** : dégradé interpolé (aube orange → jour bleu `#509ED8` à midi → crépuscule rose/violet → nuit bleu foncé).
+- **Light Rays** (React Bits) : origine `top-left` / `top-center` / `top-right` selon la position du soleil.
+- **Side Rays** (React Bits) : rayons latéraux dont la source traverse l’écran (`sourceX` 0 = est, 1 = ouest), atténués au zénith.
+- **Transitions** : fondus d’environ 4,2 s entre les paliers ; en mode Auto, rafraîchissement toutes les minutes.
+
+### Fichiers principaux
+
+| Fichier | Rôle |
+|---------|------|
+| `src/lib/accueilTimeOfDay.ts` | Paliers horaires, interpolation, animation |
+| `src/lib/accueilSideRays.ts` | Trajectoire `sourceX` + paramètres Side Rays |
+| `src/contexts/AccueilTimeOfDayContext.tsx` | Thème actif, application CSS sur `html`/`body` |
+| `src/components/LightRays.tsx` | Rayons centraux (React Bits) |
+| `src/components/SideRays.tsx` | Rayons latéraux (React Bits) |
+| `src/components/HeroTitleLottieCycle.tsx` | Lottie au-dessus du H1 (`lottie-react`) |
+| `src/data/heroLottieAnimations.ts` | Import du JSON actif + constante `HERO_LOTTIE_FILE` |
+
+### Animations Lottie au-dessus du titre
+
+L’animation **`8f577fd4-f1aa-11ef-b996-b3631e05cc15.json`** (`animation json/`) s’affiche **au-dessus du H1** en boucle.
+
+**Changer d’animation** : dans `src/data/heroLottieAnimations.ts`, modifie l’import et `HERO_LOTTIE_FILE` pour pointer vers un autre `.json` du dossier `animation json/`, puis relance `npm run dev`.
+
+Autres exports disponibles dans le dépôt : `546e56ea-…`, `5e0f7282-…`, `8c56d45c-…`, `474d4913-…` (voir `animation json/README.md`).
+
+### Boutons de test ambiance (dev uniquement)
+
+`AccueilTimeOfDayPreviewControls` n’est **pas monté** par défaut. Pour prévisualiser Nuit / Aube / Midi / etc. en local, importe-le et place-le dans `Header.tsx` ou `Hero.tsx` :
+
+```tsx
+import AccueilTimeOfDayPreviewControls from './AccueilTimeOfDayPreviewControls';
+// …
+<AccueilTimeOfDayPreviewControls />
+```
+
+Modes : Auto, Nuit, Aube, Midi, Coucher, Crépuscule — `ACCUEIL_TIME_OF_DAY_PREVIEW_OPTIONS` dans `accueilTimeOfDay.ts`.
+
+`prefers-reduced-motion` : palette figée sur le bleu midi.
 
 ## 📝 Notes de Développement
 

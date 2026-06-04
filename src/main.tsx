@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import { LanguageProvider } from './contexts/LanguageContext'
+import { AccueilTimeOfDayProvider } from './contexts/AccueilTimeOfDayContext'
 import { initGA } from './services/googleAnalyticsTracking'
 import './styles/globals.css'
 import './index.css'
@@ -18,7 +19,9 @@ try {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <LanguageProvider>
-        <App />
+        <AccueilTimeOfDayProvider>
+          <App />
+        </AccueilTimeOfDayProvider>
       </LanguageProvider>
     </React.StrictMode>,
   )

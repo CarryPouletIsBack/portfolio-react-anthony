@@ -15,6 +15,7 @@ import { Toaster } from 'sonner'
 import { isAuthenticated } from './services/authService'
 import { trackPageView, trackEvent } from './services/googleAnalyticsTracking'
 import { useLanguage } from './contexts/LanguageContext'
+import { useAccueilTimeOfDayContext } from './contexts/AccueilTimeOfDayContext'
 import './App.css'
 
 const PROJECT_COVER_IMAGES: Record<string, string> = {
@@ -35,6 +36,7 @@ const SLUG_TO_PROJECT_NAME: Record<string, string> = {
 
 function App() {
   const { language, setLanguage } = useLanguage()
+  const { setBackgroundActive } = useAccueilTimeOfDayContext()
   const [currentPage, setCurrentPage] = useState('accueil')
   const [previousPage, setPreviousPage] = useState('accueil')
   const [currentProjectImage, setCurrentProjectImage] = useState<string | null>(null)
@@ -340,10 +342,12 @@ function App() {
       document.body.classList.remove('accueil-page')
     }
 
+    setBackgroundActive(currentPage === 'accueil')
+
     // Track page view avec Google Analytics
     const pageTitle = getPageTitle(currentPage)
     trackPageView(`/${currentPage}`, pageTitle)
-  }, [currentPage, previousPage])
+  }, [currentPage, previousPage, setBackgroundActive])
 
   const handlePageChange = (page: string, projectImage?: string, projectCategory?: string) => {
     // Si on navigue vers un projet, toujours sauvegarder la page actuelle comme page précédente

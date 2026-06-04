@@ -1,0 +1,53 @@
+.header-time-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.header-time-preview__btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.header-time-preview__btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.header-time-preview__btn--active {
+  background: rgba(255, 255, 255, 0.92);
+  color: #1e3a52;
+  border-color: rgba(255, 255, 255, 0.92);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .header-time-preview {
+    width: 100%;
+    justify-content: center;
+    order: 3;
+    padding-top: 4px;
+  }
+
+  .header-time-preview__btn {
+    font-size: 10px;
+    padding: 5px 8px;
+  }
+}

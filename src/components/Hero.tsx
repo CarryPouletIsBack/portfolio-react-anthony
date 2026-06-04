@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { trackEvent } from '../services/googleAnalyticsTracking'
 import LanguageSwitcher from './LanguageSwitcher'
-import LightRays from './LightRays'
+import LightRays, { type RaysOrigin } from './LightRays'
+import SideRays from './SideRays'
+import { useAccueilTimeOfDayTheme } from '../contexts/AccueilTimeOfDayContext'
+import HeroTitleLottieCycle from './HeroTitleLottieCycle'
 import './Hero.css'
 import { getProjectsGroupedByCategory, type MenuItem } from '../services/projectService'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -18,9 +21,16 @@ interface HeroProps {
 /** Mettre à true pour réafficher le carousel (code conservé) */
 const SHOW_CAROUSEL = false
 
+function lightRaysOriginFromSunX(sourceX: number): RaysOrigin {
+  if (sourceX < 0.38) return 'top-left'
+  if (sourceX > 0.62) return 'top-right'
+  return 'top-center'
+}
+
 const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
   const { t, language } = useLanguage()
   const prefix = language === 'en' ? '/en' : '/fr'
+  const timeOfDay = useAccueilTimeOfDayTheme()
   const [allProjects, setAllProjects] = useState<MenuItem[]>([])
 
   useEffect(() => {
@@ -63,15 +73,30 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
   return (
     <div className="page active">
       <div className="hero-bg-light-rays" aria-hidden>
+        <SideRays
+          sourceX={timeOfDay.sideRays.sourceX}
+          speed={timeOfDay.sideRays.speed}
+          rayColor1={timeOfDay.sideRays.rayColor1}
+          rayColor2={timeOfDay.sideRays.rayColor2}
+          intensity={timeOfDay.sideRays.intensity}
+          spread={timeOfDay.sideRays.spread}
+          tilt={timeOfDay.sideRays.tilt}
+          saturation={timeOfDay.sideRays.saturation}
+          blend={timeOfDay.sideRays.blend}
+          falloff={timeOfDay.sideRays.falloff}
+          opacity={timeOfDay.sideRays.opacity}
+        />
         <LightRays
-          raysOrigin="top-center"
-          raysColor="#ffffff"
+          raysOrigin={lightRaysOriginFromSunX(timeOfDay.sideRays.sourceX)}
+          raysColor={timeOfDay.raysColor}
           raysSpeed={0.85}
-          lightSpread={1.15}
-          rayLength={1.8}
+          lightSpread={timeOfDay.lightSpread}
+          rayLength={timeOfDay.rayLength}
           followMouse
-          mouseInfluence={0.07}
-          saturation={1}
+          mouseInfluence={
+            timeOfDay.sideRays.sourceX > 0.38 && timeOfDay.sideRays.sourceX < 0.62 ? 0.07 : 0.02
+          }
+          saturation={timeOfDay.saturation}
         />
       </div>
       <div className="main-accueil">
@@ -79,6 +104,7 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
           {/* Colonne de gauche */}
           <div className="hero-left-column">
             <div className="hero-title-container">
+              <HeroTitleLottieCycle />
               <h1 className="hero-main-title">
                 {t('hero.title')}
               </h1>

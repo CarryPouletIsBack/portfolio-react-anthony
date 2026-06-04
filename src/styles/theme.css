@@ -128,10 +128,7 @@
     @apply bg-background text-foreground;
   }
 
-  /* Forcer le background bleu sur la page d'accueil */
-  body.accueil-page {
-    background: #509ED8 !important;
-  }
+  /* Fond accueil : voir index.css (hors layer pour priorité cascade) */
 
   /**
   * Default typography styles for HTML elements (h1-h4, p, label, button, input).

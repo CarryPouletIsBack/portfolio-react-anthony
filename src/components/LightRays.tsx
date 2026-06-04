@@ -367,21 +367,9 @@ void main() {
       cleanupFunctionRef.current?.();
       cleanupFunctionRef.current = null;
     };
-  }, [
-    isVisible,
-    raysOrigin,
-    raysColor,
-    raysSpeed,
-    lightSpread,
-    rayLength,
-    pulsating,
-    fadeDistance,
-    saturation,
-    followMouse,
-    mouseInfluence,
-    noiseAmount,
-    distortion,
-  ]);
+    // Init WebGL une seule fois à l’affichage — les props (couleur, spread…) passent par l’effet ci-dessous
+    // pour ne pas recréer le canvas à chaque frame des transitions jour/nuit.
+  }, [isVisible]);
 
   useEffect(() => {
     if (!uniformsRef.current || !containerRef.current || !rendererRef.current) return;
