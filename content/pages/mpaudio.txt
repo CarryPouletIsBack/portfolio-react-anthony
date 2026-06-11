@@ -1,0 +1,5 @@
+Titre: Projet Mpaudio - Anthony Merault
+Description: Page projet Mpaudio — e-commerce, design, UX/UI et motion design. Cas d'étude (structure Playdago) : contexte, audit, architecture, design system, prototype Figma.
+URL: /fr/mpaudio ou /en/mpaudio
+Prototype Figma: https://www.figma.com/design/xiW7wAfkwbF4kkQ5tFW0vE/PORTFOLIO?node-id=446-695
+Wireframe Figma: https://www.figma.com/design/xiW7wAfkwbF4kkQ5tFW0vE/PORTFOLIO?node-id=410-785

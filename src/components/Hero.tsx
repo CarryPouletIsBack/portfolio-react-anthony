@@ -21,6 +21,34 @@ interface HeroProps {
 /** Mettre à true pour réafficher le carousel (code conservé) */
 const SHOW_CAROUSEL = false
 
+const HERO_FEATURED_PROJECTS = [
+  { title: 'Playdago', imageSrc: '/images/cover-project-playdago.png', category: 'Application', date: '01/01/2025' },
+  {
+    title: 'Mpaudio',
+    imageSrc: '/videos/mpaudio-cover.mp4',
+    posterSrc: '/images/cover-project-mpaudio.jpg',
+    category: 'Motion',
+    date: '01/10/2024',
+  },
+  { title: 'UTOI', imageSrc: '/images/cover-project-utoi.png', category: 'Site web', date: '01/03/2025' },
+  { title: 'Pedaboard', imageSrc: '/images/cover-project-pedaboard.png', category: 'Application web', date: '10/11/2024' },
+  { title: 'Kaldera', imageSrc: '/images/cover-project-kaldera.png', category: 'Site web', date: '15/12/2024' },
+] as const
+
+function isVideoMedia(src: string): boolean {
+  return /\.(mp4|webm|mov)$/i.test(src)
+}
+
+function heroCategoryLabel(
+  category: string,
+  t: (key: string) => string
+): string {
+  if (category === 'Application') return t('hero.categoryApplication')
+  if (category === 'Application web') return t('hero.categoryApplicationWeb')
+  if (category === 'Motion') return t('hero.categoryMotion')
+  return t('hero.categorySiteWeb')
+}
+
 function lightRaysOriginFromSunX(sourceX: number): RaysOrigin {
   if (sourceX < 0.38) return 'top-left'
   if (sourceX > 0.62) return 'top-right'
@@ -183,14 +211,9 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
               </div>
             )}
 
-            {/* Liste des projets : Playdago, UTOI, Pedaboard, Kaldera */}
+            {/* Liste des projets mis en avant (alignée sur PROJECT_ORDER dans App.tsx) */}
             <div className="hero-projects-list">
-              {[
-                { title: 'Playdago', imageSrc: '/images/cover-project-playdago.png', category: 'Application', date: '01/01/2025' },
-                { title: 'UTOI', imageSrc: '/images/cover-project-utoi.png', category: 'Site web', date: '01/03/2025' },
-                { title: 'Pedaboard', imageSrc: '/images/cover-project-pedaboard.png', category: 'Application web', date: '10/11/2024' },
-                { title: 'Kaldera', imageSrc: '/images/cover-project-kaldera.png', category: 'Site web', date: '15/12/2024' },
-              ].map((project) => (
+              {HERO_FEATURED_PROJECTS.map((project) => (
                 <div key={project.title} className="hero-card project-card">
                   <div className="project-content">
                     <div
@@ -202,12 +225,25 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
                       style={{ cursor: 'pointer' }}
                     >
                       <div className="project-image-container">
-                        <img src={project.imageSrc} alt={project.title} className="project-image" />
+                        {isVideoMedia(project.imageSrc) ? (
+                          <video
+                            src={project.imageSrc}
+                            poster={'posterSrc' in project ? project.posterSrc : undefined}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="project-image"
+                            aria-label={project.title}
+                          />
+                        ) : (
+                          <img src={project.imageSrc} alt={project.title} className="project-image" />
+                        )}
                         <div className="project-overlay" />
                       </div>
                       <div className="project-info">
                         <p className="project-category">
-                          {project.category === 'Application' ? t('hero.categoryApplication') : project.category === 'Application web' ? t('hero.categoryApplicationWeb') : t('hero.categorySiteWeb')}
+                          {heroCategoryLabel(project.category, t)}
                         </p>
                         <h3 className="project-title">{project.title}</h3>
                         <p className="project-date">{project.date}</p>
@@ -244,7 +280,19 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
                 >
                   Playdago
                 </a>
-                <span className="hero-seo-desc"> — {t('hero.seoUtoidDesc')}</span>
+                <span className="hero-seo-desc"> — {t('hero.seoPlaydagoDesc')}</span>
+                <a
+                  href={`${prefix}/mpaudio`}
+                  className="hero-seo-link"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    onPageChange('project-Mpaudio', '/videos/mpaudio-cover.mp4', 'Motion')
+                    trackEvent('click', 'seo_link', 'mpaudio')
+                  }}
+                >
+                  Mpaudio
+                </a>
+                <span className="hero-seo-desc"> — {t('hero.seoMpaudioDesc')}</span>
                 <a
                   href={`${prefix}/utoi`}
                   className="hero-seo-link"
@@ -256,7 +304,7 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
                 >
                   UTOI
                 </a>
-                <span className="hero-seo-desc"> — {t('hero.seoPlaydagoDesc')}</span>
+                <span className="hero-seo-desc"> — {t('hero.seoUtoidDesc')}</span>
                 <a
                   href={`${prefix}/kaldera`}
                   className="hero-seo-link"

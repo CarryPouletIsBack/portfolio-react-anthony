@@ -87,9 +87,9 @@ export const menuCategories: MenuCategory[] = [
         title: "Ghadeer market" 
       },
       { 
-        imageSrc: "/images/mpaudio-cover.png", 
-        imageAlt: "Mp audio", 
-        title: "Mp audio" 
+        imageSrc: "/images/cover-project-mpaudio.jpg", 
+        imageAlt: "Mpaudio", 
+        title: "Mpaudio" 
       },
       { 
         imageSrc: "/images/8cbd7b5155c0b3df21ecc2703b145f2d393e07a0.png", 
@@ -103,9 +103,9 @@ export const menuCategories: MenuCategory[] = [
     title: 'Motion',
     projects: [
       { 
-        imageSrc: "/images/mpaudio-cover.png", 
-        imageAlt: "Mp audio", 
-        title: "Mp audio" 
+        imageSrc: "/images/cover-project-mpaudio.jpg", 
+        imageAlt: "Mpaudio", 
+        title: "Mpaudio" 
       },
       { 
         imageSrc: "/images/e6f2ddb160c2bbdb850462edeb04f93d7cce975f.png", 

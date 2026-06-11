@@ -3,17 +3,18 @@ import { projectsDataNew } from '../data/projectsNew';
 
 const STORAGE_KEY = 'portfolio_projects';
 /** Incrémenter pour forcer la réutilisation des données du code (ex. nouveaux champs positionnementMatrix, userFlow) */
-const DATA_VERSION = 14;
+const DATA_VERSION = 15;
 const DATA_VERSION_KEY = 'portfolio_projects_version';
 
 /** Projets dont le contenu éditorial doit toujours venir du code (évite localStorage corrompu). */
-const CONTENT_FROM_CODE_ONLY = new Set(['UTOI']);
+const CONTENT_FROM_CODE_ONLY = new Set(['UTOI', 'Mpaudio']);
 
 function resolveCoverImage(key: string, savedCover?: string): string {
   if (key === 'Pedaboard') return '/images/cover-project-pedaboard.png';
   if (key === 'Playdago') return '/images/cover-project-playdago.png';
   if (key === 'UTOI') return '/images/cover-project-utoi.png';
   if (key === 'Kaldera') return '/images/cover-project-kaldera.png';
+  if (key === 'Mpaudio') return '/videos/mpaudio-cover.mp4';
   return savedCover ?? `/images/${key.toLowerCase()}-cover.png`;
 }
 
@@ -21,6 +22,7 @@ function resolveCategory(key: string, savedCategory?: string): string {
   if (savedCategory) return savedCategory;
   if (key === 'Pedaboard') return 'applicationWeb';
   if (key === 'UTOI') return 'siteWeb';
+  if (key === 'Mpaudio') return 'motion';
   return 'application';
 }
 

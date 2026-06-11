@@ -75,6 +75,7 @@ Les URLs incluent le préfixe de langue `/fr` ou `/en`.
 | Accueil    | `/fr`, `/en`     | Hero, carousel de projets, cartes d'information |
 | À propos   | `/fr/about`, `/en/about` | Parcours, compétences, Strava, formations |
 | Playdago   | `/fr/playdago`, `/en/playdago` | Page projet détaillée |
+| Mpaudio    | `/fr/mpaudio`, `/en/mpaudio` | E-commerce — UX/UI, motion ; couverture vidéo |
 | Pedaboard  | `/fr/pedaboard`, `/en/pedaboard` | Page projet détaillée |
 | Kaldera    | `/fr/kaldera`, `/en/kaldera` | Page projet + lien [trackali.com](https://trackali.com) (nouvel onglet) |
 | 404        | toute URL inconnue | Message d'erreur, 3 projets, réseaux, retour accueil |
@@ -133,6 +134,13 @@ Les URLs incluent le préfixe de langue `/fr` ou `/en`.
 10. **Résultats & Impact** - Métriques avec Donut Chart Race animés et retours
 
 ## ✨ Fonctionnalités Récentes
+
+### Single Project — Mpaudio (e-commerce / motion)
+
+- **Structure** : même cas d’étude étendu que Playdago (`usesExtendedCaseStudyLayout`, variante `mpaudio` dans `caseStudyLayout.ts`).
+- **Données** : `src/data/mpaudioProject.ts` (`buildMpaudioProject`) — textes « À compléter », liens Figma prototype & wireframe.
+- **Couverture** : vidéo `public/videos/mpaudio-cover.mp4` (~10 Mo, optimisée depuis `MERAULT_Anthony Livrable_09_Motiondesign.mp4`) + poster `public/images/cover-project-mpaudio.jpg`.
+- **URLs** : `/fr/mpaudio`, `/en/mpaudio`.
 
 ### Single Project — Playdago (avril 2026, branche `single-project-playdago`)
 - **Design system (section Architecture)** : grille **Magic Bento** (captures Figma, tableaux palette / typéchelle intégrés dans des tuiles).
@@ -194,7 +202,7 @@ Les URLs incluent le préfixe de langue `/fr` ou `/en`.
 - **Sommaire masqué** : Le sommaire est maintenant masqué (peut être réactivé si nécessaire)
 - **ProgressiveBlur** : Effet de blur en bas de page qui suit le scroll
 - **File Tree** : Affichage des wireframes avec composant file-tree
-- **Support vidéo** : Affichage de vidéos en couverture (ex: Mp audio)
+- **Support vidéo** : Affichage de vidéos en couverture (ex. **Mpaudio** — `public/videos/mpaudio-cover.mp4`, source motion design optimisée)
 - **Tableaux scrollables** : Scroll horizontal pour les tableaux de couleurs
 - **Responsive mobile** : Paragraphes en pleine largeur avec text-align: left sur mobile
 - **Sections organisées** : Sections professionnelles avec espacement optimisé

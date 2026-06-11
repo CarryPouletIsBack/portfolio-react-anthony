@@ -22,6 +22,7 @@ import {
   getCaseStudyVariant,
   usesExtendedCaseStudyLayout,
   usesPlaydagoCaseStudyLayout,
+  usesMpaudioCaseStudyLayout,
   usesUtoidCaseStudyLayout,
 } from '../utils/caseStudyLayout';
 import {
@@ -32,6 +33,10 @@ import {
   UTOI_PRESENTATION_IMAGES,
   utoiFrameAlt,
 } from '../data/utoiCaseStudyAssets';
+import {
+  buildMpaudioAuditCarouselImages,
+  MPAUDIO_PRESENTATION_IMAGES,
+} from '../data/mpaudioCaseStudyAssets';
 import BlurText from './BlurText';
 import DonutChartRace from './DonutChartRace';
 import PositionnementMatrixChart from './PositionnementMatrixChart';
@@ -181,6 +186,12 @@ function buildAuditCarouselImages(
     return buildUtoiAuditCarouselImages().map((slide) => ({
       src: slide.src,
       alt: slide.alt ?? 'UTOI — audit',
+    }));
+  }
+  if (getCaseStudyVariant(title) === 'mpaudio') {
+    return buildMpaudioAuditCarouselImages().map((slide) => ({
+      src: slide.src,
+      alt: slide.alt ?? 'Mpaudio — audit',
     }));
   }
   const first = usesPlaydagoCaseStudyLayout(title)
@@ -335,6 +346,13 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
       return auditCarouselImages.map((img, index) => ({
         src: img.src,
         alt: t(`project.auditAlt${index + 1}`),
+        label: `${index + 1} / ${n}`,
+      }));
+    }
+    if (variant === 'mpaudio') {
+      return auditCarouselImages.map((img, index) => ({
+        src: img.src,
+        alt: `Mpaudio — Design system (${index + 1})`,
         label: `${index + 1} / ${n}`,
       }));
     }
@@ -1255,7 +1273,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                   <SwiperSlide key={index}>
                     <div
                       className={
-                        usesExtendedCaseStudyLayout(projectData.title) && index === 0
+                        usesPlaydagoCaseStudyLayout(projectData.title) && index === 0
                           ? 'figma-audit-slide figma-audit-slide--playdago-blue'
                           : 'figma-audit-slide'
                       }
@@ -1366,6 +1384,28 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                       <h3 className="figma-ds-pivot-h3">{playdagoConceptionPivotH3}</h3>
                     )}
                     <p className="figma-body whitespace-pre-line">{playdagoConceptionBody}</p>
+                    {(projectData.figmaPrototypeUrl || projectData.figmaWireframeUrl) && (
+                      <p className="figma-body figma-figma-links">
+                        {projectData.figmaWireframeUrl ? (
+                          <a
+                            href={projectData.figmaWireframeUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Wireframes Figma
+                          </a>
+                        ) : null}
+                        {projectData.figmaPrototypeUrl ? (
+                          <a
+                            href={projectData.figmaPrototypeUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Prototype Figma
+                          </a>
+                        ) : null}
+                      </p>
+                    )}
                   </div>
                   {usesPlaydagoCaseStudyLayout(projectData.title) && (
                   <div className="figma-audit-carousel-wrapper playdago-conception-gallery-wrap playdago-conception-gallery-wrap--swap-copy-row">
@@ -1629,7 +1669,8 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
 
         {/* Bloc présentation plein écran (scroll stack) — Playdago & UTOI */}
         {(usesPlaydagoCaseStudyLayout(projectData.title) ||
-          usesUtoidCaseStudyLayout(projectData.title)) && (
+          usesUtoidCaseStudyLayout(projectData.title) ||
+          usesMpaudioCaseStudyLayout(projectData.title)) && (
         <div
           className={
             usesUtoidCaseStudyLayout(projectData.title)
@@ -1654,11 +1695,13 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
             >
               {(usesUtoidCaseStudyLayout(projectData.title)
                 ? UTOI_PRESENTATION_IMAGES
-                : [
-                    { src: playdagoLightModeMaine, alt: t('project.contrastImageAlt') },
-                    { src: playdagoLightModeSinglePage, alt: t('project.lightModeSinglePageAlt') },
-                    { src: playdagoLightModeSetp1, alt: t('project.lightModeSetp1Alt') },
-                  ]
+                : usesMpaudioCaseStudyLayout(projectData.title)
+                  ? MPAUDIO_PRESENTATION_IMAGES
+                  : [
+                      { src: playdagoLightModeMaine, alt: t('project.contrastImageAlt') },
+                      { src: playdagoLightModeSinglePage, alt: t('project.lightModeSinglePageAlt') },
+                      { src: playdagoLightModeSetp1, alt: t('project.lightModeSetp1Alt') },
+                    ]
               ).map((slide, index) => (
                 <ScrollStackItem key={index} itemClassName="figma-light-mode-scroll-stack-card">
                   <div className="figma-light-mode-img-frame figma-light-mode-img-frame--stack-item">

@@ -20,15 +20,17 @@ import './App.css'
 
 const PROJECT_COVER_IMAGES: Record<string, string> = {
   Playdago: '/images/cover-project-playdago.png',
+  Mpaudio: '/videos/mpaudio-cover.mp4',
   UTOI: '/images/cover-project-utoi.png',
   Pedaboard: '/images/cover-project-pedaboard.png',
   Kaldera: '/images/cover-project-kaldera.png',
 }
 
-const PROJECT_ORDER = ['Playdago', 'UTOI', 'Pedaboard', 'Kaldera'] as const
+const PROJECT_ORDER = ['Playdago', 'Mpaudio', 'UTOI', 'Pedaboard', 'Kaldera'] as const
 
 const SLUG_TO_PROJECT_NAME: Record<string, string> = {
   playdago: 'Playdago',
+  mpaudio: 'Mpaudio',
   utoi: 'UTOI',
   pedaboard: 'Pedaboard',
   kaldera: 'Kaldera',
@@ -114,6 +116,8 @@ function App() {
         targetPage = `project-${projectName}`
       } else if (/^\/playdago$/i.test(pathToMatch)) {
         targetPage = 'project-Playdago'
+      } else if (/^\/mpaudio$/i.test(pathToMatch)) {
+        targetPage = 'project-Mpaudio'
       } else if (/^\/utoi$/i.test(pathToMatch)) {
         targetPage = 'project-UTOI'
       } else if (/^\/pedaboard$/i.test(pathToMatch)) {
@@ -182,6 +186,7 @@ function App() {
       const name = page.replace('project-', '')
       const slug = name.toLowerCase()
       if (slug === 'playdago') return `${prefix}/playdago`
+      if (slug === 'mpaudio') return `${prefix}/mpaudio`
       if (slug === 'utoi') return `${prefix}/utoi`
       if (slug === 'pedaboard') return `${prefix}/pedaboard`
       if (slug === 'kaldera') return `${prefix}/kaldera`
@@ -267,6 +272,9 @@ function App() {
       } else if (/^\/playdago$/i.test(pathToMatch)) {
         setPreviousPage('accueil')
         setCurrentPage('project-Playdago')
+      } else if (/^\/mpaudio$/i.test(pathToMatch)) {
+        setPreviousPage('accueil')
+        setCurrentPage('project-Mpaudio')
       } else if (/^\/utoi$/i.test(pathToMatch)) {
         setPreviousPage('accueil')
         setCurrentPage('project-UTOI')

@@ -1,4 +1,5 @@
 import { utoiProjectData } from './utoiProject';
+import { buildMpaudioProject } from './mpaudioProject';
 
 export interface ProjectData {
   // 1. Titre principal
@@ -185,6 +186,10 @@ export interface ProjectData {
   /** URL du projet (site en ligne) – ouvre dans un nouvel onglet */
   projectUrl?: string;
 
+  /** Liens Figma (prototype interactif, wireframes) */
+  figmaPrototypeUrl?: string;
+  figmaWireframeUrl?: string;
+
   /** Traductions EN (optionnel) */
   translations?: {
     en?: {
@@ -231,7 +236,7 @@ export interface ProjectData {
   };
 }
 
-const playdagoProjectBase: ProjectData = {
+export const playdagoProjectBase: ProjectData = {
     // 1. Titre principal
     title: 'Playdago',
     subtitle: 'Application de pédagogie active',
@@ -604,8 +609,11 @@ Although aligned with the initial specification, this structure later evolved to
     }
 };
 
+const mpaudioProjectBase = buildMpaudioProject(playdagoProjectBase);
+
 export const projectsDataNew: { [key: string]: ProjectData } = {
   Playdago: playdagoProjectBase,
+  Mpaudio: mpaudioProjectBase,
   UTOI: utoiProjectData,
   Pedaboard: {
     // 1. Titre principal

@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect, lazy, Suspense } from 'react';
+import { useMemo, useState, useCallback, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -43,11 +43,81 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
   hideCloseOnScroll = false,
 }) => {
   const [fullscreenIndex, setFullscreenIndex] = useState(0);
+  const [videoMuted, setVideoMuted] = useState(true);
+  const coverVideoRef = useRef<HTMLVideoElement>(null);
+  const fullscreenVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Dupliquer l'image pour tester le carousel
+  const hasVideoExtension = (src: string) => /\.(mp4|webm|mov|avi|mkv)$/i.test(src);
+  const isMpaudioProject = projectName === 'Mpaudio';
+  const isVideoCover = hasVideoExtension(coverImage) || isMpaudioProject;
+
+  // Carousel multi-slides (Playdago, etc.) — Mpaudio : une seule vidéo, pas de défilement
   const images = useMemo(() => {
+    if (isMpaudioProject && isVideoCover) return [coverImage];
     return [coverImage, coverImage, coverImage];
-  }, [coverImage, projectName]);
+  }, [coverImage, isMpaudioProject, isVideoCover]);
+
+  const useSingleVideoCover = isMpaudioProject && isVideoCover;
+
+  const toggleVideoMute = useCallback(() => {
+    setVideoMuted((prev) => !prev);
+  }, []);
+
+  const syncSingleVideoPlayback = useCallback(() => {
+    if (!useSingleVideoCover) return;
+
+    const cover = coverVideoRef.current;
+    const fs = fullscreenVideoRef.current;
+
+    if (isFullscreenModalOpen) {
+      const t = cover?.currentTime ?? 0;
+      cover?.pause();
+      if (cover) cover.muted = true;
+      if (fs) {
+        try {
+          fs.currentTime = t;
+        } catch {
+          /* ignore seek errors before metadata */
+        }
+        void fs.play().catch(() => {});
+      }
+    } else {
+      fs?.pause();
+      const t = fs?.currentTime ?? cover?.currentTime ?? 0;
+      if (cover) {
+        try {
+          cover.currentTime = t;
+        } catch {
+          /* ignore */
+        }
+        void cover.play().catch(() => {});
+      }
+    }
+  }, [isFullscreenModalOpen, useSingleVideoCover]);
+
+  /** Pause cover avant paint pour éviter une frame avec deux pistes audio. */
+  useLayoutEffect(() => {
+    syncSingleVideoPlayback();
+  }, [syncSingleVideoPlayback]);
+
+  useEffect(() => {
+    if (!isFullscreenModalOpen || !useSingleVideoCover) return;
+    const fs = fullscreenVideoRef.current;
+    if (!fs) return;
+    const onReady = () => syncSingleVideoPlayback();
+    fs.addEventListener('loadeddata', onReady);
+    return () => fs.removeEventListener('loadeddata', onReady);
+  }, [isFullscreenModalOpen, useSingleVideoCover, syncSingleVideoPlayback]);
+
+  useEffect(() => {
+    if (!useSingleVideoCover) return;
+    if (isFullscreenModalOpen) {
+      if (fullscreenVideoRef.current) fullscreenVideoRef.current.muted = videoMuted;
+      if (coverVideoRef.current) coverVideoRef.current.muted = true;
+    } else if (coverVideoRef.current) {
+      coverVideoRef.current.muted = videoMuted;
+    }
+  }, [videoMuted, isFullscreenModalOpen, useSingleVideoCover]);
 
   const openFullscreen = useCallback(() => {
     onFullscreenOpen?.();
@@ -76,9 +146,9 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
     setFullscreenIndex((i) => (i >= images.length - 1 ? 0 : i + 1));
   }, [images.length]);
 
-  const hasVideoExtension = (src: string) => /\.(mp4|webm|mov|avi|mkv)$/i.test(src);
-  const isMpAudioProject = projectName.toLowerCase().includes('mp audio');
   const showUtoidMap = isUtoidCoverMap(projectName);
+
+  const coverVideoMuted = isFullscreenModalOpen ? true : videoMuted;
 
   useEffect(() => {
     if (!showUtoidMap) return;
@@ -117,23 +187,41 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
               <UtoidCoverMap />
             </Suspense>
           </div>
+        ) : useSingleVideoCover ? (
+          <div className="project-cover-single-media">
+            <video
+              ref={coverVideoRef}
+              src={coverImage}
+              autoPlay
+              loop
+              muted={coverVideoMuted}
+              playsInline
+              className="project-cover-media"
+              aria-label={`${projectName} — couverture`}
+            />
+          </div>
         ) : (
         <Swiper
-        modules={[Pagination, Autoplay]}
-        pagination={{
-          clickable: true,
-          bulletClass: 'swiper-pagination-bullet-round',
-          bulletActiveClass: 'swiper-pagination-bullet-active-round',
-        }}
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false,
-        }}
+        modules={images.length > 1 ? [Pagination, Autoplay] : [Pagination]}
+        pagination={
+          images.length > 1
+            ? {
+                clickable: true,
+                bulletClass: 'swiper-pagination-bullet-round',
+                bulletActiveClass: 'swiper-pagination-bullet-active-round',
+              }
+            : false
+        }
+        autoplay={
+          images.length > 1
+            ? { delay: 5000, disableOnInteraction: false }
+            : false
+        }
         loop={images.length > 1}
         className="project-cover-swiper"
       >
         {images.map((src, index) => {
-          const isVideo = hasVideoExtension(src) || isMpAudioProject;
+          const isVideo = hasVideoExtension(src);
           
           return (
             <SwiperSlide key={index} className="project-cover-slide">
@@ -161,7 +249,29 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
       </div>
 
       {!showUtoidMap ? (
-      <div className="project-cover-fullscreen-trigger-layer" aria-hidden>
+      <div className="project-cover-fullscreen-trigger-layer">
+        {useSingleVideoCover ? (
+          <button
+            type="button"
+            className="project-cover-mute-btn"
+            onClick={toggleVideoMute}
+            aria-label={videoMuted ? 'Activer le son' : 'Couper le son'}
+            aria-pressed={!videoMuted}
+          >
+            {videoMuted ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+            )}
+          </button>
+        ) : null}
         <button
           type="button"
           className="project-cover-fullscreen-btn"
@@ -253,13 +363,36 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
               </svg>
             </button>
           )}
+          {useSingleVideoCover ? (
+            <button
+              type="button"
+              className="project-cover-fullscreen-mute-btn"
+              onClick={toggleVideoMute}
+              aria-label={videoMuted ? 'Activer le son' : 'Couper le son'}
+              aria-pressed={!videoMuted}
+            >
+              {videoMuted ? (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                  <line x1="23" y1="9" x2="17" y2="15" />
+                  <line x1="17" y1="9" x2="23" y2="15" />
+                </svg>
+              ) : (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+                </svg>
+              )}
+            </button>
+          ) : null}
           <div className="project-cover-fullscreen-slide">
-            {hasVideoExtension(images[fullscreenIndex]) || isMpAudioProject ? (
+            {hasVideoExtension(images[fullscreenIndex]) || isMpaudioProject ? (
               <video
+                ref={fullscreenVideoRef}
                 src={images[fullscreenIndex]}
                 autoPlay
                 loop
-                muted
+                muted={videoMuted}
                 playsInline
                 className="project-cover-fullscreen-media"
               />
