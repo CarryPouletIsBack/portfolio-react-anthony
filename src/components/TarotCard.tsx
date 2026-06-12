@@ -13,7 +13,7 @@ interface TarotCardProps {
 }
 
 const TarotCard: React.FC<TarotCardProps> = ({
-  avatarUrl = '/images/pp-anthony.jpg',
+  avatarUrl = '/images/pp-anthony.webp',
   name = 'Anthony Merault',
   title = 'Développeur',
   handle = 'anthony',

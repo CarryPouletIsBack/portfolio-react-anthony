@@ -719,7 +719,7 @@ const AboutNew = () => {
                   <div className="about-photo-wrapper">
                     <div className="about-photo-container">
                       <img 
-                        src="/images/portrait-anthony.jpg" 
+                        src="/images/portrait-anthony.webp" 
                         alt="Anthony Merault" 
                         className="about-photo"
                       />

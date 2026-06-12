@@ -10,12 +10,12 @@ const DATA_VERSION_KEY = 'portfolio_projects_version';
 const CONTENT_FROM_CODE_ONLY = new Set(['UTOI', 'Mpaudio']);
 
 function resolveCoverImage(key: string, savedCover?: string): string {
-  if (key === 'Pedaboard') return '/images/cover-project-pedaboard.png';
-  if (key === 'Playdago') return '/images/cover-project-playdago.png';
-  if (key === 'UTOI') return '/images/cover-project-utoi.png';
-  if (key === 'Kaldera') return '/images/cover-project-kaldera.png';
+  if (key === 'Pedaboard') return '/images/cover-project-pedaboard.webp';
+  if (key === 'Playdago') return '/images/cover-project-playdago.webp';
+  if (key === 'UTOI') return '/images/cover-project-utoi.webp';
+  if (key === 'Kaldera') return '/images/cover-project-kaldera.webp';
   if (key === 'Mpaudio') return '/videos/mpaudio-cover.mp4';
-  return savedCover ?? `/images/${key.toLowerCase()}-cover.png`;
+  return savedCover ?? `/images/${key.toLowerCase()}-cover.webp`;
 }
 
 function resolveCategory(key: string, savedCategory?: string): string {

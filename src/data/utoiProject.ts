@@ -137,7 +137,7 @@ La complexité du dossier d'inscription (certificats, options, paiement) est abs
     title: 'Maquettes',
     items: [
       {
-        image: '/images/cover-project-utoi.png',
+        image: '/images/cover-project-utoi.webp',
         description: 'Architecture de navigation : saisons, fiches courses et tunnel d’inscription unifié.',
       },
     ],
@@ -242,7 +242,7 @@ La complexité du dossier d'inscription (certificats, options, paiement) est abs
   },
 
   year: '2025',
-  image: '/images/cover-project-utoi.png',
+  image: '/images/cover-project-utoi.webp',
   projectUrl: 'https://utoi.re',
   skills: ['UX Research', 'Design system', 'UI', 'Branding', 'WordPress', 'Figma'],
   duration: '2025',

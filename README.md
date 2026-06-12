@@ -139,7 +139,7 @@ Les URLs incluent le préfixe de langue `/fr` ou `/en`.
 
 - **Structure** : même cas d’étude étendu que Playdago (`usesExtendedCaseStudyLayout`, variante `mpaudio` dans `caseStudyLayout.ts`).
 - **Données** : `src/data/mpaudioProject.ts` (`buildMpaudioProject`) — textes « À compléter », liens Figma prototype & wireframe.
-- **Couverture** : vidéo `public/videos/mpaudio-cover.mp4` (~10 Mo, optimisée depuis `MERAULT_Anthony Livrable_09_Motiondesign.mp4`) + poster `public/images/cover-project-mpaudio.jpg`.
+- **Couverture** : vidéo `public/videos/mpaudio-cover.mp4` (~10 Mo, optimisée depuis `MERAULT_Anthony Livrable_09_Motiondesign.mp4`) + poster `public/images/cover-project-mpaudio.webp`.
 - **URLs** : `/fr/mpaudio`, `/en/mpaudio`.
 
 ### Single Project — Playdago (avril 2026, branche `single-project-playdago`)

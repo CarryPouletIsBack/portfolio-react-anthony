@@ -22,17 +22,17 @@ interface HeroProps {
 const SHOW_CAROUSEL = false
 
 const HERO_FEATURED_PROJECTS = [
-  { title: 'Playdago', imageSrc: '/images/cover-project-playdago.png', category: 'Application', date: '01/01/2025' },
+  { title: 'Playdago', imageSrc: '/images/cover-project-playdago.webp', category: 'Application', date: '01/01/2025' },
   {
     title: 'Mpaudio',
     imageSrc: '/videos/mpaudio-cover.mp4',
-    posterSrc: '/images/cover-project-mpaudio.jpg',
+    posterSrc: '/images/cover-project-mpaudio.webp',
     category: 'Motion',
     date: '01/10/2024',
   },
-  { title: 'UTOI', imageSrc: '/images/cover-project-utoi.png', category: 'Site web', date: '01/03/2025' },
-  { title: 'Pedaboard', imageSrc: '/images/cover-project-pedaboard.png', category: 'Application web', date: '10/11/2024' },
-  { title: 'Kaldera', imageSrc: '/images/cover-project-kaldera.png', category: 'Site web', date: '15/12/2024' },
+  { title: 'UTOI', imageSrc: '/images/cover-project-utoi.webp', category: 'Site web', date: '01/03/2025' },
+  { title: 'Pedaboard', imageSrc: '/images/cover-project-pedaboard.webp', category: 'Application web', date: '10/11/2024' },
+  { title: 'Kaldera', imageSrc: '/images/cover-project-kaldera.webp', category: 'Site web', date: '15/12/2024' },
 ] as const
 
 function isVideoMedia(src: string): boolean {
@@ -262,7 +262,7 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
                   className="hero-seo-link"
                   onClick={(e) => {
                     e.preventDefault()
-                    onPageChange('project-Pedaboard', '/images/cover-project-pedaboard.png', 'Application web')
+                    onPageChange('project-Pedaboard', '/images/cover-project-pedaboard.webp', 'Application web')
                     trackEvent('click', 'seo_link', 'pedaboard')
                   }}
                 >
@@ -274,7 +274,7 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
                   className="hero-seo-link"
                   onClick={(e) => {
                     e.preventDefault()
-                    onPageChange('project-Playdago', '/images/cover-project-playdago.png', 'Application')
+                    onPageChange('project-Playdago', '/images/cover-project-playdago.webp', 'Application')
                     trackEvent('click', 'seo_link', 'playdago')
                   }}
                 >
@@ -298,7 +298,7 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
                   className="hero-seo-link"
                   onClick={(e) => {
                     e.preventDefault()
-                    onPageChange('project-UTOI', '/images/cover-project-utoi.png', 'Site web')
+                    onPageChange('project-UTOI', '/images/cover-project-utoi.webp', 'Site web')
                     trackEvent('click', 'seo_link', 'utoi')
                   }}
                 >
@@ -310,7 +310,7 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
                   className="hero-seo-link"
                   onClick={(e) => {
                     e.preventDefault()
-                    onPageChange('project-Kaldera', '/images/cover-project-kaldera.png', 'Site web')
+                    onPageChange('project-Kaldera', '/images/cover-project-kaldera.webp', 'Site web')
                     trackEvent('click', 'seo_link', 'kaldera')
                   }}
                 >

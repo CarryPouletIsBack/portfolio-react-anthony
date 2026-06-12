@@ -19,11 +19,11 @@ import { useAccueilTimeOfDayContext } from './contexts/AccueilTimeOfDayContext'
 import './App.css'
 
 const PROJECT_COVER_IMAGES: Record<string, string> = {
-  Playdago: '/images/cover-project-playdago.png',
+  Playdago: '/images/cover-project-playdago.webp',
   Mpaudio: '/videos/mpaudio-cover.mp4',
-  UTOI: '/images/cover-project-utoi.png',
-  Pedaboard: '/images/cover-project-pedaboard.png',
-  Kaldera: '/images/cover-project-kaldera.png',
+  UTOI: '/images/cover-project-utoi.webp',
+  Pedaboard: '/images/cover-project-pedaboard.webp',
+  Kaldera: '/images/cover-project-kaldera.webp',
 }
 
 const PROJECT_ORDER = ['Playdago', 'Mpaudio', 'UTOI', 'Pedaboard', 'Kaldera'] as const

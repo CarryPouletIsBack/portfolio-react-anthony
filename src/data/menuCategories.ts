@@ -20,27 +20,27 @@ export const menuCategories: MenuCategory[] = [
       title: 'Application',
       projects: [
       { 
-        imageSrc: "/images/cover-project-playdago.png", 
+        imageSrc: "/images/cover-project-playdago.webp", 
         imageAlt: "Playdago", 
         title: "Playdago" 
       },
       { 
-        imageSrc: "/images/f27446bbc5c96f74d44074bc97b9be64f7cdf4cf.png", 
+        imageSrc: "/images/f27446bbc5c96f74d44074bc97b9be64f7cdf4cf.webp", 
         imageAlt: "Pedaboard", 
         title: "Pedaboard" 
       },
       { 
-        imageSrc: "/images/cover-project-kaldera.png", 
+        imageSrc: "/images/cover-project-kaldera.webp", 
         imageAlt: "Kaldera", 
         title: "Kaldera" 
       },
       { 
-        imageSrc: "/images/d09371ff5fd475e08d0476d1b301dd9aabb49d5c.png", 
+        imageSrc: "/images/d09371ff5fd475e08d0476d1b301dd9aabb49d5c.webp", 
         imageAlt: "Ghadeer market", 
         title: "Ghadeer market" 
       },
       { 
-        imageSrc: "/images/8cbd7b5155c0b3df21ecc2703b145f2d393e07a0.png", 
+        imageSrc: "/images/8cbd7b5155c0b3df21ecc2703b145f2d393e07a0.webp", 
         imageAlt: "Open challenge", 
         title: "Open challenge" 
       }
@@ -51,22 +51,22 @@ export const menuCategories: MenuCategory[] = [
     title: 'Site web',
     projects: [
       { 
-        imageSrc: "/images/0134e78478dc1f1d253d2dc665ff3b92b115ee46.png", 
+        imageSrc: "/images/0134e78478dc1f1d253d2dc665ff3b92b115ee46.webp", 
         imageAlt: "UTOI", 
         title: "UTOI" 
       },
       { 
-        imageSrc: "/images/25c86067ea3b2084f730bb1f906759081bc20fac.png", 
+        imageSrc: "/images/25c86067ea3b2084f730bb1f906759081bc20fac.webp", 
         imageAlt: "Agua benta", 
         title: "Agua benta" 
       },
       { 
-        imageSrc: "/images/e6f2ddb160c2bbdb850462edeb04f93d7cce975f.png", 
+        imageSrc: "/images/e6f2ddb160c2bbdb850462edeb04f93d7cce975f.webp", 
         imageAlt: "Anset assurance", 
         title: "Anset assurance" 
       },
       { 
-        imageSrc: "/images/8cc5f68c1c8fa66e1ddab4fe1075e9d19645f9d4.png", 
+        imageSrc: "/images/8cc5f68c1c8fa66e1ddab4fe1075e9d19645f9d4.webp", 
         imageAlt: "Open challenge", 
         title: "Open challenge" 
       }
@@ -82,17 +82,17 @@ export const menuCategories: MenuCategory[] = [
         title: "My spir" 
       },
       { 
-        imageSrc: "/images/f27446bbc5c96f74d44074bc97b9be64f7cdf4cf.png", 
+        imageSrc: "/images/f27446bbc5c96f74d44074bc97b9be64f7cdf4cf.webp", 
         imageAlt: "Ghadeer market", 
         title: "Ghadeer market" 
       },
       { 
-        imageSrc: "/images/cover-project-mpaudio.jpg", 
+        imageSrc: "/images/cover-project-mpaudio.webp", 
         imageAlt: "Mpaudio", 
         title: "Mpaudio" 
       },
       { 
-        imageSrc: "/images/8cbd7b5155c0b3df21ecc2703b145f2d393e07a0.png", 
+        imageSrc: "/images/8cbd7b5155c0b3df21ecc2703b145f2d393e07a0.webp", 
         imageAlt: "Sublim", 
         title: "Sublim" 
       }
@@ -103,17 +103,17 @@ export const menuCategories: MenuCategory[] = [
     title: 'Motion',
     projects: [
       { 
-        imageSrc: "/images/cover-project-mpaudio.jpg", 
+        imageSrc: "/images/cover-project-mpaudio.webp", 
         imageAlt: "Mpaudio", 
         title: "Mpaudio" 
       },
       { 
-        imageSrc: "/images/e6f2ddb160c2bbdb850462edeb04f93d7cce975f.png", 
+        imageSrc: "/images/e6f2ddb160c2bbdb850462edeb04f93d7cce975f.webp", 
         imageAlt: "Mémoire Kartier Titan", 
         title: "Mémoire Kartier Titan" 
       },
       { 
-        imageSrc: "/images/8cc5f68c1c8fa66e1ddab4fe1075e9d19645f9d4.png", 
+        imageSrc: "/images/8cc5f68c1c8fa66e1ddab4fe1075e9d19645f9d4.webp", 
         imageAlt: "Pub tv Sublim", 
         title: "Pub tv Sublim" 
       }
@@ -124,7 +124,7 @@ export const menuCategories: MenuCategory[] = [
     title: 'Plv',
     projects: [
       { 
-        imageSrc: "/images/d09371ff5fd475e08d0476d1b301dd9aabb49d5c.png", 
+        imageSrc: "/images/d09371ff5fd475e08d0476d1b301dd9aabb49d5c.webp", 
         imageAlt: "Run Alim", 
         title: "Run Alim" 
       }

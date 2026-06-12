@@ -483,7 +483,7 @@ Grille 4pt : Une structure à la fois dense et aérée, essentielle pour organis
     
     // Métadonnées
     year: '2025',
-    image: '/images/cover-project-playdago.png',
+    image: '/images/cover-project-playdago.webp',
     skills: ['UX Research', 'Design system', 'UI', 'Branding', 'Figma', 'React js'],
     duration: '9 mois',
     type: 'Application web',
@@ -715,7 +715,7 @@ export const projectsDataNew: { [key: string]: ProjectData } = {
       title: 'Wireframes & Prototype',
       items: [
         {
-          image: '/images/f27446bbc5c96f74d44074bc97b9be64f7cdf4cf.png',
+          image: '/images/f27446bbc5c96f74d44074bc97b9be64f7cdf4cf.webp',
           description: 'Architecture globale du CRM avec les modules de gestion des clients, formations et tâches. Interface pensée pour une navigation intuitive et un accès rapide aux fonctionnalités principales.'
         }
       ]
@@ -823,7 +823,7 @@ export const projectsDataNew: { [key: string]: ProjectData } = {
     
     // Métadonnées
     year: 'Décembre 2023',
-    image: '/images/f27446bbc5c96f74d44074bc97b9be64f7cdf4cf.png',
+    image: '/images/f27446bbc5c96f74d44074bc97b9be64f7cdf4cf.webp',
     skills: ['UX Research', 'Design system', 'UI', 'Branding', 'Figma', 'React js'],
     duration: '9 mois',
     type: 'Application web - CRM',
@@ -929,7 +929,7 @@ export const projectsDataNew: { [key: string]: ProjectData } = {
     wireframes: {
       title: 'Maquettes & Prototype',
       items: [
-        { image: '/images/cover-project-kaldera.png', description: 'Interface principale de Kaldera avec visualisation des parcours trail et données de simulation.' }
+        { image: '/images/cover-project-kaldera.webp', description: 'Interface principale de Kaldera avec visualisation des parcours trail et données de simulation.' }
       ]
     },
     designSystem: {
@@ -999,7 +999,7 @@ export const projectsDataNew: { [key: string]: ProjectData } = {
       nextSteps: ['Intégration API cartographique avancée', 'Mode hors-ligne', 'Partage de parcours']
     },
     year: '2025',
-    image: '/images/cover-project-kaldera.png',
+    image: '/images/cover-project-kaldera.webp',
     projectUrl: 'https://trackali.com',
     skills: ['UX/UI', 'Design System', 'React', 'Cartographie', 'Figma'],
     duration: 'En cours',

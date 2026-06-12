@@ -1,10 +1,10 @@
-import wireframeBanner from '../assets/mpaudio/audit/wireframe-banner.png';
-import wireframeAmplisSlider from '../assets/mpaudio/audit/wireframe-amplis-slider.png';
-import wireframeSingleProduct from '../assets/mpaudio/audit/wireframe-single-product.png';
-import prototypeBanner from '../assets/mpaudio/audit/prototype-banner.png';
-import presentationAccueil from '../assets/mpaudio/light-mode/presentation-accueil.png';
-import presentationAmplisSlider from '../assets/mpaudio/light-mode/presentation-amplis-slider.png';
-import presentationSingleProduct from '../assets/mpaudio/light-mode/presentation-single-product.png';
+import wireframeBanner from '../assets/mpaudio/audit/wireframe-banner.webp';
+import wireframeAmplisSlider from '../assets/mpaudio/audit/wireframe-amplis-slider.webp';
+import wireframeSingleProduct from '../assets/mpaudio/audit/wireframe-single-product.webp';
+import prototypeBanner from '../assets/mpaudio/audit/prototype-banner.webp';
+import presentationAccueil from '../assets/mpaudio/light-mode/presentation-accueil.webp';
+import presentationAmplisSlider from '../assets/mpaudio/light-mode/presentation-amplis-slider.webp';
+import presentationSingleProduct from '../assets/mpaudio/light-mode/presentation-single-product.webp';
 
 export type CaseStudySlide = { src: string; alt?: string };
 

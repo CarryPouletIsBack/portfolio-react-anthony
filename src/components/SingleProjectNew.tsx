@@ -110,25 +110,25 @@ import formationIconWhite from '../assets/93d42323f5ac3dc5fadde5c92e8d5135e38d29
 import boutiqueIconBlue from '../assets/9dc5c3ec76d7852c81cd48b560b25b52336544c2.svg'
 import boutiqueIconWhite from '../assets/3bea835efaa0ca18d639afff7d53d9069da477c0.svg'
 /** Première slide Audit : Playdago uniquement (Pedaboard / autres gardent l’asset Figma partagé) */
-import auditCarouselBluePlaydago from '../assets/audit/Blue.png';
+import auditCarouselBluePlaydago from '../assets/audit/Blue.webp';
 /** Slide 2 uniquement du carrousel #audit Playdago (pas le doublon Design system) */
-import auditCarouselMacBookPlaydagoAuditSection from '../assets/audit/MacBook Pro 16_ - 5th Gen - Silver.png';
+import auditCarouselMacBookPlaydagoAuditSection from '../assets/audit/MacBook Pro 16_ - 5th Gen - Silver.webp';
 /** Slide 3 uniquement du carrousel #audit Playdago (pas le doublon Design system) */
-import auditCarouselHandheldIpadPlaydagoAuditSection from '../assets/audit/Handheld-iPad-2.png';
+import auditCarouselHandheldIpadPlaydagoAuditSection from '../assets/audit/Handheld-iPad-2.webp';
 /** Slides 2–4 carrousels Playdago (Design system & repli) — dossier « creation atelier » */
-import auditCarouselCreationAtelierLancerDes from '../assets/audit/creation atelier/lancer de des.png';
-import auditCarouselCreationAtelierPersonnalisationDes from '../assets/audit/creation atelier/lancer de des/personnalisation du des.png';
-import auditCarouselCreationAtelierActionPopup from '../assets/audit/creation atelier/lancer de des/popup/action.png';
+import auditCarouselCreationAtelierLancerDes from '../assets/audit/creation atelier/lancer de des.webp';
+import auditCarouselCreationAtelierPersonnalisationDes from '../assets/audit/creation atelier/lancer de des/personnalisation du des.webp';
+import auditCarouselCreationAtelierActionPopup from '../assets/audit/creation atelier/lancer de des/popup/action.webp';
 /** Design system Playdago — tuiles Magic Bento (exports Figma) */
-import playdagoDsFrame1048 from '../assets/audit/Frame 1048.png';
-import playdagoDsFrame1050 from '../assets/audit/Frame 1050.png';
-import playdagoDsFrame1051 from '../assets/audit/Frame 1051.png';
-import playdagoCardSwapDashboard from '../assets/audit/Dashboard.png';
-import playdagoCardSwapPersonnalisationDes from '../assets/audit/creation atelier/lancer de des/personnalisation du des.png';
-import playdagoCardSwapDistributionCartes from '../assets/audit/concept 2/matching/formateur/Distribution des cartes.png';
-import playdagoLightModeMaine from '../assets/playdago/Dashboard/maine.png';
-import playdagoLightModeSinglePage from '../assets/Atelier/SinglePage.png';
-import playdagoLightModeSetp1 from '../assets/Participant·es/Atelier/Matching/Play/Setp1.png';
+import playdagoDsFrame1048 from '../assets/audit/Frame 1048.webp';
+import playdagoDsFrame1050 from '../assets/audit/Frame 1050.webp';
+import playdagoDsFrame1051 from '../assets/audit/Frame 1051.webp';
+import playdagoCardSwapDashboard from '../assets/audit/Dashboard.webp';
+import playdagoCardSwapPersonnalisationDes from '../assets/audit/creation atelier/lancer de des/personnalisation du des.webp';
+import playdagoCardSwapDistributionCartes from '../assets/audit/concept 2/matching/formateur/Distribution des cartes.webp';
+import playdagoLightModeMaine from '../assets/playdago/Dashboard/maine.webp';
+import playdagoLightModeSinglePage from '../assets/Atelier/SinglePage.webp';
+import playdagoLightModeSetp1 from '../assets/Participant·es/Atelier/Matching/Play/Setp1.webp';
 /** Chaque image des dossiers `audit/concept 1/` et `audit/concept 2/` = un trait cliquable sur la graduation (ordre = tri du chemin fichier). */
 const PLAYDAGO_CONCEPTION_CONCEPT_1_GLOB = import.meta.glob<{ default: string }>(
   '../assets/audit/concept 1/**/*.{png,jpg,jpeg,webp}',
@@ -1756,10 +1756,10 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
               }}
             >
               {[
-                { slug: 'Pedaboard', title: 'Pedaboard', date: t('project.december2023'), badges: [t('hero.categoryApplicationWeb'), 'UX/UI', 'CRM'], coverImage: '/images/cover-project-pedaboard.png' },
-                { slug: 'Playdago', title: 'Playdago', date: t('project.february2025'), badges: [t('hero.categoryApplication'), 'UX/UI', 'SaaS'], coverImage: '/images/cover-project-playdago.png' },
-                { slug: 'UTOI', title: 'UTOI', date: '2025', badges: [t('hero.categorySiteWeb'), 'UX/UI'], coverImage: '/images/cover-project-utoi.png' },
-                { slug: 'Kaldera', title: 'Kaldera', date: '2025', badges: [t('hero.categorySiteWeb'), 'UX/UI', 'Simulation'], coverImage: '/images/cover-project-kaldera.png' },
+                { slug: 'Pedaboard', title: 'Pedaboard', date: t('project.december2023'), badges: [t('hero.categoryApplicationWeb'), 'UX/UI', 'CRM'], coverImage: '/images/cover-project-pedaboard.webp' },
+                { slug: 'Playdago', title: 'Playdago', date: t('project.february2025'), badges: [t('hero.categoryApplication'), 'UX/UI', 'SaaS'], coverImage: '/images/cover-project-playdago.webp' },
+                { slug: 'UTOI', title: 'UTOI', date: '2025', badges: [t('hero.categorySiteWeb'), 'UX/UI'], coverImage: '/images/cover-project-utoi.webp' },
+                { slug: 'Kaldera', title: 'Kaldera', date: '2025', badges: [t('hero.categorySiteWeb'), 'UX/UI', 'Simulation'], coverImage: '/images/cover-project-kaldera.webp' },
               ].map((proj) => (
                 <SwiperSlide key={proj.slug}>
                   <a href={`/project/${proj.slug}`} className="figma-projet-mockup-card">
