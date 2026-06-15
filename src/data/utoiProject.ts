@@ -4,7 +4,7 @@ import type { ProjectData } from './projectsNew';
 export const utoiProjectData: ProjectData = {
   title: 'UTOI',
   subtitle: 'Le trail dans l’Océan Indien',
-  badges: ['UX/UI', '2025', 'Site web'],
+  badges: ['UX/UI', 'Site web'],
   summary:
     "L'UTOI (Ultra Trail de l'Océan Indien) est l'organisation derrière les grandes courses de trail à La Réunion, dont l'Ultra Trail des Géants. Portée par l'ACSR, elle vise à faire de l'île une « Terre de Trail » capable d'attirer l'élite internationale.\n\nEn 2025, malgré le succès sportif des premières éditions, l'expérience numérique restait fragmentée (site vitrine WordPress, inscriptions et résultats chez des prestataires externes). La refonte vise une plateforme 100 % centralisée sur utoi.re : inscription, course, résultats et services coureurs sans quitter l'univers de marque.",
 

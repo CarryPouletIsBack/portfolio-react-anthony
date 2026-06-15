@@ -27,6 +27,12 @@ export interface ProjectData {
   auditBodyAfterCarousel?: string;
   /** Section Architecture & Flux — 1er paragraphe (optionnel ; sinon libellé global) */
   archLead?: string;
+  /** Section Branding (Playdago) */
+  brandingLead?: string;
+  brandingBody?: string;
+  /** Section Péda GO ! — contexte cliente (Playdago) */
+  pedagoLead?: string;
+  pedagoBody?: string;
   /** Teaser Design system (2 colonnes) sous l’arbre user flow — ex. Playdago */
   architectureDsDuplicateLead?: string;
   architectureDsDuplicateBody?: string;
@@ -205,6 +211,10 @@ export interface ProjectData {
       auditLeadAfterCarousel?: string;
       auditBodyAfterCarousel?: string;
       archLead?: string;
+      brandingLead?: string;
+      brandingBody?: string;
+      pedagoLead?: string;
+      pedagoBody?: string;
       architectureDsDuplicateLead?: string;
       architectureDsDuplicateBody?: string;
       architectureDsDuplicatePivotH3?: string;
@@ -240,7 +250,7 @@ export const playdagoProjectBase: ProjectData = {
     // 1. Titre principal
     title: 'Playdago',
     subtitle: 'Application de pédagogie active',
-    badges: ['UX/UI', '2025', 'SaaS', 'Application'],
+    badges: ['Application', 'UX/UI', 'SaaS', 'CRM', 'Marketplace'],
     
     // 2. Résumé / Introduction (aligné Figma 49-229, adapté Playdago)
     summary: 'PlayDaGo a été créé pour répondre à une demande spécifique, comment organiser et concevoir des ateliers ludiques (cartes, dés, matching) à distance.\n\nLe défi n\u2019était pas seulement de digitaliser l\'ensemble du processus, mais de retranscrire le côté\u00A0sensoriel\u00A0des ateliers en\u00A0présentiel. De la création du groupe jusqu\'au suivi des résultats après l\'atelier.',
@@ -274,6 +284,14 @@ export const playdagoProjectBase: ProjectData = {
 
     archLead:
       "La base de l'architecture repose sur une distinction stricte des rôles afin d'éviter toute confusion. Cela garantit une clarté organisationnelle essentielle pour la bonne exécution des tâches et la coordination efficace des équipes.",
+
+    brandingLead: `En complément du produit, j'ai posé les bases de l'identité visuelle de PlayDaGo en créant un logotype calligraphique. L'objectif : évoquer le geste manuel, la créativité et le côté sensoriel des ateliers en présentiel.`,
+
+    brandingBody: `De l'esquisse outline sur fond sombre à la version finale encre #005A73, le logo guide l'extension de la palette existante de la cliente et la tonalité graphique du design system.`,
+
+    pedagoLead: `Péda GO ! est un organisme de formation spécialisé en pédagogie active et ludique. En présentiel à La Réunion et en métropole, Cyrielle et son équipe animent des formations, des ateliers et du conseil autour d'outils concrets — cartes, dés, matching, story cubes — pour impliquer les participants et rendre l'apprentissage vivant.`,
+
+    pedagoBody: `L'activité reposait jusqu'ici sur ces sessions physiques. Face à la multiplication des plateformes et à l'impossibilité de reproduire à distance le même niveau d'interaction, la cliente a initié Playdago : digitaliser ses pratiques sans perdre le côté sensoriel et collectif du présentiel. Le produit prolonge Péda GO ! en permettant de concevoir, lancer et suivre des ateliers ludiques en ligne.`,
 
     architectureDsDuplicateLead: `L'interface a été conçue pour se fondre au service de l'interaction pédagogique.
 
@@ -483,6 +501,7 @@ Grille 4pt : Une structure à la fois dense et aérée, essentielle pour organis
     
     // Métadonnées
     year: '2025',
+    projectUrl: 'https://playdago.fr',
     image: '/images/cover-project-playdago.webp',
     skills: ['UX Research', 'Design system', 'UI', 'Branding', 'Figma', 'React js'],
     duration: '9 mois',
@@ -535,6 +554,14 @@ Grille 4pt : Une structure à la fois dense et aérée, essentielle pour organis
 
         archLead:
           'The foundation of the architecture relies on a strict distinction of roles to avoid any confusion. This ensures organizational clarity that is essential for proper task execution and effective team coordination.',
+
+        brandingLead: `Beyond the product, I laid the foundations of PlayDaGo's visual identity by creating a calligraphic logotype — evoking manual gesture, creativity and the sensory side of in-person workshops.`,
+
+        brandingBody: `From the outline sketch on a dark ground to the final #005A73 ink version, the logo guided the extension of the client's palette and the graphic tone of the design system.`,
+
+        pedagoLead: `Péda GO ! is a training organization specialized in active, playful pedagogy. In person in Réunion and mainland France, Cyrielle and her team run training courses, workshops and consulting around tangible tools — cards, dice, matching, story cubes — to engage participants and make learning come alive.`,
+
+        pedagoBody: `Until then, the business relied on these in-person sessions. Faced with too many separate platforms and the difficulty of reproducing the same level of interaction remotely, the client initiated Playdago: digitizing her practices without losing the sensory, collective side of in-person workshops. The product extends Péda GO ! by making it possible to design, run and track playful workshops online.`,
 
         architectureDsDuplicateLead: `The interface was designed to recede in service of pedagogical interaction.
 
@@ -618,7 +645,7 @@ export const projectsDataNew: { [key: string]: ProjectData } = {
   Pedaboard: {
     // 1. Titre principal
     title: 'Pedaboard',
-    badges: ['Application', 'UX/UI', '2025', 'CRM'],
+    badges: ['Application', 'UX/UI', 'CRM'],
     
     // 2. Résumé / Introduction (contenu Figma node 49-229)
     summary: 'Pedaboard est un outil interne de gestion et de pilotage conçu pour une professionnelle de la pédagogie active. Le projet part d\'un besoin clair : centraliser des données aujourd\'hui éparpillées sur plusieurs plateformes (base clients, formations, commandes, newsletter, rappels, événements), afin d\'obtenir une vue d\'ensemble fiable, réduire la charge mentale et améliorer le suivi des activités. L\'objectif n\'était pas de remplacer les outils existants (emailing, e-commerce, etc.), mais de créer une interface centrale de lecture, de suivi et de rappel, capable de relier toutes les informations clés autour d\'un même client.',
@@ -912,7 +939,7 @@ export const projectsDataNew: { [key: string]: ProjectData } = {
   'Kaldera': {
     title: 'Kaldera',
     subtitle: 'Application web de simulation trail',
-    badges: ['Site web', 'UX/UI', '2025', 'Simulation'],
+    badges: ['Site web', 'UX/UI', 'Simulation'],
     summary: 'Kaldera est une application web de simulation trail permettant aux coureurs de visualiser des parcours, préparer leurs entraînements et simuler des courses en conditions réalistes. Le projet vise à offrir une expérience immersive pour planifier et analyser des sorties trail avec des données de relief, dénivelé et météo.',
     context: {
       title: 'Contexte & Problématique',

@@ -3,11 +3,11 @@ import { projectsDataNew } from '../data/projectsNew';
 
 const STORAGE_KEY = 'portfolio_projects';
 /** Incrémenter pour forcer la réutilisation des données du code (ex. nouveaux champs positionnementMatrix, userFlow) */
-const DATA_VERSION = 15;
+const DATA_VERSION = 16;
 const DATA_VERSION_KEY = 'portfolio_projects_version';
 
 /** Projets dont le contenu éditorial doit toujours venir du code (évite localStorage corrompu). */
-const CONTENT_FROM_CODE_ONLY = new Set(['UTOI', 'Mpaudio']);
+const CONTENT_FROM_CODE_ONLY = new Set(['Playdago', 'UTOI', 'Mpaudio']);
 
 function resolveCoverImage(key: string, savedCover?: string): string {
   if (key === 'Pedaboard') return '/images/cover-project-pedaboard.webp';
@@ -46,6 +46,7 @@ function mergeStoredProject(
   return {
     ...defaults,
     ...saved,
+    badges: defaults.badges ?? saved?.badges,
     userFlow: defaults.userFlow ?? saved?.userFlow,
     auditLeadAfterCarousel: defaults.auditLeadAfterCarousel ?? saved?.auditLeadAfterCarousel,
     auditBodyAfterCarousel: defaults.auditBodyAfterCarousel ?? saved?.auditBodyAfterCarousel,

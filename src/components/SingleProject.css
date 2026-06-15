@@ -908,6 +908,10 @@
   padding: 0 0 var(--sp-space-2xl);
 }
 
+.project-header-section .project-date + .project-main-title {
+  margin-top: 0;
+}
+
 /* Date au-dessus du titre (Figma: JetBrains Mono 12px) */
 .project-date {
   font-family: var(--sp-font-mono);
@@ -1232,6 +1236,7 @@
 .single-project-page #problematique.problematique-section,
 .single-project-page #audit,
 .single-project-page #architecture,
+.single-project-page #branding,
 .single-project-page #design-system,
 .single-project-page #conception,
 .single-project-page #light-mode,
@@ -1494,6 +1499,214 @@
   transition: gap 0.2s ease;
 }
 
+/* ——— Branding Playdago ——— */
+.figma-branding-section {
+  padding-top: var(--sp-space-xl, 48px);
+  padding-bottom: var(--sp-space-xl, 48px);
+}
+
+.figma-branding-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 440px);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+  margin-top: var(--sp-space-lg, 32px);
+}
+
+.figma-branding-copy {
+  min-width: 0;
+}
+
+.figma-branding-visual {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 3vw, 28px);
+  width: 100%;
+  min-width: 0;
+}
+
+.figma-branding-body {
+  margin: 0;
+}
+
+.figma-branding-logos-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 3vw, 28px);
+  width: 100%;
+  min-width: 0;
+}
+
+/* Tuile carrée commune aux deux versions */
+.figma-branding-logo-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: clamp(24px, 8%, 40px);
+  box-sizing: border-box;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.figma-branding-logo-tile--checker {
+  background-color: #0a0a0a;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.figma-branding-logo-tile--paper {
+  background: none;
+  box-shadow: none;
+  transform: none;
+}
+
+.figma-branding-logo-tile--paper::before {
+  display: none;
+}
+
+.figma-branding-logo-svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+}
+
+@media (max-width: 900px) {
+  .figma-branding-layout {
+    grid-template-columns: 1fr;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .figma-branding-logo-svg {
+    max-width: 220px;
+  }
+}
+
+/* ——— Présentation de l'entreprise (Playdago) ——— */
+.figma-pedago-section {
+  width: 100%;
+  padding-top: var(--sp-space-2xl, 40px);
+  margin-top: 0;
+  box-sizing: border-box;
+}
+
+.figma-pedago-section > .section-title {
+  margin-bottom: 0;
+}
+
+.figma-two-cols--pedago {
+  margin-top: var(--sp-space-lg, 24px);
+  margin-bottom: 0;
+}
+
+.figma-pedago-carousel-stack {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: var(--sp-space-lg, 32px);
+}
+
+.figma-pedago-carousel-wrapper {
+  width: 100%;
+  padding-bottom: 0;
+}
+
+.figma-pedago-carousel,
+.figma-pedago-carousel.swiper {
+  width: 100%;
+  overflow: visible !important;
+  padding-bottom: 0;
+}
+
+.figma-pedago-carousel .swiper-wrapper {
+  align-items: stretch;
+}
+
+.figma-pedago-carousel .swiper-slide {
+  width: 520px;
+  height: 360px;
+  aspect-ratio: 13 / 9;
+  max-width: min(100%, calc(100vw - 2 * var(--sp-padding-x-mobile, 16px)));
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.figma-pedago-slide {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--sp-border);
+  background: var(--sp-surface-alt);
+}
+
+.figma-pedago-slide img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.figma-pedago-carousel .swiper-pagination {
+  position: relative;
+  bottom: auto;
+  margin-top: var(--sp-space-lg, 24px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.figma-pedago-carousel .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  margin: 0 !important;
+  background: var(--sp-text-muted, #888);
+  opacity: 0.45;
+}
+
+.figma-pedago-carousel .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: var(--sp-accent, #f1582a);
+}
+
+.figma-pedago-photo-credit {
+  margin: var(--sp-space-md, 16px) 0 0;
+  font-family: var(--sp-font-body);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--sp-text-muted, #6b6b6b);
+}
+
+.figma-pedago-photo-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.figma-pedago-photo-credit a:hover {
+  color: var(--sp-text);
+}
+
+@media (max-width: 768px) {
+  .figma-pedago-carousel .swiper-slide {
+    height: 280px;
+  }
+}
+
 .figma-lead {
   font-family: var(--sp-font-title);
   font-size: 20px;
@@ -1718,6 +1931,20 @@
 
 .figma-userflow {
   margin-top: var(--sp-space-lg);
+}
+
+/* Design system Playdago — tableaux pleine largeur (style Pedaboard) */
+.figma-design-system-tables {
+  margin-top: var(--sp-space-lg, 32px);
+  width: 100%;
+}
+
+.figma-design-system-tables .playdago-ds-tables--typescale {
+  margin-top: var(--sp-space-xl, 48px);
+}
+
+.figma-design-system-tables .playdago-ds-tables {
+  width: 100%;
 }
 
 /* Bloc Audit dupliqué (Playdago) sous l’arbre user flow — même contenu que #audit */

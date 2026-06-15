@@ -8,6 +8,7 @@ export function buildMpaudioProject(playdagoBase: ProjectData): ProjectData {
     ...playdagoBase,
     title: 'Mpaudio',
     subtitle: 'E-commerce — design, UX/UI & motion',
+    projectUrl: undefined,
     badges: ['E-commerce', 'UX/UI', 'Motion design', 'Design'],
     summary: T,
     figmaPrototypeUrl:

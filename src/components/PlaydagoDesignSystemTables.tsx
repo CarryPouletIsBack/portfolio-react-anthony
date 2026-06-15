@@ -97,7 +97,7 @@ export function PlaydagoPaletteTable({ projectData, isEn, t }: BaseProps) {
 
   return (
     <div className="playdago-ds-tables playdago-ds-tables--palette">
-      <h3 className="figma-palette-title">{`Palette "${projectData.title}"`}</h3>
+      <h3 className="figma-palette-title">{t('project.palette')}</h3>
       <p className="figma-caption">{t('project.materialDesign')}</p>
       <div className="figma-palette-table">
         <div className="figma-palette-header">

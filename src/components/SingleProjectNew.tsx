@@ -19,6 +19,10 @@ import 'swiper/css/pagination';
 import './SingleProject.css';
 import { type ProjectData } from '../data/projectsNew';
 import {
+  getProjectBadgeLabel,
+  resolveProjectHeaderBadges,
+} from '../utils/projectBadges';
+import {
   getCaseStudyVariant,
   usesExtendedCaseStudyLayout,
   usesPlaydagoCaseStudyLayout,
@@ -49,6 +53,8 @@ import { PlaydagoPaletteTable, PlaydagoTypescaleTable } from './PlaydagoDesignSy
 import CardSwap, { Card } from './CardSwap';
 import MagicBento from './MagicBento';
 import PlaydagoH1HandwritingLogo from './PlaydagoH1HandwritingLogo';
+import PlaydagoBrandingLogos from './PlaydagoBrandingLogos';
+import PlaydagoPedagoSection from './PlaydagoPedagoSection';
 import ScrollStack, { ScrollStackItem } from './ScrollStack';
 
 /** User flow → arbre : tous les enfants en branches (vertical) → Compte, Contact, Page Tâches, Formation, Laboratoire sur la même colonne après Dashboard */
@@ -119,10 +125,6 @@ import auditCarouselHandheldIpadPlaydagoAuditSection from '../assets/audit/Handh
 import auditCarouselCreationAtelierLancerDes from '../assets/audit/creation atelier/lancer de des.webp';
 import auditCarouselCreationAtelierPersonnalisationDes from '../assets/audit/creation atelier/lancer de des/personnalisation du des.webp';
 import auditCarouselCreationAtelierActionPopup from '../assets/audit/creation atelier/lancer de des/popup/action.webp';
-/** Design system Playdago — tuiles Magic Bento (exports Figma) */
-import playdagoDsFrame1048 from '../assets/audit/Frame 1048.webp';
-import playdagoDsFrame1050 from '../assets/audit/Frame 1050.webp';
-import playdagoDsFrame1051 from '../assets/audit/Frame 1051.webp';
 import playdagoCardSwapDashboard from '../assets/audit/Dashboard.webp';
 import playdagoCardSwapPersonnalisationDes from '../assets/audit/creation atelier/lancer de des/personnalisation du des.webp';
 import playdagoCardSwapDistributionCartes from '../assets/audit/concept 2/matching/formateur/Distribution des cartes.webp';
@@ -338,7 +340,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
     [projectData.title]
   );
 
-  /** Design system — Bento 6 tuiles (Playdago & UTOI) */
+  /** Design system — Bento (UTOI & Mpaudio) */
   const playdagoDsBentoItems = useMemo(() => {
     const n = auditCarouselImages.length;
     const variant = getCaseStudyVariant(projectData.title);
@@ -377,38 +379,11 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
         },
       ];
     }
-    const frameAlt = (id: string) => `Playdago — Design system (${id})`;
-    return [
-      {
-        src: playdagoDsFrame1050,
-        alt: frameAlt('Frame 1050'),
-      },
-      {
-        src: playdagoDsFrame1051,
-        alt: frameAlt('Frame 1051'),
-      },
-      {
-        content: (
-          <PlaydagoTypescaleTable
-            projectData={projectData}
-            t={t}
-            typographyHeadingId="playdago-bento-typescale"
-          />
-        ),
-      },
-      {
-        content: <PlaydagoPaletteTable projectData={projectData} isEn={isEn} t={t} />,
-      },
-      {
-        src: playdagoDsFrame1048,
-        alt: frameAlt('Frame 1048'),
-      },
-      {
-        src: playdagoCardSwapDashboard,
-        alt: frameAlt('Dashboard'),
-        hideMediaFrame: true,
-      },
-    ];
+    return auditCarouselImages.map((img, index) => ({
+      src: img.src,
+      alt: t(`project.auditAlt${index + 1}`),
+      label: `${index + 1} / ${n}`,
+    }));
   }, [projectData, isEn, t, auditCarouselImages]);
 
   /** Groupes d’images par concept (Playdago & UTOI) */
@@ -979,16 +954,21 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
         {/* Bloc unique Figma : titre, badges + Contexte du projet, gap 40px */}
         <div className="project-top-block">
           <div className="project-header-section">
+            {projectData.year && (
+              <p className="project-date">
+                {isEn && projectData.translations?.en?.year
+                  ? projectData.translations.en.year
+                  : projectData.year}
+              </p>
+            )}
             <h1 className="project-main-title">
               <BlurText text={projectData.title} className="project-main-title" />
             </h1>
             <div className="project-badges">
-              {projectCategory && projectCategory !== '2025' && <span className="project-badge">{projectCategory}</span>}
-              {projectData.badges?.filter(badge => {
-                const categoryBadges = ['Application', 'Site Web', 'Navigation', 'Logo', 'Motion', 'PLV'];
-                return !categoryBadges.includes(badge);
-              }).map((badge, index) => (
-                <span key={index} className="project-badge">{badge}</span>
+              {resolveProjectHeaderBadges(projectData.badges, projectCategory).map((badge) => (
+                <span key={badge} className="project-badge">
+                  {getProjectBadgeLabel(badge, t)}
+                </span>
               ))}
             </div>
             {projectData.subtitle && <p className="project-subtitle">{isEn && projectData.translations?.en?.subtitle ? projectData.translations.en.subtitle : projectData.subtitle}</p>}
@@ -1060,6 +1040,24 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                 </div>
               </div>
             </motion.section>
+          )}
+
+          {usesPlaydagoCaseStudyLayout(projectData.title) && projectData.pedagoLead && (
+            <PlaydagoPedagoSection
+              title={t('project.pedagoTitle')}
+              lead={
+                isEn && projectData.translations?.en?.pedagoLead
+                  ? projectData.translations.en.pedagoLead
+                  : projectData.pedagoLead
+              }
+              body={
+                isEn && projectData.translations?.en?.pedagoBody
+                  ? projectData.translations.en.pedagoBody
+                  : projectData.pedagoBody ?? ''
+              }
+              photoCreditLabel={t('project.pedagoPhotoCredit')}
+              photoCreditLinkLabel={t('project.pedagoPhotoCreditLink')}
+            />
           )}
         </div>
 
@@ -1303,6 +1301,33 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
           </div>
         </motion.section>
 
+        {/* Branding — Playdago */}
+        {usesPlaydagoCaseStudyLayout(projectData.title) && (
+          <motion.section id="branding" className="project-section figma-branding-section" {...scrollSectionProps}>
+            <h2 className="section-title">{t('project.branding')}</h2>
+            <div className="figma-branding-layout">
+              <div className="figma-branding-copy">
+                <p className="figma-lead whitespace-pre-line">
+                  {isEn && projectData.translations?.en?.brandingLead
+                    ? projectData.translations.en.brandingLead
+                    : projectData.brandingLead ?? ''}
+                </p>
+              </div>
+              <div className="figma-branding-visual">
+                {(projectData.brandingBody ||
+                  (isEn && projectData.translations?.en?.brandingBody)) && (
+                  <p className="figma-body whitespace-pre-line figma-branding-body">
+                    {isEn && projectData.translations?.en?.brandingBody
+                      ? projectData.translations.en.brandingBody
+                      : projectData.brandingBody ?? ''}
+                  </p>
+                )}
+                <PlaydagoBrandingLogos />
+              </div>
+            </div>
+          </motion.section>
+        )}
+
         {/* Architecture & Flux */}
         <motion.section id="architecture" className="project-section figma-architecture-section" {...scrollSectionProps}>
           <h2 className="section-title">{t('project.architecture')}</h2>
@@ -1331,7 +1356,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
             )}
           </div>
 
-          {/* Playdago : Design system — texte + bento (palette & typéchelle intégrés aux tuiles) */}
+          {/* Playdago : Design system — tableaux palette & typéchelle (comme Pedaboard) ; UTOI/Mpaudio : bento */}
           {usesExtendedCaseStudyLayout(projectData.title) && (
             <>
               <div id="design-system" className="figma-audit-playdago-duplicate">
@@ -1348,21 +1373,32 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                       : projectData.architectureDsDuplicateBody ?? ''}
                   </p>
                 </div>
-                <div
-                  className={
-                    usesUtoidCaseStudyLayout(projectData.title)
-                      ? 'playdago-ds-magic-bento-wrap playdago-ds-magic-bento-wrap--utoi'
-                      : 'playdago-ds-magic-bento-wrap'
-                  }
-                >
-                  <MagicBento
-                    className="playdago-ds-magic-bento"
-                    imageItems={playdagoDsBentoItems}
-                    glowColor={
-                      usesUtoidCaseStudyLayout(projectData.title) ? '27, 122, 78' : '241, 88, 42'
+                {usesPlaydagoCaseStudyLayout(projectData.title) ? (
+                  <div className="figma-design-system-tables">
+                    <PlaydagoPaletteTable projectData={projectData} isEn={isEn} t={t} />
+                    <PlaydagoTypescaleTable
+                      projectData={projectData}
+                      t={t}
+                      typographyHeadingId="playdago-ds-typescale"
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className={
+                      usesUtoidCaseStudyLayout(projectData.title)
+                        ? 'playdago-ds-magic-bento-wrap playdago-ds-magic-bento-wrap--utoi'
+                        : 'playdago-ds-magic-bento-wrap'
                     }
-                  />
-                </div>
+                  >
+                    <MagicBento
+                      className="playdago-ds-magic-bento"
+                      imageItems={playdagoDsBentoItems}
+                      glowColor={
+                        usesUtoidCaseStudyLayout(projectData.title) ? '27, 122, 78' : '241, 88, 42'
+                      }
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="figma-audit-playdago-duplicate figma-audit-playdago-duplicate--stacked">
@@ -1544,7 +1580,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
           )}
         </motion.section>
 
-        {/* Design system — Playdago : contenu déplacé sous Architecture (switch carrousel / tables) */}
+        {/* Design system — Pedaboard & projets classiques (Playdago : tables sous #architecture) */}
         {projectData.designSystem && !usesExtendedCaseStudyLayout(projectData.title) && (
           <motion.section id="design-system" className="project-section figma-design-system-section" {...scrollSectionProps}>
             <h2 className="section-title">{t('project.designSystem')}</h2>
@@ -1756,10 +1792,10 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
               }}
             >
               {[
-                { slug: 'Pedaboard', title: 'Pedaboard', date: t('project.december2023'), badges: [t('hero.categoryApplicationWeb'), 'UX/UI', 'CRM'], coverImage: '/images/cover-project-pedaboard.webp' },
-                { slug: 'Playdago', title: 'Playdago', date: t('project.february2025'), badges: [t('hero.categoryApplication'), 'UX/UI', 'SaaS'], coverImage: '/images/cover-project-playdago.webp' },
-                { slug: 'UTOI', title: 'UTOI', date: '2025', badges: [t('hero.categorySiteWeb'), 'UX/UI'], coverImage: '/images/cover-project-utoi.webp' },
-                { slug: 'Kaldera', title: 'Kaldera', date: '2025', badges: [t('hero.categorySiteWeb'), 'UX/UI', 'Simulation'], coverImage: '/images/cover-project-kaldera.webp' },
+                { slug: 'Pedaboard', title: 'Pedaboard', date: t('project.december2023'), badges: ['Application web', 'UX/UI', 'CRM'], coverImage: '/images/cover-project-pedaboard.webp' },
+                { slug: 'Playdago', title: 'Playdago', date: t('project.february2025'), badges: ['Application', 'UX/UI', 'SaaS', 'CRM', 'Marketplace'], coverImage: '/images/cover-project-playdago.webp' },
+                { slug: 'UTOI', title: 'UTOI', date: '2025', badges: ['Site web', 'UX/UI'], coverImage: '/images/cover-project-utoi.webp' },
+                { slug: 'Kaldera', title: 'Kaldera', date: '2025', badges: ['Site web', 'UX/UI', 'Simulation'], coverImage: '/images/cover-project-kaldera.webp' },
               ].map((proj) => (
                 <SwiperSlide key={proj.slug}>
                   <a href={`/project/${proj.slug}`} className="figma-projet-mockup-card">
@@ -1772,8 +1808,10 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
                         <h3 className="figma-projet-name">{proj.title}</h3>
                         {proj.badges && proj.badges.length > 0 && (
                           <div className="figma-projet-badges">
-                            {proj.badges.map((badge: string) => (
-                              <span key={badge} className="project-badge">{badge}</span>
+                            {resolveProjectHeaderBadges(proj.badges).map((badge) => (
+                              <span key={badge} className="project-badge">
+                                {getProjectBadgeLabel(badge, t)}
+                              </span>
                             ))}
                           </div>
                         )}
