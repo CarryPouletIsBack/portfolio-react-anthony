@@ -48,16 +48,15 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
   const fullscreenVideoRef = useRef<HTMLVideoElement>(null);
 
   const hasVideoExtension = (src: string) => /\.(mp4|webm|mov|avi|mkv)$/i.test(src);
-  const isMpaudioProject = projectName === 'Mpaudio';
-  const isVideoCover = hasVideoExtension(coverImage) || isMpaudioProject;
+  const isVideoCover = hasVideoExtension(coverImage);
 
-  // Carousel multi-slides (Playdago, etc.) — Mpaudio : une seule vidéo, pas de défilement
+  // Une seule vidéo en cover (pas de carousel Swiper dupliqué)
   const images = useMemo(() => {
-    if (isMpaudioProject && isVideoCover) return [coverImage];
+    if (isVideoCover) return [coverImage];
     return [coverImage, coverImage, coverImage];
-  }, [coverImage, isMpaudioProject, isVideoCover]);
+  }, [coverImage, isVideoCover]);
 
-  const useSingleVideoCover = isMpaudioProject && isVideoCover;
+  const useSingleVideoCover = isVideoCover;
 
   const toggleVideoMute = useCallback(() => {
     setVideoMuted((prev) => !prev);
@@ -158,7 +157,7 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
   return (
     <>
       <div 
-        className={`project-cover-image-above${showUtoidMap ? ' project-cover-image-above--map' : ''}${coverFullscreenActive ? ' project-cover-fullscreen-expanded' : ''}`}
+        className={`project-cover-image-above${showUtoidMap ? ' project-cover-image-above--map' : ''}${useSingleVideoCover ? ' project-cover-image-above--video' : ''}${coverFullscreenActive ? ' project-cover-fullscreen-expanded' : ''}`}
         style={{
           transform: `translateY(${swipeY}px)`,
           transition: swipeY === 0 ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' : 'none'
@@ -386,7 +385,7 @@ const ProjectCoverCarousel: React.FC<ProjectCoverCarouselProps> = ({
             </button>
           ) : null}
           <div className="project-cover-fullscreen-slide">
-            {hasVideoExtension(images[fullscreenIndex]) || isMpaudioProject ? (
+            {hasVideoExtension(images[fullscreenIndex]) ? (
               <video
                 ref={fullscreenVideoRef}
                 src={images[fullscreenIndex]}

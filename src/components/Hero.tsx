@@ -22,7 +22,7 @@ interface HeroProps {
 const SHOW_CAROUSEL = false
 
 const HERO_FEATURED_PROJECTS = [
-  { title: 'Playdago', imageSrc: '/images/cover-project-playdago.webp', category: 'Application', date: '01/01/2025' },
+  { title: 'Playdago', imageSrc: '/videos/playdago-cover.mp4', posterSrc: '/images/cover-project-playdago.webp', category: 'Application', date: '01/01/2025' },
   {
     title: 'Mpaudio',
     imageSrc: '/videos/mpaudio-cover.mp4',
@@ -274,7 +274,7 @@ const Hero = ({ onPageChange, onContactClick }: HeroProps) => {
                   className="hero-seo-link"
                   onClick={(e) => {
                     e.preventDefault()
-                    onPageChange('project-Playdago', '/images/cover-project-playdago.webp', 'Application')
+                    onPageChange('project-Playdago', '/videos/playdago-cover.mp4', 'Application')
                     trackEvent('click', 'seo_link', 'playdago')
                   }}
                 >

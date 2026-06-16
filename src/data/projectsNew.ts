@@ -502,7 +502,7 @@ Grille 4pt : Une structure à la fois dense et aérée, essentielle pour organis
     // Métadonnées
     year: '2025',
     projectUrl: 'https://playdago.fr',
-    image: '/images/cover-project-playdago.webp',
+    image: '/videos/playdago-cover.mp4',
     skills: ['UX Research', 'Design system', 'UI', 'Branding', 'Figma', 'React js'],
     duration: '9 mois',
     type: 'Application web',

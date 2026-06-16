@@ -55,7 +55,104 @@ import MagicBento from './MagicBento';
 import PlaydagoH1HandwritingLogo from './PlaydagoH1HandwritingLogo';
 import PlaydagoBrandingLogos from './PlaydagoBrandingLogos';
 import PlaydagoPedagoSection from './PlaydagoPedagoSection';
-import ScrollStack, { ScrollStackItem } from './ScrollStack';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+
+const PLAYDAGO_COVER_VIDEO = '/videos/playdago-cover.mp4';
+const PLAYDAGO_COVER_POSTER = '/images/cover-project-playdago.webp';
+
+function PlaydagoBrandingVideo({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
+  const [playing, setPlaying] = useState(true);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = muted;
+    const tryPlay = () => {
+      if (playing) void video.play().catch(() => setPlaying(false));
+    };
+    tryPlay();
+    video.addEventListener('loadeddata', tryPlay);
+    const onPlay = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
+    video.addEventListener('play', onPlay);
+    video.addEventListener('pause', onPause);
+    return () => {
+      video.removeEventListener('loadeddata', tryPlay);
+      video.removeEventListener('play', onPlay);
+      video.removeEventListener('pause', onPause);
+    };
+  }, [src, muted, playing]);
+
+  const toggleMute = () => setMuted((value) => !value);
+
+  const togglePlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      void video.play().catch(() => setPlaying(false));
+    } else {
+      video.pause();
+    }
+  };
+
+  return (
+    <div className="figma-playdago-branding-video">
+      <video
+        ref={videoRef}
+        src={src}
+        poster={PLAYDAGO_COVER_POSTER}
+        autoPlay
+        loop
+        muted={muted}
+        playsInline
+        preload="auto"
+        aria-label="Playdago — motion design"
+      />
+      <div className="figma-playdago-branding-video-controls">
+        <button
+          type="button"
+          className="figma-media-control-btn"
+          onClick={togglePlay}
+          aria-label={playing ? 'Mettre en pause' : 'Lire la vidéo'}
+          aria-pressed={playing}
+        >
+          {playing ? (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <rect x="6" y="4" width="4" height="16" />
+              <rect x="14" y="4" width="4" height="16" />
+            </svg>
+          ) : (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
+          )}
+        </button>
+        <button
+          type="button"
+          className="figma-media-control-btn"
+          onClick={toggleMute}
+          aria-label={muted ? 'Activer le son' : 'Couper le son'}
+          aria-pressed={!muted}
+        >
+          {muted ? (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <line x1="23" y1="9" x2="17" y2="15" />
+              <line x1="17" y1="9" x2="23" y2="15" />
+            </svg>
+          ) : (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 /** User flow → arbre : tous les enfants en branches (vertical) → Compte, Contact, Page Tâches, Formation, Laboratoire sur la même colonne après Dashboard */
 function userFlowToFlowData(userFlow: { nodes: { id: string; name?: string; title?: string }[]; links: { from: string; to: string }[] }): FlowNodeData | null {
@@ -1216,6 +1313,16 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
 
         {/* Audit */}
         <motion.section id="audit" className="project-section figma-audit-section" {...scrollSectionProps}>
+          {usesPlaydagoCaseStudyLayout(projectData.title) && (
+            <div className="figma-branding-legacy-cover figma-playdago-audit-cover" aria-label="Playdago cover">
+              <img
+                src={PLAYDAGO_COVER_POSTER}
+                alt="Playdago — cover"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+          )}
           <h2 className="section-title">{t('project.audit')}</h2>
           {usesExtendedCaseStudyLayout(projectData.title) && (
             <p className="figma-audit-subtitle">
@@ -1304,6 +1411,13 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
         {/* Branding — Playdago */}
         {usesPlaydagoCaseStudyLayout(projectData.title) && (
           <motion.section id="branding" className="project-section figma-branding-section" {...scrollSectionProps}>
+            <PlaydagoBrandingVideo
+              src={
+                coverImage && /\.(mp4|webm|mov)$/i.test(coverImage)
+                  ? coverImage
+                  : PLAYDAGO_COVER_VIDEO
+              }
+            />
             <h2 className="section-title">{t('project.branding')}</h2>
             <div className="figma-branding-layout">
               <div className="figma-branding-copy">
@@ -1703,7 +1817,7 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
         </motion.section>
         )}
 
-        {/* Bloc présentation plein écran (scroll stack) — Playdago & UTOI */}
+        {/* Bloc présentation — galerie statique (Playdago, UTOI, Mpaudio) */}
         {(usesPlaydagoCaseStudyLayout(projectData.title) ||
           usesUtoidCaseStudyLayout(projectData.title) ||
           usesMpaudioCaseStudyLayout(projectData.title)) && (
@@ -1718,44 +1832,31 @@ const SingleProjectNew: FC<SingleProjectProps> = ({
             <PlaydagoH1HandwritingLogo className="figma-light-mode-h1-logo" scrollContainerRef={pageRef} />
           )}
           <motion.section id="light-mode" className="project-section figma-light-mode-section" {...scrollSectionProps}>
-            <ScrollStack
-              scrollRootRef={pageRef}
-              centerStackVertically
-              smoothFactor={0.22}
-              itemDistance={72}
-              itemStackDistance={32}
-              stackPosition="22%"
-              baseScale={0.82}
-              itemScale={0.035}
-              className="figma-light-mode-scroll-stack"
-            >
-              {(usesUtoidCaseStudyLayout(projectData.title)
-                ? UTOI_PRESENTATION_IMAGES
-                : usesMpaudioCaseStudyLayout(projectData.title)
-                  ? MPAUDIO_PRESENTATION_IMAGES
-                  : [
-                      { src: playdagoLightModeMaine, alt: t('project.contrastImageAlt') },
-                      { src: playdagoLightModeSinglePage, alt: t('project.lightModeSinglePageAlt') },
-                      { src: playdagoLightModeSetp1, alt: t('project.lightModeSetp1Alt') },
-                    ]
-              ).map((slide, index) => (
-                <ScrollStackItem key={index} itemClassName="figma-light-mode-scroll-stack-card">
-                  <div className="figma-light-mode-img-frame figma-light-mode-img-frame--stack-item">
+            <div className="figma-light-mode-gallery-wrap">
+              <ResponsiveMasonry columnsCountBreakPoints={{ 0: 1, 640: 2 }}>
+                <Masonry gutter="14px">
+                  {(usesUtoidCaseStudyLayout(projectData.title)
+                    ? UTOI_PRESENTATION_IMAGES
+                    : usesMpaudioCaseStudyLayout(projectData.title)
+                      ? MPAUDIO_PRESENTATION_IMAGES
+                      : [
+                          { src: playdagoLightModeMaine, alt: t('project.contrastImageAlt') },
+                          { src: playdagoLightModeSinglePage, alt: t('project.lightModeSinglePageAlt') },
+                          { src: playdagoLightModeSetp1, alt: t('project.lightModeSetp1Alt') },
+                        ]
+                  ).map((slide, index) => (
                     <img
+                      key={index}
                       src={slide.src}
                       alt={slide.alt ?? ''}
-                      className={
-                        index === 0
-                          ? 'figma-light-mode-zoom-img'
-                          : 'figma-light-mode-zoom-img figma-light-mode-extra-img'
-                      }
+                      className="figma-light-mode-gallery-img"
                       loading="lazy"
                       decoding="async"
                     />
-                  </div>
-                </ScrollStackItem>
-              ))}
-            </ScrollStack>
+                  ))}
+                </Masonry>
+              </ResponsiveMasonry>
+            </div>
           </motion.section>
         </div>
         )}

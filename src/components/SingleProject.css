@@ -1500,6 +1500,83 @@
 }
 
 /* ——— Branding Playdago ——— */
+.figma-playdago-branding-video {
+  position: relative;
+  width: 100%;
+  margin-bottom: var(--sp-space-lg, 32px);
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #0a0a0a;
+}
+
+.figma-playdago-branding-video video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.figma-playdago-branding-video-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  gap: 12px;
+  z-index: 2;
+}
+
+/* Boutons média — même langage que ProjectCoverCarousel */
+.figma-media-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.2),
+    0 2px 16px 0 rgba(31, 38, 135, 0.1),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.2);
+  transition: background 0.2s ease, transform 0.2s ease;
+  color: #000;
+}
+
+.figma-media-control-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
+}
+
+.figma-media-control-btn:active {
+  transform: scale(0.98);
+}
+
+.figma-playdago-audit-cover {
+  margin-bottom: var(--sp-space-lg, 32px);
+}
+
+.figma-branding-legacy-cover {
+  width: 100%;
+  margin-bottom: var(--sp-space-lg, 32px);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.figma-branding-legacy-cover img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1344 / 768;
+  height: auto;
+  object-fit: cover;
+}
+
 .figma-branding-section {
   padding-top: var(--sp-space-xl, 48px);
   padding-bottom: var(--sp-space-xl, 48px);
@@ -1531,10 +1608,11 @@
 
 .figma-branding-logos-stack {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: clamp(20px, 3vw, 28px);
   width: 100%;
   min-width: 0;
+  align-items: stretch;
 }
 
 /* Tuile carrée commune aux deux versions */
@@ -1588,6 +1666,10 @@
 }
 
 @media (max-width: 768px) {
+  .figma-branding-logos-stack {
+    flex-direction: column;
+  }
+
   .figma-branding-logo-svg {
     max-width: 220px;
   }
@@ -1951,7 +2033,7 @@
 .figma-audit-playdago-duplicate {
   margin-top: var(--sp-space-xl, 48px);
   padding-top: var(--sp-space-lg, 32px);
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: none;
 }
 
 .single-project-page .figma-audit-playdago-duplicate > .figma-subsection-title {
@@ -1963,7 +2045,7 @@
 .figma-audit-playdago-duplicate--stacked {
   margin-top: var(--sp-space-xl, 48px);
   padding-top: var(--sp-space-lg, 32px);
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: none;
 }
 
 .figma-two-cols--playdago-conception-copy .playdago-ds-stacked-body-col {
@@ -3208,6 +3290,18 @@
   overflow: visible;
   position: relative;
   z-index: 2;
+}
+
+.single-project-page #light-mode .figma-light-mode-gallery-wrap {
+  width: 100%;
+  max-width: 100%;
+}
+
+.single-project-page #light-mode .figma-light-mode-gallery-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
 }
 
 /* Regroupe logo + section #light-mode : un seul « bloc » dans le gap du main (logo vraiment au-dessus, pas dans <section>) */
